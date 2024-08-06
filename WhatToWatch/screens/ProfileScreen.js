@@ -5,7 +5,7 @@ import { Text, View , StyleSheet } from 'react-native';
 export default function ProfileScreen() {
     return (
         <View style={styles.container}>
-            <Text>Welcome to the ListScreen</Text>
+            <Text>Welcome to the ProfileScreen</Text>
         </View>
     )
 }
