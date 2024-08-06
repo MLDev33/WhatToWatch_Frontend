@@ -42,6 +42,7 @@ const TabNavigator = () => {
     },
     tabBarActiveTintColor: 'tomato',
     tabBarInactiveTintColor: 'gray',
+    headerShown : false,
     })}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="List" component={ListScreen} />
