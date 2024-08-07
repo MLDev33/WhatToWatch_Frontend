@@ -8,9 +8,11 @@ import Movie from '../components/Movie/Movie';
 export default function HomeScreen() {
   const [movies, setMovies] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  //selectedMovie utilisé pour les modals et les swipes
   const [selectedMovie, setSelectedMovie] = useState(null);
+  //selectedindex utilisé pour les modals et les swipes
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const [loading, setLoading] = useState(true);
   // data test
   let userTest = {
     name: "userTest",
@@ -26,7 +28,7 @@ export default function HomeScreen() {
         throw new Error('No valid platforms provided');
       }
       const plateformesParam = encodeURIComponent(JSON.stringify(plateformes));
-      const url = `http://192.168.1.83:3000/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=30`;
+      const url = `http://192.168.1.83:3000/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=50`;
       console.log('Fetching URL:', url); // Log the URL
 
       const response = await fetch(url);
@@ -38,9 +40,12 @@ export default function HomeScreen() {
       console.log(JSON.stringify(data, null, 2));
     } catch (error) {
       console.error("Erreur : ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
+  // finally est exécuté après le try ou le catch
   useEffect(() => {
     fetchTrendings();
   }, []);
@@ -90,7 +95,11 @@ export default function HomeScreen() {
         <Text style={styles.welcomeText}>Welcome {userTest.name}</Text>
         <View style={styles.movies}>
           <Text style={styles.moviesHeader}>Here are some movies you might like:</Text>
-          <MovieTrendings movies={movies} />
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <MovieTrendings movies={movies} />
+          )}
         </View>
         {selectedMovie && (
           <Modal
