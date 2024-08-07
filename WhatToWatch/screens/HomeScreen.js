@@ -28,7 +28,7 @@ export default function HomeScreen() {
         throw new Error('No valid platforms provided');
       }
       const plateformesParam = encodeURIComponent(JSON.stringify(plateformes));
-      const url = `http://192.168.1.83:3000/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=50`;
+      const url = `http://192.168.1.83:3000/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
       console.log('Fetching URL:', url); // Log the URL
 
       const response = await fetch(url);
@@ -76,10 +76,13 @@ export default function HomeScreen() {
       }
     }
   };
-
+//le composant movie trendings nous permet d'obtenir une liste de films horizontale , un index pour gerer les swipes , potentiellement plus tard pour refetcher 
   const MovieTrendings = ({ movies }) => {
     return (
-      <ScrollView horizontal style={styles.scrollContainer}>
+      <ScrollView 
+      horizontal 
+      style={styles.scrollContainer}
+      showsHorizontalScrollIndicator={false}>
         {movies.map((item, index) => (
           <TouchableOpacity key={index} onPress={() => openModal(index)}>
             <Movie poster={item.poster} />
@@ -96,7 +99,7 @@ export default function HomeScreen() {
         <View style={styles.movies}>
           <Text style={styles.moviesHeader}>Here are some movies you might like:</Text>
           {loading ? (
-            <Text>Loading...</Text>
+            <Text>Loading trendings on your platform(s) </Text>
           ) : (
             <MovieTrendings movies={movies} />
           )}
@@ -165,6 +168,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    overflow: 'hidden',
+
   },
   modalContent: {
     width: '80%',
