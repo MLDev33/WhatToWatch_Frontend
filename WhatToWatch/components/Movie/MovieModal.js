@@ -16,6 +16,8 @@ const MovieModal = ({
 }) => {
   if (!movie) return null;
 
+ console.log( movie.type , movie.genre);
+
   return (
     <Modal
       animationType="slide"
@@ -35,6 +37,8 @@ const MovieModal = ({
                   : movie.description}
               </Text>
               <View style={styles.modalDetailsRow}>
+                <Text> genre : {movie.genre.join(', ')}</Text>
+                <Text> type : {movie.type} </Text>
                 <Text style={styles.modalDetails}>Année: {movie.annee}</Text>
                 <Text style={styles.modalDetails}>Popularité: {movie.popularite}</Text>
                 <Text style={styles.modalDetails}>Votes: {movie.vote}</Text>
@@ -90,16 +94,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10, // Réduire l'espacement
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5, // Réduire l'espacement
   },
   modalDescription: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 5, // Réduire l'espacement
     alignItems: 'flex-start',
   },
   modalDetailsRow: {
@@ -107,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginBottom: 10,
+    marginBottom: 5, // Réduire l'espacement
   },
   modalDetails: {
     fontSize: 14,
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10, // Réduire l'espacement
     width: '100%',
   },
   button: {
@@ -126,10 +130,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 20,
+    marginTop: 10, // Réduire l'espacement
   },
   closeButton: {
-    marginTop: 20,
+    marginTop: 10, // Réduire l'espacement
     padding: 10,
     backgroundColor: '#2196F3',
     borderRadius: 5,
@@ -139,5 +143,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
 export default MovieModal;
