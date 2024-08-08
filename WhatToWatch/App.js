@@ -53,6 +53,9 @@ const TabNavigator = () => {
         tabBarActiveTintColor: "tomato",
         tabBarInactiveTintColor: "gray",
         headerShown: false,
+        tabBarLabelStyle : {
+          marginBottom: 5,
+        }
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
