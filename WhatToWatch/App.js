@@ -1,10 +1,9 @@
-import { StatusBar } from "expo-status-bar";
+
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import {AppContainer} from ‘./containers/app-container’;
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SplashScreen from "./screens/SplashScreen";
 import OnBoardingOne from "./screens/OnBoardingScreenOne";
@@ -75,7 +74,7 @@ export default function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
 
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            {/* <StatusBar style="auto" /> */}
+          
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
