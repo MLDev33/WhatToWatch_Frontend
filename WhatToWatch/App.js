@@ -63,13 +63,14 @@ const TabNavigator = () => {
   );
 };
 
+      
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="OnBoardingOne" component={OnBoardingOne} />
+          <Stack.Screen name="OnBoardingOne" component={OnBoardingOne} /> a replacer ligne 73
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
             {/* <StatusBar style="auto" /> */}
           </Stack.Navigator>
