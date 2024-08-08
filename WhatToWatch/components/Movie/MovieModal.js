@@ -1,9 +1,19 @@
 // MovieModal.js
 import React from 'react';
 import { View, Text, Image, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { PanGestureHandler, GestureHandlerRootView, State } from 'react-native-gesture-handler';
+import { PanGestureHandler, GestureHandlerRootView,  } from 'react-native-gesture-handler';
+import { FontAwesome } from '@expo/vector-icons';
 
-const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
+const MovieModal = ({ 
+  visible, 
+  movie, 
+  onClose, 
+  onSwipe,
+  onLike,
+  onDislike,
+  onShare,
+  onUndo
+}) => {
   if (!movie) return null;
 
   return (
@@ -21,7 +31,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
               <Text style={styles.modalTitle}>{movie.titre}</Text>
               <Text style={styles.modalDescription}>
                 {movie.description.length > 100
-                  ? `${movie.description.substring(0, 100)}...`
+                  ? `${movie.description.substring(0, 120)}...`
                   : movie.description}
               </Text>
               <View style={styles.modalDetailsRow}>
@@ -32,9 +42,27 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
               <Text style={styles.modalDetails}>
                 Plateformes: {Array.isArray(movie.plateformes) ? movie.plateformes.map(p => p.nom).join(', ') : 'N/A'}
               </Text>
-              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>Fermer</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity onPress={onUndo} style={styles.button}>
+                  <FontAwesome name="undo" size={24} color="orange" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onDislike} style={styles.button}>
+                  <FontAwesome name="close" size={24} color="red" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onLike} style={styles.button}>
+                  <FontAwesome name="heart" size={24} color="green" />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={onShare} style={styles.button}>
+                  <FontAwesome name="share" size={24} color="blue" />
+                </TouchableOpacity>
+      
+              </View>
+              <View style={styles.closeButtonContainer}>
+                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                  <FontAwesome name="times" size={24} color="white" />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </PanGestureHandler>
@@ -56,11 +84,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   modalImage: {
     width: '100%',
-    height: 200,
+    height: 300,
     borderRadius: 10,
     marginBottom: 20,
   },
@@ -72,7 +100,7 @@ const styles = StyleSheet.create({
   modalDescription: {
     fontSize: 16,
     marginBottom: 10,
-    textAlign: 'center',
+    alignItems: 'flex-start',
   },
   modalDetailsRow: {
     flexWrap: 'wrap',
@@ -83,6 +111,22 @@ const styles = StyleSheet.create({
   },
   modalDetails: {
     fontSize: 14,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 20,
+    width: '100%',
+  },
+  button: {
+    marginHorizontal: 10,
+  },
+  closeButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginTop: 20,
   },
   closeButton: {
     marginTop: 20,
