@@ -1,22 +1,33 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import {AppContainer} from ‘./containers/app-container’;
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SplashScreen from "./screens/SplashScreen";
-import OnBoardingOne from "./screens/OnBoardingScreenOne";
-import OnBoardingTwo from "./screens/OnBoardingScreenTwo";
+import OnBoardingScreen from "./screens/OnBoardingScreen";
 import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ListScreen from "./screens/ListScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import { useState, useEffect } from "react";
 
 
+// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+// import {
+// 	GOOGLE_WEB_CLIENT_ID,
+// 	GOOGLE_ANDROID_CLIENT_ID,
+// 	GOOGLE_IOS_CLIENT_ID,
+// } from '@env';
+
+// GoogleSignin.configure({
+// 	webClientId: GOOGLE_WEB_CLIENT_ID,
+// 	androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+// 	iosClientId: GOOGLE_IOS_CLIENT_ID,
+// 	scopes: ['profile', 'email'],
+// });
 
 //try fix modal swipping issue
 
@@ -24,7 +35,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import user from './reducers/user';
+import user from "./reducers/user";
 
 const store = configureStore({
   reducer: { user },
@@ -68,14 +79,39 @@ const TabNavigator = () => {
 
                 //<Stack.Screen name="OnBoardingOne" component={OnBoardingOne} /> a replacer ligne 73
 export default function App() {
+  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
+
+
+//useEffect to check if user has already seen the onboarding- it checks if there is a value - 
+// if value is null (user has not seen the app before) it logs already launched on the storage for next connection
+// plus set state isFirstLaunch -> true to display onboarding
+  useEffect(() => {
+    AsyncStorage.getItem("alreadyLaunched").then((value) => {
+      if (value === null) {
+        AsyncStorage.setItem("alreadyLaunched", "true");
+        setIsFirstLaunch(true);
+      } else {
+        setIsFirstLaunch(false);
+      }
+    })   
+  }, []);
+
+  // not to see the onboarding screen while loading and setting the state to true
+  if(isFirstLaunch===null){
+    return
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            {/* <StatusBar style="auto" /> */}
+            {!isFirstLaunch && (
+            <Stack.Screen name="OnBoardingScreen" component={OnBoardingScreen} />
+            )} 
+            <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="SignIn" component={SignIn} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
