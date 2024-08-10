@@ -59,7 +59,7 @@ const { width, height } = useWindowDimensions();
         pages={[
           {
             backgroundColor: "#fff",
-            image: <Image source={require('../assets/images/onboarding-image-2.jpg')} style={[styles.image, { width, height, resizeMode: "contain" }]}/>,
+            image: <Image source={require('../assets/onboarding-image-2.jpg')} style={[styles.image, { width, height, resizeMode: "contain" }]}/>,
             title: " Welcome to What To Watch ",
             subtitle:
               "Stay informed about the latest releases of movies or series on your favorite platforms (Netflix, Disney+, OCS, etc.). Plan your next movie night alone or with a group!",
