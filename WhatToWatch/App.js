@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
-import { StyleSheet } from "react-native";
-=======
 import { StyleSheet, View } from "react-native";
->>>>>>> 3ee643bb6a8a4094bf8a14dbaf09c2823f465918
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
