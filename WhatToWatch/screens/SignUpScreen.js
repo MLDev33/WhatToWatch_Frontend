@@ -81,7 +81,7 @@ export default function SignUp({ navigation }) {
     if (!checkEmail.test(signUpEmail)) {
       setErrorMessage(true);
     } else {
-      fetch(`https://what-to-watch-hawmt3w45-mldev33s-projects.vercel.app/users/signup`, {
+      fetch(`http://192.168.1.83:3000/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

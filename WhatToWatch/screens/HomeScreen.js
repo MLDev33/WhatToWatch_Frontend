@@ -25,7 +25,7 @@ export default function HomeScreen() {
         throw new Error('No valid platforms provided');
       }
       const plateformesParam = encodeURIComponent(JSON.stringify(plateformes));
-      const url = `https://what-to-watch-hawmt3w45-mldev33s-projects.vercel.app/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
+      const url = `http://192.168.1.83:3000/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
 
       const response = await fetch(url);
       if (!response.ok) {

@@ -37,15 +37,19 @@ const MovieModal = ({
                   : movie.description}
               </Text>
               <View style={styles.modalDetailsRow}>
+              {movie.genre && movie.genre.length > 0 ? (
                 <Text> genre : {movie.genre.join(', ')}</Text>
+              ) : (
+                <Text> genre : N/A</Text>
+              )}
                 <Text> type : {movie.type} </Text>
                 <Text style={styles.modalDetails}>Année: {movie.annee}</Text>
                 <Text style={styles.modalDetails}>Popularité: {movie.popularite}</Text>
                 <Text style={styles.modalDetails}>Votes: {movie.vote}</Text>
               </View>
               <Text style={styles.modalDetails}>
-                Plateformes: {Array.isArray(movie.plateformes) ? movie.plateformes.map(p => p.nom).join(', ') : 'N/A'}
-              </Text>
+  Plateformes: {Array.isArray(movie.plateformes) && movie.plateformes.length > 0 ? movie.plateformes.map(p => p.nom).join(', ') : 'N/A'}
+</Text>
               <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={onUndo} style={styles.button}>
                   <FontAwesome name="undo" size={24} color="orange" />

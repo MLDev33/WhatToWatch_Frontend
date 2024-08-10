@@ -12,7 +12,7 @@ function SearchScreen() {
 
     const handleSearch = async () => {
         try {
-          const response = await fetch(`https://what-to-watch-hawmt3w45-mldev33s-projects.vercel.app/movies/search?query=${searchQuery}`);
+          const response = await fetch(`http://192.168.1.83:3000/movies/search?query=${searchQuery}`);
           const data = await response.json();
           console.log('Données reçues:', data);
           setSearchResults(data.results);
