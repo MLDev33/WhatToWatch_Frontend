@@ -81,7 +81,7 @@ export default function SignUp({ navigation }) {
     if (!checkEmail.test(signUpEmail)) {
       setErrorMessage(true);
     } else {
-      fetch("http://localhost:3000/users/signup", {
+      fetch(`http://192.168.1.140:3000/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -227,12 +227,12 @@ const styles = StyleSheet.create({
     fontWeight: 300
     },
     textButton: {
-      fontWeight: 600,
+      fontWeight: '600',
     },
     suggestionsText: {
       justifyContent: 'center',
       alignItems: 'center',
-      fontWeight: 600,
+      fontWeight: '600',
       color: 'red'
     }
 });
