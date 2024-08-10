@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }, 
     image:{
-      // position: 'absolute',
-      // marginTop: 0
+      position: 'absolute',
+      marginTop: 0
     } 
 });

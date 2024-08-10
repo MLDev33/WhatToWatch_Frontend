@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   title: {
     width: "80%",
     fontSize: 38,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   input: {
     width: "80%",
@@ -224,15 +224,15 @@ const styles = StyleSheet.create({
       marginBottom: 80,
     },
     button2: {
-    fontWeight: 300
+    fontWeight: '300'
     },
     textButton: {
-      fontWeight: 600,
+      fontWeight: '600',
     },
     suggestionsText: {
       justifyContent: 'center',
       alignItems: 'center',
-      fontWeight: 600,
+      fontWeight: '600',
       color: 'red'
     }
 });
