@@ -15,6 +15,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import { useState, useEffect } from "react";
 
 
+
 // import { GoogleSignin } from '@react-native-google-signin/google-signin';
 // import {
 // 	GOOGLE_WEB_CLIENT_ID,
@@ -107,10 +108,14 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!isFirstLaunch && (
+              <>
             <Stack.Screen name="OnBoardingScreen" component={OnBoardingScreen} />
+            {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
+            </>
             )} 
-            <Stack.Screen name="SignUp" component={SignUp} />
+            {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
             <Stack.Screen name="SignIn" component={SignIn} />
+            <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
