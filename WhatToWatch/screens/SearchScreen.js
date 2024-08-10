@@ -12,7 +12,7 @@ function SearchScreen() {
 
     const handleSearch = async () => {
         try {
-          const response = await fetch(`http://192.168.1.83:3000/movies/search?query=${searchQuery}`);
+          const response = await fetch(`http://192.168.1.140:3000/movies/search?query=${searchQuery}`);
           const data = await response.json();
           console.log('Données reçues:', data);
           setSearchResults(data.results);
@@ -70,7 +70,7 @@ input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginVertical: 10,
+    marginVertical: 30,
     paddingHorizontal: 10,
 },
 list: {
