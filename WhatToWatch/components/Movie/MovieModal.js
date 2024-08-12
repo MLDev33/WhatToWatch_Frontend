@@ -1,7 +1,7 @@
 // MovieModal.js
 import React from 'react';
 import { View, Text, Image, Modal, TouchableOpacity, StyleSheet } from 'react-native';
-import { PanGestureHandler, GestureHandlerRootView,  } from 'react-native-gesture-handler';
+import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { FontAwesome } from '@expo/vector-icons';
 
 const MovieModal = ({ 
@@ -16,7 +16,8 @@ const MovieModal = ({
 }) => {
   if (!movie) return null;
 
- console.log( movie.type , movie.genre);
+  console.log(movie.type, movie.genre);
+  const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
   return (
     <Modal
@@ -29,7 +30,7 @@ const MovieModal = ({
         <PanGestureHandler onGestureEvent={onSwipe} onHandlerStateChange={onSwipe}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Image style={styles.modalImage} source={{ uri: `https://image.tmdb.org/t/p/w500/${movie.poster}` }} />
+              <Image style={styles.modalImage} source={{ uri: `${TMDB_IMAGE_BASE_URL}/${movie.poster}` }} />
               <Text style={styles.modalTitle}>{movie.titre}</Text>
               <Text style={styles.modalDescription}>
                 {movie.description.length > 100
@@ -37,19 +38,27 @@ const MovieModal = ({
                   : movie.description}
               </Text>
               <View style={styles.modalDetailsRow}>
-              {movie.genre && movie.genre.length > 0 ? (
-                <Text> genre : {movie.genre.join(', ')}</Text>
-              ) : (
-                <Text> genre : N/A</Text>
-              )}
+                {movie.genre && movie.genre.length > 0 ? (
+                  <Text> genre : {movie.genre.join(', ')}</Text>
+                ) : (
+                  <Text> genre : N/A</Text>
+                )}
                 <Text> type : {movie.type} </Text>
                 <Text style={styles.modalDetails}>Année: {movie.annee}</Text>
                 <Text style={styles.modalDetails}>Popularité: {movie.popularite}</Text>
                 <Text style={styles.modalDetails}>Votes: {movie.vote}</Text>
               </View>
               <Text style={styles.modalDetails}>
-  Plateformes: {Array.isArray(movie.plateformes) && movie.plateformes.length > 0 ? movie.plateformes.map(p => p.nom).join(', ') : 'N/A'}
-</Text>
+                Plateformes: {Array.isArray(movie.plateformes) && movie.plateformes.length > 0 ? (
+                  movie.plateformes.map((p, index) => (
+                    <View key={index} style={styles.platformContainer}>
+                      <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logo}` }} style={styles.platformLogo} />
+                      <Text>{p.nom}</Text>
+                    </View>
+                  ))
+                ) : 'N/A'}
+              </Text>
+
               <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={onUndo} style={styles.button}>
                   <FontAwesome name="undo" size={24} color="orange" />
@@ -60,11 +69,9 @@ const MovieModal = ({
                 <TouchableOpacity onPress={onLike} style={styles.button}>
                   <FontAwesome name="heart" size={24} color="green" />
                 </TouchableOpacity>
-
                 <TouchableOpacity onPress={onShare} style={styles.button}>
                   <FontAwesome name="share" size={24} color="blue" />
                 </TouchableOpacity>
-      
               </View>
               <View style={styles.closeButtonContainer}>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -96,9 +103,11 @@ const styles = StyleSheet.create({
   },
   modalImage: {
     width: '100%',
-    height: 300,
+    height: undefined, // Permet de définir la hauteur automatiquement
+    aspectRatio: 2 / 3, // Maintient le ratio de l'image
     borderRadius: 10,
     marginBottom: 10, // Réduire l'espacement
+    resizeMode: 'contain', // Redimensionne l'image pour qu'elle soit entièrement visible
   },
   modalTitle: {
     fontSize: 20,
@@ -119,6 +128,16 @@ const styles = StyleSheet.create({
   },
   modalDetails: {
     fontSize: 14,
+  },
+  platformContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  platformLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -147,4 +166,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 export default MovieModal;
