@@ -11,19 +11,19 @@ const SearchResults = ({ results, onItemPress }) => {
     const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
     return (
       <TouchableOpacity style={styles.itemContainer} onPress={() => onItemPress(item)}>
-        <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster}` }} style={styles.poster} />
+        <Image source={{ uri: item.poster ? `${TMDB_IMAGE_BASE_URL}${item.poster}` : null }} style={styles.poster} />
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{item.titre}</Text>
+          <Text style={styles.title}>{item.titre || 'Titre non disponible'}</Text>
           <Text style={styles.overview}>
-            {item.description.length > 100 ? item.description.substring(0, 100) + '...' : item.description}
+            {item.description ? (item.description.length > 100 ? item.description.substring(0, 100) + '...' : item.description) : 'Description non disponible'}
           </Text>
           <View style={styles.platformsContainer}>
             <Text style={styles.platformsLabel}>Available on:</Text>
             {platforms.length > 0 ? (
               platforms.map((p, index) => (
                 <View key={index} style={styles.platformContainer}>
-                  <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logo}` }} style={styles.platformLogo} />
-                  <Text style={styles.platformName}>{p.nom}</Text>
+                  <Image source={{ uri: p.logo ? `${TMDB_IMAGE_BASE_URL}${p.logo}` : null }} style={styles.platformLogo} />
+                  <Text style={styles.platformName}>{p.nom || 'Nom non disponible'}</Text>
                 </View>
               ))
             ) : (
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 150,
     marginRight: 10,
+    backgroundColor: '#ccc', // Placeholder color if no image
   },
   textContainer: {
     flex: 1,
@@ -88,8 +89,13 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 5,
+    backgroundColor: '#ccc', // Placeholder color if no image
   },
   platformName: {
+    fontSize: 12,
+    color: '#888',
+  },
+  platforms: {
     fontSize: 12,
     color: '#888',
   },

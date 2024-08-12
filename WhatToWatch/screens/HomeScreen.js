@@ -16,6 +16,15 @@ export default function HomeScreen() {
     plateformes: ["netflix", "disney+"],
   };
 
+  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+  
+  // Utiliser une condition pour basculer entre les URLs
+  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+   const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
+
+
   //valeur de test aussi , a terme , l'utilisera aura selectionné des plateformes valides avant d'arriver sur cette page
   const validPlatforms = ["netflix", "disney+", "hulu", "amazon", "hbo"];
 
@@ -28,7 +37,7 @@ export default function HomeScreen() {
       //encodeURIcomponent permet de transformer un objet en chaine de caractère , ici on transforme le tableau de plateformes en chaine de caractère , pour l'envoyer dans l'url en requete get
       //sinon il faudrai une requete post plus lourde
       const plateformesParam = encodeURIComponent(JSON.stringify(plateformes));
-      const url = `https://what-to-watch-sandy.vercel.app/movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
+      const url = `${baseUrl}movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
 
       const response = await fetch(url);
       if (!response.ok) {
