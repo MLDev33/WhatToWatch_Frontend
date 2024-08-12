@@ -35,7 +35,7 @@ export default function SignIn({ navigation }) {
   }
 
   const handleSubmit = () => {
-    fetch("http://192.168.1.140:3000/movies/users/signin", {
+    fetch("https://what-to-watch-sandy.vercel.app/users/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
