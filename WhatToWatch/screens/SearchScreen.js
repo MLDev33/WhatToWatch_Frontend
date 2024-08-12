@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet , FlatList } from 'react-native';
+import { View, TextInput, Button, StyleSheet, FlatList } from 'react-native';
 import SearchResults from '../components/Movie/SearchResults';
 import MovieModal from '../components/Movie/MovieModal';
 
-
 function SearchScreen() {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
-    const handleSearch = async () => {
-        try {
-          const response = await fetch(`https://what-to-watch-sandy.vercel.app/movies/search?query=${searchQuery}`);
-          const data = await response.json();
-          console.log('Données reçues:', data);
-          setSearchResults(data.results);
-        } catch (error) {
-          console.error('Une erreur est survenue:', error);
-        }
-      };
+  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+
+  // Utiliser une condition pour basculer entre les URLs
+  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`${baseUrl}movies/search?query=${searchQuery}`);
+      const data = await response.json();
+      console.log('Données reçues:', data);
+      setSearchResults(data.results || []);
+    } catch (error) {
+      console.error('Une erreur est survenue:', error);
+    }
+  };
 
   const handleItemPress = (movie) => {
     setSelectedMovie(movie);
@@ -30,11 +37,12 @@ function SearchScreen() {
     setSelectedMovie(null);
     setModalVisible(false);
   };
+
   const renderItem = ({ item }) => (
     <SearchResults results={[item]} onItemPress={handleItemPress} />
-);
+  );
 
-return (
+  return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
@@ -59,22 +67,23 @@ return (
 }
 
 const styles = StyleSheet.create({
-container: {
+  container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-},
-input: {
+  },
+  input: {
     width: '80%',
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
     marginVertical: 30,
     paddingHorizontal: 10,
-},
-list: {
+  },
+  list: {
     width: '100%',
-},
+  },
 });
+
 export default SearchScreen;

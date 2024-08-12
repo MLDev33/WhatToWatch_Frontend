@@ -24,6 +24,14 @@ export default function SignIn({ navigation }) {
 
   const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
+  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+  
+  // Utiliser une condition pour basculer entre les URLs
+  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+   const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
+
   const handlePasswordVisibility = () => {  
     if (rightIcon === 'eye') {  
         setRightIcon('eye-slash');  
@@ -35,7 +43,7 @@ export default function SignIn({ navigation }) {
   }
 
   const handleSubmit = () => {
-    fetch("https://what-to-watch-sandy.vercel.app/users/signin", {
+    fetch(`${baseUrl}users/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
