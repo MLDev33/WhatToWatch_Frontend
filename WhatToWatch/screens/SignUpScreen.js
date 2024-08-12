@@ -19,7 +19,8 @@ export default function SignUp({ navigation }) {
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('false');
+  const [credentialError, setCredentialError] = useState('');
   const [rightIcon, setRightIcon] = useState('eye');
   const [hidePassword, setHidePassword] = useState(true);
   const [validPassword, setValidPassword] = useState(false);
@@ -81,7 +82,7 @@ export default function SignUp({ navigation }) {
     if (!checkEmail.test(signUpEmail)) {
       setErrorMessage(true);
     } else {
-      fetch(`http://192.168.1.140:3000/users/signup`, {
+      fetch(`https://what-to-watch-sandy.vercel.app/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -90,10 +91,15 @@ export default function SignUp({ navigation }) {
           password: signUpPassword,
         }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+        if (!response.ok) {
+          throw new Error('Something went wrong: ' + response.status);
+        }
+        return response.json();
+         })
         .then((data) => {
           console.log(data);
-          if (data.result) {
+          if (data.result === true) {
             dispatch(
               login({
                 username: signUpUsername,
@@ -105,6 +111,8 @@ export default function SignUp({ navigation }) {
             setSignUpUsername("");
             setSignUpPassword("");
             navigation.navigate("TabNavigator");
+          }else {
+            setCredentialError(data.error);
           }
           console.log("button clicked");
         });
@@ -177,7 +185,7 @@ export default function SignUp({ navigation }) {
         style={styles.button}
         activeOpacity={0.8}
       >
-        {errorMessage && <Text style={styles.error}>Invalid Email</Text>}
+        {credentialError && <Text style={styles.error}>{credentialError}</Text>}
         <Text style={styles.textButton}>REGISTER</Text>
       </TouchableOpacity>
       <Text style={styles.textButton}>Or connect with</Text>

@@ -8,7 +8,7 @@ const SearchResults = ({ results, onItemPress }) => {
 
     // Extract platforms
     const platforms = Array.isArray(item.plateformes) ? item.plateformes : [];
-
+    const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
     return (
       <TouchableOpacity style={styles.itemContainer} onPress={() => onItemPress(item)}>
         <Image source={{ uri: `https://image.tmdb.org/t/p/w500${item.poster}` }} style={styles.poster} />
@@ -17,9 +17,19 @@ const SearchResults = ({ results, onItemPress }) => {
           <Text style={styles.overview}>
             {item.description.length > 100 ? item.description.substring(0, 100) + '...' : item.description}
           </Text>
-          <Text style={styles.platforms}>
-            Available on: {platforms.length > 0 ? platforms.map(p => p.nom).join(', ') : 'N/A'}
-          </Text>
+          <View style={styles.platformsContainer}>
+            <Text style={styles.platformsLabel}>Available on:</Text>
+            {platforms.length > 0 ? (
+              platforms.map((p, index) => (
+                <View key={index} style={styles.platformContainer}>
+                  <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logo}` }} style={styles.platformLogo} />
+                  <Text style={styles.platformName}>{p.nom}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.platforms}>N/A</Text>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -58,7 +68,28 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
-  platforms: {
+  platformsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  platformsLabel: {
+    fontSize: 12,
+    color: '#888',
+    marginRight: 5,
+  },
+  platformContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  platformLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
+  },
+  platformName: {
     fontSize: 12,
     color: '#888',
   },
