@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   haveAccount: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 250
+    marginTop: 10,
   },
     button: {
       alignItems: 'center',
