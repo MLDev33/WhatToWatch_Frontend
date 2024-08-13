@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView  , TextInput , Button , TouchableOpacity} from 'react-native';
 import {  GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import Movie from '../components/Movie/Movie';
 import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
+import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const [movies, setMovies] = useState([]);
@@ -10,11 +12,15 @@ export default function HomeScreen() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState(''); // État pour la recherche
+  const navigation = useNavigation(); // Hook de navigation
   //valeur de test , on recuperera depuis le store
+  const user = useSelector((state) => state.user.value);
+  let username = user.username;
   let userTest = {
-    name: "userTest",
     plateformes: ["netflix", "disney+"],
   };
+
 
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -82,7 +88,10 @@ export default function HomeScreen() {
       }
     }
   };
-
+  const handleSearchSubmit = () => {
+    navigation.navigate('Search', { query: searchQuery });
+    setSearchQuery(''); // Réinitialisation de la recherche
+  };
     //on envoi en props le resultat de la requete fetch , si on est en chargement , on affiche un message de chargement
     //Movie est un composant qui affiche un film , on lui envoi en props le poster du film et une fonction qui permet d'ouvrir le modal
     //l'utilisateur verra un poster du composant Movie puis cliquera dessus pour acceder au composant MovieModal qui affiche le film en grand
@@ -102,25 +111,47 @@ export default function HomeScreen() {
     </ScrollView>
   );
 
-    //
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome {userTest.name}</Text>
-        <View style={styles.movies}>
-          <Text style={styles.moviesHeader}>Here are some movies you might like:</Text>
-          {loading ? (
-            <Text>Loading trendings on your platform(s)</Text>
-          ) : (
-            <MovieTrendings movies={movies} />
-          )}
+    //modification pour le query du searchscreen
+    return (
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <Text style={styles.welcomeText}>Welcome {username}</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search for movies..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onSubmitEditing={handleSearchSubmit}
+          />
+          <TouchableOpacity style={styles.searchButton} onPress={handleSearchSubmit}>
+          <Text style={styles.searchButtonText}>Search</Text>
+        </TouchableOpacity>
+          <View style={styles.movies}>
+            <Text style={styles.moviesHeader}>Trendings on your platforms</Text>
+            {loading ? (
+              <Text>Loading trendings on your platform(s)</Text>
+            ) : (
+              <MovieTrendings movies={movies} />
+            )}
+          </View>
+          <MovieModal
+            visible={modalVisible}
+            movie={selectedMovie}
+            onClose={closeModal}
+            onSwipe={handleSwipe}
+          />
         </View>
-        <MovieModal
-          visible={modalVisible}
-          movie={selectedMovie}
-          onClose={closeModal}
-          onSwipe={handleSwipe}
-        />
+        <View style={styles.listsContainer}>
+        <Text style={styles.createListText}>Create a new list</Text>
+        <TouchableOpacity style={styles.addButton}>
+          <Text style={styles.addButtonText}>Add List</Text>
+        </TouchableOpacity>
+        <View style={styles.userLists}>
+        <TouchableOpacity>
+            <Text>User Like</Text>
+          </TouchableOpacity>
+          <Text>List map goes here</Text>
+        </View>
       </View>
     </GestureHandlerRootView>
   );
@@ -129,23 +160,71 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
   },
   welcomeText: {
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 24,
     fontWeight: 'bold',
   },
+  searchInput: {
+    height: 30,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  // Styling for the search button
+  searchButton: {
+    height: 30,
+    backgroundColor: '#7C4DFF', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    borderRadius: 5, 
+    marginBottom: 10, 
+  },
+  searchButtonText: {
+    color: '#fff', 
+    fontSize: 16, 
+    fontWeight: 'bold', 
+  },
   movies: {
-    marginTop: 20,
-    marginVertical: 20,
+    flex: 1,
   },
   moviesHeader: {
-    marginBottom: 10,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
+    marginBottom: 5,
   },
   scrollContainer: {
-    flexDirection: 'row',
+    flexWrap : 'nowrap',
+  },
+  listsContainer: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+  },
+  createListText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: '#7C4DFF',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  userLists: {
+    marginTop: 20,
+  },
+  listItem: {
+    fontSize: 16,
+    paddingVertical: 5,
   },
 });

@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, FlatList } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 import SearchResults from '../components/Movie/SearchResults';
 import MovieModal from '../components/Movie/MovieModal';
 
+
 function SearchScreen() {
-  const [searchQuery, setSearchQuery] = useState('');
+  //test pour recupere le query depis le homescreen
+
+  const route = useRoute();
+  const initialQuery = route.params?.query || '';
+
+
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [isResetting, setIsResetting] = useState(false);
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -16,6 +24,7 @@ function SearchScreen() {
   // Utiliser une condition pour basculer entre les URLs
   //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
   const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+
 
   const handleSearch = async () => {
     try {
@@ -27,6 +36,24 @@ function SearchScreen() {
       console.error('Une erreur est survenue:', error);
     }
   };
+  // Reset search results when initial query changes
+  // il est sans doute possible de faire tout en use effect mais je n'ai pas reussi
+  useEffect(() => {
+    if (initialQuery) {
+      setSearchQuery(initialQuery);
+      setIsResetting(true);
+      setSearchResults([]); // Réinitialiser les résultats
+    } else {
+      setSearchResults([]); // Réinitialiser les résultats si pas de query
+    }
+  }, [initialQuery]);
+  // Re-run search when query changes
+  useEffect(() => {
+    if (isResetting && searchResults.length === 0) {
+      setIsResetting(false);
+      handleSearch();
+    }
+  }, [searchResults, isResetting]);
 
   const handleItemPress = (movie) => {
     setSelectedMovie(movie);
