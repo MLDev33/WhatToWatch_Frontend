@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -120,7 +120,7 @@ export default function App() {
           options={{ headerShown: false }}
         /> */}
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {!isFirstLaunch && (
+            {isFirstLaunch && (
               <>
                 <Stack.Screen
                   name="OnBoardingScreen"
