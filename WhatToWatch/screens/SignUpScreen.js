@@ -209,7 +209,7 @@ export default function SignUp({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "000",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     width: "80%",
     fontSize: 38,
     fontWeight: '600',
+    // color:"white",
   },
   input: {
     width: "80%",
@@ -224,6 +225,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ec6e5b",
     borderBottomWidth: 1,
     fontSize: 18,
+    // color:"white",
   },
   haveAccount: {
     flexDirection: "row",
@@ -243,6 +245,7 @@ const styles = StyleSheet.create({
     },
     textButton: {
       fontWeight: '600',
+      // color:"white",
     },
     suggestionsText: {
       justifyContent: 'center',

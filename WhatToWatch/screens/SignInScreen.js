@@ -141,12 +141,12 @@ export default function SignIn({ navigation }) {
       // style={styles.textButton}
       >Forgotten password? </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress={ () => <ForgottenPassword />
-      }
+      onPress={ () => setModalVisible(true)}
       >
         <Text style={styles.textButton}>Click here</Text>
       </TouchableOpacity>
       </View>
+      <ForgottenPassword modalVisible={modalVisible} setModalVisible={modalVisible} />
     </KeyboardAvoidingView>
   );
 }

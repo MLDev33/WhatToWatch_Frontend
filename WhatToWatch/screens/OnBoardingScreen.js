@@ -33,7 +33,7 @@ const Square = ({ selected }) => {
       style={{
         width: 6,
         height: 6,
-        marginTop: -170,
+        marginTop: -150,
         marginHorizontal: 3,
         backgroundColor ,
       }}
@@ -43,26 +43,26 @@ const Square = ({ selected }) => {
 };
 
 const Next = ({  ...props }) => (
-  // <Button
-  //   title={'Next'}
-  //   // buttonStyle={{
-  //   //   backgroundColor: backgroundColor(isLight),
-  //   // }}
-  //   containerViewStyle={{
-  //     marginVertical: 10,
-  //     width: 70,
-  //     backgroundColor: 'pink',
-  //     justifyContent: 'center'
-  //   }}
-  //   // textStyle={{ color: color(isLight) }}
-  //   {...props}
-  // />
-  <TouchableOpacity  style={{
-    marginVertical: 30,
-    width: 170,}} {...props}>
-    <Text>Next</Text>
-  </TouchableOpacity>
-  // {...props}
+  <Button
+    title={'Next'}
+    // buttonStyle={{
+    //   backgroundColor: backgroundColor(isLight),
+    // }}
+    containerViewStyle={{
+      marginVertical: 10,
+      width: 70,
+      backgroundColor: 'pink',
+      justifyContent: 'center'
+    }}
+    // textStyle={{ color: color(isLight) }}
+    {...props}
+  />
+  // <TouchableOpacity  style={{
+  //   marginVertical: 30,
+  //   width: 170,}} {...props}>
+  //   <Text>Next</Text>
+  // </TouchableOpacity>
+  // // {...props}
 );
 
 const Done = ({  ...props }) => (
