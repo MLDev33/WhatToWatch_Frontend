@@ -12,6 +12,9 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
+import {  GestureHandlerRootView, State } from 'react-native-gesture-handler';
+import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
+
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
@@ -21,6 +24,7 @@ export default function SignIn({ navigation }) {
   const [errorMessage, setErrorMessage] = useState(false);
   const [rightIcon, setRightIcon] = useState('eye');
   const [hidePassword, setHidePassword] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
@@ -74,12 +78,22 @@ export default function SignIn({ navigation }) {
       });
   };
 
+  const openModal = () => {
+  
+    setModalVisible(true);
+
+  };
+  
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Welcome to What To Watch !</Text>
+      <Text style={styles.title}>Welcome to {'\n'} What To Watch !</Text>
       <TextInput
         placeholder="Username"
         autoCapitalize="none"
@@ -115,7 +129,7 @@ export default function SignIn({ navigation }) {
           Don't have an account?
         </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress ={() => {navigation.navigate('SignUp')}}
+      onPress ={ () => navigation.navigate('SignUp')}
       >
         <Text style={styles.textButton}>
          Sign up here
@@ -127,7 +141,8 @@ export default function SignIn({ navigation }) {
       // style={styles.textButton}
       >Forgotten password? </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress={() => navigation.navigate('ForgottenPassword')}
+      onPress={ () => <ForgottenPassword />
+      }
       >
         <Text style={styles.textButton}>Click here</Text>
       </TouchableOpacity>

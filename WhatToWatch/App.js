@@ -130,11 +130,13 @@ export default function App() {
               </>
             )}
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
+            
             <Stack.Screen name="SignIn" component={SignIn} />
             <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
      {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />  */}
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
