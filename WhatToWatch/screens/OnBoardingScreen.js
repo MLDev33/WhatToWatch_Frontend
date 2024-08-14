@@ -21,64 +21,69 @@ const { width, height } = useWindowDimensions();
 // const skip = ( {...props} ) => ( <TouchableOpacity style={{marginHorizontal:10}} {...props} > <Text style={{fontSize:16}}>Done</Text> </TouchableOpacity> );
 
 
-const Square = ({ isLight, selected }) => {
+const Square = ({ selected }) => {
   let backgroundColor;
-  if (isLight) {
-    backgroundColor = selected ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.3)';
-  } else {
+  // if (isLight) {
+    // backgroundColor = selected ? 'rgba(0, 0, 0, 0.8)' : 'rgba(0, 0, 0, 0.3)';
+  // } else {
     backgroundColor = selected ? '#fff' : 'rgba(255, 255, 255, 0.5)';
-  }
+  // }
   return (
     <View
       style={{
         width: 6,
         height: 6,
+        marginTop: -170,
         marginHorizontal: 3,
-        backgroundColor,
+        backgroundColor ,
       }}
+      
     />
   );
 };
 
 const Next = ({  ...props }) => (
-  <Button
-    title={'Next'}
-    // buttonStyle={{
-    //   backgroundColor: backgroundColor(isLight),
-    // }}
-    containerViewStyle={{
-      marginVertical: 10,
-      width: 70,
-      // backgroundColor: backgroundColor(isLight),
-    }}
-    // textStyle={{ color: color(isLight) }}
-    {...props}
-  />
+  // <Button
+  //   title={'Next'}
+  //   // buttonStyle={{
+  //   //   backgroundColor: backgroundColor(isLight),
+  //   // }}
+  //   containerViewStyle={{
+  //     marginVertical: 10,
+  //     width: 70,
+  //     backgroundColor: 'pink',
+  //     justifyContent: 'center'
+  //   }}
+  //   // textStyle={{ color: color(isLight) }}
+  //   {...props}
+  // />
+  <TouchableOpacity  style={{
+    marginVertical: 30,
+    width: 170,}} {...props}>
+    <Text>Next</Text>
+  </TouchableOpacity>
+  // {...props}
 );
 
 const Done = ({  ...props }) => (
   <Button
     title={'Done'}
-    // buttonStyle={{
-    //   backgroundColor: backgroundColor(isLight),
-    // }}
+    style={styles.buttonContainer}
     containerViewStyle={{
-      marginVertical: 10,
-      width: 70,
-      // backgroundColor: backgroundColor(isLight),
+      marginVertical: 30,
+      width: 170,
+      backgroundColor: 'red',
     }}
-    // textStyle={{ color: color(isLight) }}
+    textStyle={{ color: 'red' }}
     {...props}
   />
 );
 
   return (
-    <SafeAreaView 
-    style={styles.container}
-    >
+
       <Onboarding
-DotComponent={Square}
-      // onDone={()=> navigation.replace('SignUp')}
+      DotComponent={Square}
+      onDone={()=> navigation.replace('SignUp')}
       NextButtonComponent={Next}
       DoneButtonComponent={Done}
         pages={[
@@ -110,21 +115,22 @@ DotComponent={Square}
               "Not sure what to watch on your next date? Create a list of your favorite movie genres, like films or series, and share everything with the group! A match? Perfect, your movie night is planned!",
           },
         ]}
-     
+        bottomBarColor="#000027"
+        bottomBarHeight={170}
         containerStyles={{
-          marginTop: -200, 
+          marginTop: -60,
           borderColor: "yellow",
           borderWidth: 2,  
           }}
         titleStyles={styles.textH1}
         subTitleStyles={styles.textBody14}
         showDone={true}
-        // showSkip={false}
-        // skipLabel={skip}
+        showSkip={false}
         showNext={true}
+  
       />
       
-    </SafeAreaView>
+
   );
 }
 
@@ -137,16 +143,17 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         backgroundColor: "#000027",
     }, 
-  //   imageContainer:{
-  //     borderColor: "red",
-  //     borderWidth: 2,
-  //     resizeMode: "cover",
-  //     flexDirection: "column",
-  // },
+    imageContainer:{
+      borderColor: "red",
+      borderWidth: 2,
+      resizeMode: "cover",
+      flexDirection: "column",
+  },
   image: {
-      height: 450,
+      height: 400,
   },
   textH1: {
+    marginTop: -30,
     textAlign: "center",
     color:"white",
     fontSize: 40,
@@ -161,6 +168,7 @@ marginVertical: 20,
 buttonContainer:{
   flex: "auto",
   alignItems: "center",
+  color: 'red'
 }
 });
 
