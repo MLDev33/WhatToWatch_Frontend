@@ -135,7 +135,7 @@ export default function SignUp({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Welcome to What To Watch !</Text>
+      <Text style={styles.title}>Welcome to {'\n'} What To Watch !</Text>
       <TextInput
         placeholder="Username"
         autoCapitalize="none"
