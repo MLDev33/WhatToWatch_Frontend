@@ -1,18 +1,15 @@
 import { useState } from "react";
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  Icon,
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import {  GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
 
 
@@ -79,9 +76,7 @@ export default function SignIn({ navigation }) {
   };
 
   const openModal = () => {
-  
     setModalVisible(true);
-
   };
   
   const closeModal = () => {
@@ -141,12 +136,12 @@ export default function SignIn({ navigation }) {
       // style={styles.textButton}
       >Forgotten password? </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress={ () => <ForgottenPassword />
-      }
+      onPress={() => setModalVisible(true)}
       >
         <Text style={styles.textButton}>Click here</Text>
       </TouchableOpacity>
       </View>
+      <ForgottenPassword modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </KeyboardAvoidingView>
   );
 }

@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import OnBoardingScreen from "./screens/OnBoardingScreen";
-import ForgottenPassword from "./screens/ForgottenPasswordScreen";
 import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -132,7 +131,7 @@ export default function App() {
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
             
             <Stack.Screen name="SignIn" component={SignIn} />
-            <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />
+            
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
      {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
