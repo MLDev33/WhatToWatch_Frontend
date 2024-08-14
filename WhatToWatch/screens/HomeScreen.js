@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView  , TextInput , Button , TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, ScrollView  , TextInput  , TouchableOpacity} from 'react-native';
 import {  GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import Movie from '../components/Movie/Movie';
 import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
