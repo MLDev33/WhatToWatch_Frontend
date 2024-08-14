@@ -32,7 +32,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
  
   const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [platformModalVisible, setPlatformModalVisible] = useState(false);
-  console.log(movie.type, movie.genre);
+  console.log(movie.type, movie.genre ,movie.annee);
   const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
   const userToken = useSelector((state) => state.user.value.token);

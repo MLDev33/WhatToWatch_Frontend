@@ -16,7 +16,7 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
+
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -39,21 +39,16 @@ function SearchScreen() {
   // Reset search results when initial query changes
   // il est sans doute possible de faire tout en use effect mais je n'ai pas reussi
   useEffect(() => {
-    if (initialQuery) {
+    if (initialQuery !== searchQuery) {
       setSearchQuery(initialQuery);
-      setIsResetting(true);
-      setSearchResults([]); // Réinitialiser les résultats
+      setSearchResults([]);
+    }
+    if (searchQuery) {
+      handleSearch(searchQuery);
     } else {
-      setSearchResults([]); // Réinitialiser les résultats si pas de query
+      setSearchResults([]);
     }
-  }, [initialQuery]);
-  // Re-run search when query changes
-  useEffect(() => {
-    if (isResetting && searchResults.length === 0) {
-      setIsResetting(false);
-      handleSearch();
-    }
-  }, [searchResults, isResetting]);
+  }, [initialQuery, searchQuery]);
 
   const handleItemPress = (movie) => {
     setSelectedMovie(movie);
