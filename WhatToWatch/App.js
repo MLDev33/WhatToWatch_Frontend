@@ -120,7 +120,7 @@ export default function App() {
           options={{ headerShown: false }}
         /> */}
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {isFirstLaunch && (
+            {!isFirstLaunch && (
               <>
                 <Stack.Screen
                   name="OnBoardingScreen"

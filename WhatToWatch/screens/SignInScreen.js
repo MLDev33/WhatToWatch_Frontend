@@ -115,7 +115,7 @@ export default function SignIn({ navigation }) {
           Don't have an account?
         </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress ={ () => {navigation.navigate('SignUp')}}
+      onPress ={() => {navigation.navigate('SignUp')}}
       >
         <Text style={styles.textButton}>
          Sign up here
@@ -127,7 +127,7 @@ export default function SignIn({ navigation }) {
       // style={styles.textButton}
       >Forgotten password? </Text>
       <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      // onPress={navigation.navigate('ForgottenPassword')}
+      onPress={() => navigation.navigate('ForgottenPassword')}
       >
         <Text style={styles.textButton}>Click here</Text>
       </TouchableOpacity>
