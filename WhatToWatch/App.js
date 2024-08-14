@@ -1,10 +1,9 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import SplashScreen from "./screens/SplashScreen";
 import OnBoardingScreen from "./screens/OnBoardingScreen";
 import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
