@@ -11,6 +11,7 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
+import RecoveredPasswordModal from "../components/SignInUp/RecoveredPassword";
 
 
 export default function SignIn({ navigation }) {
@@ -75,13 +76,6 @@ export default function SignIn({ navigation }) {
       });
   };
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-  
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   return (
     <KeyboardAvoidingView
@@ -96,7 +90,6 @@ export default function SignIn({ navigation }) {
         value={signInUsername}
         style={styles.input}
       />
-      {/* <TextInput placeholder="Email address" onChangeText={(value) => setEmail(value)} value={email} style={styles.input} /> */}
       <TextInput
         secureTextEntry={true}
         placeholder="Password"
