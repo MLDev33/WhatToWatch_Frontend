@@ -1,10 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Text, View , StyleSheet } from 'react-native';
-import { login } from "../reducers/user";
+import { Text, View , StyleSheet, TouchableOpacity } from 'react-native';
+import { login, logout } from "../reducers/user";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
 
     const dispatch = useDispatch();
 
@@ -14,6 +14,7 @@ export default function ProfileScreen() {
   const handleLogOut = () => {
     dispatch(logout());
     console.log("logout");
+    navigation.replace('SignIn')
   };
 
     return (
