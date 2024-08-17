@@ -11,59 +11,57 @@ export default function ForgottenPassword({ modalVisible, setModalVisible }) {
 
     const [email, setEmail] = useState("");
     const [errorMessage, setErrorMessage] = useState(false);
+    const [recoveredModalVisible, setRecoveredModalVisible] = useState(false);
 
     const handleSubmit = () => {
         if (!checkEmail.test(email)) {
-          setErrorMessage(true);
-          setModalVisible(true);
-        console.log('error to be displayed')
+            setErrorMessage(true);
+            setModalVisible(true);
+            console.log('error to be displayed');
         } else {
-         
-              console.log("good email");
-         
+            console.log("good email");
+            setModalVisible(false);
+            setRecoveredModalVisible(true);
         }
-      };
-
+    };
     return (
         <View>
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-        >
-            <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Forgotten Password</Text>
-                    <Text style={styles.modalTitle}>Please enter the email address associated with your account {'\n'} What To Watch</Text>
-                    <TouchableOpacity
-                        style={styles.closeButtonContainer}
-                        onPress={() => setModalVisible(false)}
-                    >
-                        <FontAwesome name="times" size={20} color="black" />
-                    </TouchableOpacity>
-                    <TextInput
-        autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-        keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-        textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-        autoComplete="email"
-        placeholder="Email address"
-        onChangeText={(value) => setEmail(value)}
-        value={email}
-        style={styles.input}
-      />
-      
-      <TouchableOpacity
-        onPress={() => handleSubmit()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.modalTitle}>Recover Password</Text>
-      </TouchableOpacity>
-   
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Forgotten Password</Text>
+                        <Text style={styles.modalTitle}>Please enter the email address associated with your account {'\n'} What To Watch</Text>
+                        <TouchableOpacity
+                            style={styles.closeButtonContainer}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <FontAwesome name="times" size={20} color="black" />
+                        </TouchableOpacity>
+                        <TextInput
+                            autoCapitalize="none"
+                            keyboardType="email-address"
+                            textContentType="emailAddress"
+                            autoComplete="email"
+                            placeholder="Email address"
+                            onChangeText={(value) => setEmail(value)}
+                            value={email}
+                            style={styles.input}
+                        />
+                        <TouchableOpacity
+                            onPress={() => handleSubmit()}
+                            style={styles.button}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.modalTitle}>Recover Password</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
-        </Modal>
-        <RecoveredPasswordModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
+            </Modal>
+            <RecoveredPasswordModal modalVisible={recoveredModalVisible} setModalVisible={setRecoveredModalVisible} />
         </View>
     );
 }
