@@ -11,7 +11,7 @@ import {
   Icon,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { login, logout } from "../reducers/user";
+import { login } from "../reducers/user";
 
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
