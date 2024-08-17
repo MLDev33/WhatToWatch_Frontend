@@ -4,27 +4,19 @@ import { useRoute } from '@react-navigation/native';
 import SearchResults from '../components/Movie/SearchResults';
 import MovieModal from '../components/Movie/MovieModal';
 
-
 function SearchScreen() {
-  //test pour recupere le query depis le homescreen
-
   const route = useRoute();
   const initialQuery = route.params?.query || '';
-
 
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [searchResults, setSearchResults] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [shouldSearch, setShouldSearch] = useState(false); // Nouvel état
 
-  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-
-  // Utiliser une condition pour basculer entre les URLs
-  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
-
+  const baseUrl = localUrl;
 
   const handleSearch = async () => {
     try {
@@ -36,19 +28,21 @@ function SearchScreen() {
       console.error('Une erreur est survenue:', error);
     }
   };
-  // Reset search results when initial query changes
-  // il est sans doute possible de faire tout en use effect mais je n'ai pas reussi
+
   useEffect(() => {
     if (initialQuery !== searchQuery) {
       setSearchQuery(initialQuery);
       setSearchResults([]);
+      setShouldSearch(true); // Déclencher la recherche après la mise à jour de initialQuery
     }
-    if (searchQuery) {
-      handleSearch(searchQuery);
-    } else {
-      setSearchResults([]);
+  }, [initialQuery]);
+
+  useEffect(() => {
+    if (shouldSearch) {
+      handleSearch();
+      setShouldSearch(false); // Réinitialiser l'état après la recherche
     }
-  }, [initialQuery, searchQuery]);
+  }, [shouldSearch]);
 
   const handleItemPress = (movie) => {
     setSelectedMovie(movie);
@@ -72,7 +66,7 @@ function SearchScreen() {
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
-      <Button title="Rechercher" onPress={handleSearch} />
+      <Button title="Rechercher" onPress={() => setShouldSearch(true)} />
       <FlatList
         data={searchResults}
         renderItem={renderItem}

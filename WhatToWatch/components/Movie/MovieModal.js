@@ -37,10 +37,11 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
 
   const userToken = useSelector((state) => state.user.value.token);
   console.log("userToken", userToken);
-
+  //-------------------- Fonction pour ajouter un film en favoris-----------------------------//
   const onLike = async (movie) => {
-    console.log("likepress on", movie.titre);
+    console.log("likepress on", movie.titre , "id", movie.id , "for the user", userToken , "annee", movie.annee);
     try {
+     
       const response = await fetch(`${baseUrl}movies/like`, {
         method: "POST",
         headers: {
@@ -80,7 +81,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
       alert("Une erreur est survenue lors de l'ajout aux favoris.");
     }
   };
-
+  //-------------------- Fonction pour partager le lien de l'application-----------------------------//
   const shareNative = async () => {
     // Mapper les types de votre application aux types de l'URL
     const typeMap = {
@@ -131,7 +132,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <FontAwesome name="times" size={20} color="white" />
+                  <FontAwesome name="times" size={20} color="black" />
                 </TouchableOpacity>
                 <Image
                   style={styles.modalImage}
@@ -243,15 +244,12 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     position: "relative",
   },
-  closeButton: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    zIndex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderRadius: 15,
-    padding: 5,
-  },
+closeButton: {
+  position: "absolute",
+  top: 5,
+  right: 8,
+
+},
   modalImage: {
     width: "100%",
     height: undefined,
@@ -317,15 +315,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  closeButtonContainer: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-  },
-  closeButton: {
-    fontSize: 16,
-    color: "black",
   },
 });
 
