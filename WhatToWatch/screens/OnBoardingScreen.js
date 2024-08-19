@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: '50%',
+    marginTop :'10%',
     justifyContent: 'center',
     alignItems: 'center',
   },
