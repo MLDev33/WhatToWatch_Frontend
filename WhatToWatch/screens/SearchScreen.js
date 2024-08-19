@@ -12,7 +12,7 @@ function SearchScreen() {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [shouldSearch, setShouldSearch] = useState(false); // Nouvel état
+  const [shouldSearch, setShouldSearch] = useState(true); // Nouvel état
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
