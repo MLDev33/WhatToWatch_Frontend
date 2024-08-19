@@ -2,11 +2,15 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Text, View , StyleSheet, TouchableOpacity } from 'react-native';
-import { login, logout } from "../reducers/user";
+import { logout } from "../reducers/user";
+import DeleteAccount from "../components/Profile/DeleteAccount";
+
 
 export default function ProfileScreen({ navigation }) {
 
     const dispatch = useDispatch();
+
+    const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false);
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
@@ -23,6 +27,10 @@ export default function ProfileScreen({ navigation }) {
             <TouchableOpacity style={styles.button2} activeOpacity={0.8} onPress={handleLogOut}>
           <Text style={styles.textButton}>LOGOUT</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button2} activeOpacity={0.8} onPress={() => setDeleteAccountModalVisible(true)}>
+          <Text style={styles.textButton}>DELETE ACCOUNT</Text>
+        </TouchableOpacity>
+        <DeleteAccount deleteAccountModalVisible={deleteAccountModalVisible} setDeleteAccountModalVisible={setDeleteAccountModalVisible} />
         </View>
     )
 }

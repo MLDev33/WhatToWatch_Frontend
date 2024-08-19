@@ -20,6 +20,7 @@ export default function ForgottenPassword({ modalVisible, setModalVisible }) {
             console.log('error to be displayed');
         } else {
             console.log("good email");
+            setEmail("");
             setModalVisible(false);
             setRecoveredModalVisible(true);
         }
