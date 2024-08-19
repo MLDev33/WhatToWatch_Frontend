@@ -23,30 +23,16 @@ const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
 
 const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
+
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  let username = user.username;
-  let token = user.token;
-  const [userPassword, setUserPassword] = useState("");
   const navigation = useNavigation();
+
+  const user = useSelector((state) => state.user.value);
+  let token = user.token;
+
+  const [userPassword, setUserPassword] = useState("");
+
   const handleDeleteAccount = () => {
-    fetch(`${baseUrl}users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: username,
-        password: userPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        console.log(username);
-        console.log(userPassword);
-        if (!data.result) {
-          console.log("false");
-        } else {
-          console.log("true");
           fetch(`${baseUrl}users/${token}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -59,15 +45,13 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
               } else {
                 console.log("trueR");
                 dispatch(logout());
-                navigation.replace("SignUp");
+                navigation.navigate("SignUp");
               }
-              console.log("button signin clicked");
+              console.log("button delete account clicked");
             });
-        }
-
         setUserPassword("");
-      });
-  };
+      };
+  
 
   const handleCloseButton = () => {
     setModalVisible(false);
@@ -111,7 +95,7 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
       </View>
     </Modal>
   );
-};
+}
 
 const styles = StyleSheet.create({
   modalOverlay: {

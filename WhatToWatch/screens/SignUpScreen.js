@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-// import SelectPlatformModal from "../components/SignInUp/SelectPlatform";
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { MaterialIcons as Icon } from '@expo/vector-icons';
 
@@ -31,6 +30,7 @@ export default function SignUp({ navigation }) {
   const [strength, setStrength] = useState('');
   const [platformsModalVisible, setPlatformsModalVisible] = useState(false)
   const [selectedProviders, setSelectedProviders] = useState([]);
+
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -112,7 +112,7 @@ export default function SignUp({ navigation }) {
          })
         .then((data) => {
           console.log(data);
-          console.log(selectedProviders)
+          console.log(selectedProviders, "providers")
           if (data.result === true) {
             dispatch(
               login({
@@ -134,9 +134,6 @@ export default function SignUp({ navigation }) {
     }
   };
 
-  const onTap = () => {
-    console.log('Button touched!');
-    navigation.navigate('SignIn')}
 
     const providers = [
       {id : 1, "Amazon Prime Video": 119, name: 'Amazon Prime', logo:''}, 
@@ -230,7 +227,7 @@ export default function SignUp({ navigation }) {
       <Text style={styles.textButton}>Or connect with</Text>
       <View style={styles.haveAccount}>
         <Text>Already have an account?</Text>
-        <TouchableOpacity style={styles.button2} activeOpacity={0.8} onPress={onTap}>
+        <TouchableOpacity style={styles.button2} activeOpacity={0.8} onPress={()=>navigation.navigate('SignIn')}>
           <Text style={styles.textButton}>Sign in here!</Text>
         </TouchableOpacity>
       </View>
@@ -272,7 +269,6 @@ export default function SignUp({ navigation }) {
           </View>
         </View>
       </Modal>
-      {/* <SelectPlatformModal platformsModalVisible={platformsModalVisible} setPlatformsModalVisible={setPlatformsModalVisible} /> */}
     </KeyboardAvoidingView>
   );
 }
