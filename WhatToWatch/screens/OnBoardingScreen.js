@@ -77,7 +77,7 @@ export default function OnBoardingScreen() {
           </View>,
           title: `Welcome to ${'\n'} What To Watch`,
           subtitle:
-            "Not sure what to watch ? Create a list of your favorite movie genres, like films or series, and share everything with the group! A match? Perfect, your movie night is planned!",
+            "Not sure what to watch ? Create a list of your favorite genres, films or series, and share everything with the group! A match? Perfect, your movie night is planned!",
         },
       ]}
       bottomBarHeight={60}
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: '50%',
+    marginTop: '10%',
     justifyContent: 'center',
     alignItems: 'center',
   },
