@@ -29,7 +29,7 @@ export default function SignUp({ navigation }) {
   const [suggestions, setSuggestions] = useState([]);
   const [strength, setStrength] = useState('');
   const [platformsModalVisible, setPlatformsModalVisible] = useState(false)
-  const [selectedProviders, setSelectedProviders] = useState([]);
+  const [selectedProviders, setSelectedProviders] = useState({});
 
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -101,7 +101,7 @@ export default function SignUp({ navigation }) {
           username: signUpUsername,
           email: signUpEmail,
           password: signUpPassword,
-          favouritePlatforms: selectedProviders
+          favouritePlatforms: [selectedProviders]
         }),
       })
         .then((response) => {
@@ -136,27 +136,27 @@ export default function SignUp({ navigation }) {
 
 
     const providers = [
-      {id : 1, "Amazon Prime Video": 119, name: 'Amazon Prime', logo:''}, 
-      {id : 2, "Disney Plus": 337, name: 'Disney Plus', logo: ''}, 
-      {id : 3,  Netflix: 8, name: 'Netflix', logo:''}, 
-      {id : 4, "HBO Max": 384, name: 'HBO Max',  logo: ''},  
-      {id : 5,"Canal+": 381, name: 'Canal+', logo: ''}, 
-      {id : 6, "Apple TV": 2, name:  "Apple TV",  logo:''},
-      {id : 7, Starz: 43, name: 'Starz', logo: ''}, 
-      {id : 8, Crunchyroll: 283, name: 'Crunchyroll', logo: ''}, 
-      {id : 9, MUBI: 11, name: 'MUBI', logo:''}, 
-      {id : 10, YouTube: 192, name: 'YouTube', logo:''}, 
-      {id : 11, Hulu: 15, name: 'Hulu', logo: ''}, 
-      {id : 12, "Rakuten TV": 35, name: 'Rakuten TV', logo: ''}, 
-      {id : 13, "BBC iPlayer": 38, name: 'BBC iPlayer', logo: ''}, 
-      {id : 14, "OCS Go": 56, name: 'OCS', logo: ''}, 
-      {id : 15, ABC: 148, name: 'ABC', logo: ''}, 
-      {id : 16, "Universal Pictures": 184, name: 'Universal Pictures', logo: ''}, 
-      {id : 17,Arte: 234, name: 'Arte', logo: ''}, 
-       {id : 18, "France TV": 236, name: 'France TV', logo: ''}, 
-       {id : 19, Boomerang: 248, name: 'Boomerang', logo: ''}, 
-       {id : 20, Sky: 210, name: 'Sky', logo: ''}, 
-       {id : 21, "Rai Play": 222, name: 'Rai Play', logo: ''},   
+      {"Amazon Prime Video": 119, id : 1, "Amazon Prime Video": 119, name: 'Amazon Prime', logo:''}, 
+      {"Disney Plus": 337, id : 2,  name: 'Disney Plus', logo: ''}, 
+      {Netflix: 8, id : 3,  name: 'Netflix', logo:''}, 
+      {"HBO Max": 384, id : 4, name: 'HBO Max',  logo: ''},  
+      {"Canal+": 381, id : 5, name: 'Canal+', logo: ''}, 
+      {"Apple TV": 2, id : 6, name:  "Apple TV",  logo:''},
+      {Starz: 43, id : 7, name: 'Starz', logo: ''}, 
+      {Crunchyroll: 283, id : 8, name: 'Crunchyroll', logo: ''}, 
+      {MUBI: 11,  id : 9, name: 'MUBI', logo:''}, 
+      {YouTube: 192,  id : 10, name: 'YouTube', logo:''}, 
+      {Hulu: 15, id : 11, name: 'Hulu', logo: ''}, 
+      {"Rakuten TV": 35, id : 12, name: 'Rakuten TV', logo: ''}, 
+      {"BBC iPlayer": 38, id : 13, name: 'BBC iPlayer', logo: ''}, 
+      {"OCS Go": 56, id : 14, "OCS Go": 56, name: 'OCS', logo: ''}, 
+      {ABC: 148, id : 15, name: 'ABC', logo: ''}, 
+      {"Universal Pictures": 184, id : 16, name: 'Universal Pictures', logo: ''}, 
+      {Arte: 234, id : 17, name: 'Arte', logo: ''}, 
+       {"France TV": 236, id : 18, name: 'France TV', logo: ''}, 
+       {Boomerang: 248, id : 19, name: 'Boomerang', logo: ''}, 
+       {Sky: 210, id : 20,  name: 'Sky', logo: ''}, 
+       {"Rai Play": 222, id : 21, name: 'Rai Play', logo: ''},   
    ];
 
   return (
