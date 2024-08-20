@@ -29,7 +29,7 @@ export default function SignUp({ navigation }) {
   const [suggestions, setSuggestions] = useState([]);
   const [strength, setStrength] = useState('');
   const [platformsModalVisible, setPlatformsModalVisible] = useState(false)
-  const [selectedProviders, setSelectedProviders] = useState({});
+  const [selectedProviders, setSelectedProviders] = useState([]);
 
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -136,27 +136,27 @@ export default function SignUp({ navigation }) {
 
 
     const providers = [
-      {"Amazon Prime Video": 119, id : 1, "Amazon Prime Video": 119, name: 'Amazon Prime', logo:''}, 
-      {"Disney Plus": 337, id : 2,  name: 'Disney Plus', logo: ''}, 
-      {Netflix: 8, id : 3,  name: 'Netflix', logo:''}, 
-      {"HBO Max": 384, id : 4, name: 'HBO Max',  logo: ''},  
-      {"Canal+": 381, id : 5, name: 'Canal+', logo: ''}, 
-      {"Apple TV": 2, id : 6, name:  "Apple TV",  logo:''},
-      {Starz: 43, id : 7, name: 'Starz', logo: ''}, 
-      {Crunchyroll: 283, id : 8, name: 'Crunchyroll', logo: ''}, 
-      {MUBI: 11,  id : 9, name: 'MUBI', logo:''}, 
-      {YouTube: 192,  id : 10, name: 'YouTube', logo:''}, 
+      {"Amazon Prime Video": 119, id : 119, "Amazon Prime Video": 119, name: 'Amazon Prime', logo:''}, 
+      {"Disney Plus": 337, id : 337,  name: 'Disney Plus', logo: ''}, 
+      {Netflix: 8, id : 8,  name: 'Netflix', logo:''}, 
+      {"HBO Max": 384, id : 384, name: 'HBO Max',  logo: ''},  
+      {"Canal+": 381, id : 381, name: 'Canal+', logo: ''}, 
+      {"Apple TV": 2, id : 2, name:  "Apple TV",  logo:''},
+      {Starz: 43, id : 43, name: 'Starz', logo: ''}, 
+      {Crunchyroll: 283, id : 283, name: 'Crunchyroll', logo: ''}, 
+      {MUBI: 11,  id : 11, name: 'MUBI', logo:''}, 
+      {YouTube: 192,  id : 192, name: 'YouTube', logo:''}, 
       {Hulu: 15, id : 11, name: 'Hulu', logo: ''}, 
-      {"Rakuten TV": 35, id : 12, name: 'Rakuten TV', logo: ''}, 
-      {"BBC iPlayer": 38, id : 13, name: 'BBC iPlayer', logo: ''}, 
-      {"OCS Go": 56, id : 14, "OCS Go": 56, name: 'OCS', logo: ''}, 
-      {ABC: 148, id : 15, name: 'ABC', logo: ''}, 
-      {"Universal Pictures": 184, id : 16, name: 'Universal Pictures', logo: ''}, 
-      {Arte: 234, id : 17, name: 'Arte', logo: ''}, 
-       {"France TV": 236, id : 18, name: 'France TV', logo: ''}, 
-       {Boomerang: 248, id : 19, name: 'Boomerang', logo: ''}, 
-       {Sky: 210, id : 20,  name: 'Sky', logo: ''}, 
-       {"Rai Play": 222, id : 21, name: 'Rai Play', logo: ''},   
+      {"Rakuten TV": 35, id : 35, name: 'Rakuten TV', logo: ''}, 
+      {"BBC iPlayer": 38, id : 38, name: 'BBC iPlayer', logo: ''}, 
+      {"OCS Go": 56, id : 56, "OCS Go": 56, name: 'OCS', logo: ''}, 
+      {ABC: 148, id : 148, name: 'ABC', logo: ''}, 
+      {"Universal Pictures": 184, id : 184, name: 'Universal Pictures', logo: ''}, 
+      {Arte: 234, id : 234, name: 'Arte', logo: ''}, 
+       {"France TV": 236, id : 236, name: 'France TV', logo: ''}, 
+       {Boomerang: 248, id : 248, name: 'Boomerang', logo: ''}, 
+       {Sky: 210, id : 210,  name: 'Sky', logo: ''}, 
+       {"Rai Play": 222, id : 222, name: 'Rai Play', logo: ''},   
    ];
 
   return (
@@ -243,10 +243,11 @@ export default function SignUp({ navigation }) {
             </Text>
             <Text style={styles.modalTitle}>Select at least one platform</Text>
             <SectionedMultiSelect 
+            single={false}
             items={providers}
             IconRenderer={Icon}
             uniqueKey="id"
-            onSelectedItemsChange={setSelectedProviders}
+            onSelectedItemsChange={(data)=>setSelectedProviders((providers)=>[...providers, data])}
             selectedProviders={selectedProviders}
             />
             <View style={styles.buttons}>

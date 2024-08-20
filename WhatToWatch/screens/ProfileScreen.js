@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { logout } from "../reducers/user";
 import DeleteAccount from "../components/Profile/DeleteAccount";
+import { Avatar } from 'react-native-elements';
 
 export default function ProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -20,6 +21,11 @@ export default function ProfileScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>Welcome to the ProfileScreen {username}</Text>
+      <Avatar 
+      rounded 
+      containerStyle={{height: 50, width: 50}}
+      source={require('../assets/avatar-1.png')}
+      />
       <TouchableOpacity style={styles.button2} activeOpacity={0.8} onPress={handleLogOut}>
         <Text style={styles.textButton}>LOGOUT</Text>
       </TouchableOpacity>
