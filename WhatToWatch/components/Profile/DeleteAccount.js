@@ -7,8 +7,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../reducers/user";
 import DeleteAccountConfirmation from "./DeleteAccountConfirmation";
 
 //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
@@ -18,56 +16,12 @@ const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
 //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
 const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
-const DeleteAccount = ({ navigation, deleteAccountModalVisible, setDeleteAccountModalVisible }) => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
-  let username = user.username;
-  let token = user.token;
-  const [userPassword, setUserPassword] = useState("");
+const DeleteAccount = ({ deleteAccountModalVisible, setDeleteAccountModalVisible }) => {
+
   const [
     deleteAccountConfirmationModalVisible,
     setDeleteAccountConfirmationModalVisible,
   ] = useState(false);
-
-  const handleDeleteAccount = () => {
-    fetch(`${baseUrl}users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: username,
-        password: userPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        console.log(username);
-        console(userPassword);
-        if (!data.result) {
-          console.log("false");
-        } else {
-          console.log("true");
-          fetch(`${baseUrl}users/${token}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data);
-              if (!data.result) {
-                console.log("falseR");
-              } else {
-                console.log("trueR");
-                dispatch(logout());
-                navigation.navigate("SignUp");
-              }
-              console.log("button signin clicked");
-            });
-        }
-
-        setUserPassword("");
-      });
-  };
 
   const handleDeleteButton = () => {
     setDeleteAccountModalVisible(false);
