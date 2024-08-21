@@ -257,7 +257,7 @@ export default function SignUp({ navigation }) {
         style={styles.button}
         activeOpacity={0.8}
       >
-        {credentialError && <Text style={styles.error}>{credentialError}{errorMessage}</Text>}
+        {credentialError && <Text style={styles.error}>User already exists</Text>}
         <Text style={styles.textButton}>REGISTER</Text>
       </TouchableOpacity>
       <Text style={styles.textButton}>Or connect with</Text>

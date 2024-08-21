@@ -11,6 +11,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ListScreen from "./screens/ListScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
 import { useState, useEffect } from "react";
 
 // import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -135,6 +136,7 @@ export default function App() {
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
      {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="ProfileSettingsScreen" component={ProfileSettingsScreen} />
             {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />  */}
           </Stack.Navigator>
         </NavigationContainer>

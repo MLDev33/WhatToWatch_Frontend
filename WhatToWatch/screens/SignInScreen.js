@@ -60,6 +60,7 @@ export default function SignIn({ navigation }) {
         console.log(signInPassword);
         if (!data.result) {
           console.log("false");
+          setErrorMessage(true)
         } else {
           dispatch(
             login({
@@ -108,6 +109,7 @@ export default function SignIn({ navigation }) {
         style={styles.button}
         activeOpacity={0.8}
       >
+        {errorMessage && <Text style={styles.error}>User not found or wrong email</Text>}
         <Text style={styles.textButton}>LOGIN</Text>
       </TouchableOpacity>
       <View style={styles.texts}>
