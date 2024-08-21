@@ -17,10 +17,7 @@ export default function HomeScreen() {
   //valeur de test , on recuperera depuis le store
   const user = useSelector((state) => state.user.value);
   let username = user.username;
-  let userTest = {
-    plateformes: ["netflix", "disney+"],
-  };
-
+  let usertoken = user.token;
 
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -30,21 +27,29 @@ export default function HomeScreen() {
   //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
    const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
 
-
-  //valeur de test aussi , a terme , l'utilisera aura selectionné des plateformes valides avant d'arriver sur cette page
-  const validPlatforms = ["netflix", "disney+", "hulu", "amazon", "hbo"];
-
-  async function fetchTrendings() {
+   async function fetchFavouritePlatforms(usertoken) {
     try {
-      const plateformes = userTest.plateformes.filter(platform => validPlatforms.includes(platform));
-      if (plateformes.length === 0) {
-        throw new Error('No valid platforms provided');
+      const response = await fetch(`${baseUrl}users/favouritePlatforms/${usertoken}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch favourite platforms: ' + response.status);
       }
-      //encodeURIcomponent permet de transformer un objet en chaine de caractère , ici on transforme le tableau de plateformes en chaine de caractère , pour l'envoyer dans l'url en requete get
-      //sinon il faudrai une requete post plus lourde
-      const plateformesParam = encodeURIComponent(JSON.stringify(plateformes));
+      const data = await response.json();
+      if (!data.result) {
+        throw new Error(data.error || 'Failed to fetch favourite platforms');
+      }
+      return data.favouritePlatforms || [];
+    } catch (error) {
+      console.error("Erreur lors de la récupération des plateformes favorites : ", error);
+      return [];
+    }
+  }
+  
+  async function fetchTrendings(usertoken) {
+    try {
+      const favouritePlatforms = await fetchFavouritePlatforms(usertoken);
+      const plateformesParam = encodeURIComponent(JSON.stringify(favouritePlatforms));
       const url = `${baseUrl}movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
-
+  
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Something went wrong: ' + response.status);
@@ -57,10 +62,12 @@ export default function HomeScreen() {
       setLoading(false);
     }
   }
+
+
   //on ne fetch pas à l'infini , on fetch une seule fois au chargement de la page , si la liste de film est vide 
   useEffect(() => {
     if (movies.length === 0) {
-    fetchTrendings();
+    fetchTrendings(usertoken);
   }
 }, []);
   
