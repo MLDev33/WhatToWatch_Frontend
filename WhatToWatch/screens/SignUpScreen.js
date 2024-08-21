@@ -77,6 +77,41 @@ export default function SignUp({ navigation }) {
     }
   };
 
+  const providers = [
+    {
+      "Amazon Prime Video": 119,
+      id: 119,
+      "Amazon Prime Video": 119,
+      name: "Amazon Prime",
+      logo: "",
+    },
+    { "Disney Plus": 337, id: 337, name: "Disney Plus", logo: "" },
+    { Netflix: 8, id: 8, name: "Netflix", logo: "" },
+    { "HBO Max": 384, id: 384, name: "HBO Max", logo: "" },
+    { "Canal+": 381, id: 381, name: "Canal+", logo: "" },
+    { "Apple TV": 2, id: 2, name: "Apple TV", logo: "" },
+    { Starz: 43, id: 43, name: "Starz", logo: "" },
+    { Crunchyroll: 283, id: 283, name: "Crunchyroll", logo: "" },
+    { MUBI: 11, id: 11, name: "MUBI", logo: "" },
+    { YouTube: 192, id: 192, name: "YouTube", logo: "" },
+    { Hulu: 15, id: 15, name: "Hulu", logo: "" },
+    { "Rakuten TV": 35, id: 35, name: "Rakuten TV", logo: "" },
+    { "BBC iPlayer": 38, id: 38, name: "BBC iPlayer", logo: "" },
+    { "OCS Go": 56, id: 56, "OCS Go": 56, name: "OCS", logo: "" },
+    { ABC: 148, id: 148, name: "ABC", logo: "" },
+    {
+      "Universal Pictures": 184,
+      id: 184,
+      name: "Universal Pictures",
+      logo: "",
+    },
+    { Arte: 234, id: 234, name: "Arte", logo: "" },
+    { "France TV": 236, id: 236, name: "France TV", logo: "" },
+    { Boomerang: 248, id: 248, name: "Boomerang", logo: "" },
+    { Sky: 210, id: 210, name: "Sky", logo: "" },
+    { "Rai Play": 222, id: 222, name: "Rai Play", logo: "" },
+  ];
+
   const handlePasswordVisibility = () => {
     if (rightIcon === "eye") {
       setRightIcon("eye-slash");
@@ -90,10 +125,12 @@ export default function SignUp({ navigation }) {
   const handleRegister = () => {
     if (!checkEmail.test(signUpEmail)) {
       setErrorMessage(true);
+      console.log(errorMessage)
     } else {
       setPlatformsModalVisible(true);
     }
   };
+
 
   const handleSubmit = () => {
     if(selectedProviders<1){
@@ -140,41 +177,7 @@ export default function SignUp({ navigation }) {
     }
   };
 
-  const providers = [
-    {
-      "Amazon Prime Video": 119,
-      id: 119,
-      "Amazon Prime Video": 119,
-      name: "Amazon Prime",
-      logo: "",
-    },
-    { "Disney Plus": 337, id: 337, name: "Disney Plus", logo: "" },
-    { Netflix: 8, id: 8, name: "Netflix", logo: "" },
-    { "HBO Max": 384, id: 384, name: "HBO Max", logo: "" },
-    { "Canal+": 381, id: 381, name: "Canal+", logo: "" },
-    { "Apple TV": 2, id: 2, name: "Apple TV", logo: "" },
-    { Starz: 43, id: 43, name: "Starz", logo: "" },
-    { Crunchyroll: 283, id: 283, name: "Crunchyroll", logo: "" },
-    { MUBI: 11, id: 11, name: "MUBI", logo: "" },
-    { YouTube: 192, id: 192, name: "YouTube", logo: "" },
-    { Hulu: 15, id: 15, name: "Hulu", logo: "" },
-    { "Rakuten TV": 35, id: 35, name: "Rakuten TV", logo: "" },
-    { "BBC iPlayer": 38, id: 38, name: "BBC iPlayer", logo: "" },
-    { "OCS Go": 56, id: 56, "OCS Go": 56, name: "OCS", logo: "" },
-    { ABC: 148, id: 148, name: "ABC", logo: "" },
-    {
-      "Universal Pictures": 184,
-      id: 184,
-      name: "Universal Pictures",
-      logo: "",
-    },
-    { Arte: 234, id: 234, name: "Arte", logo: "" },
-    { "France TV": 236, id: 236, name: "France TV", logo: "" },
-    { Boomerang: 248, id: 248, name: "Boomerang", logo: "" },
-    { Sky: 210, id: 210, name: "Sky", logo: "" },
-    { "Rai Play": 222, id: 222, name: "Rai Play", logo: "" },
-  ];
-
+  
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -253,7 +256,7 @@ export default function SignUp({ navigation }) {
         style={styles.button}
         activeOpacity={0.8}
       >
-        {credentialError && <Text style={styles.error}>{credentialError}</Text>}
+        {credentialError && <Text style={styles.error}>{credentialError}{errorMessage}</Text>}
         <Text style={styles.textButton}>REGISTER</Text>
       </TouchableOpacity>
       <Text style={styles.textButton}>Or connect with</Text>
@@ -287,7 +290,7 @@ export default function SignUp({ navigation }) {
                   onPress={() => {
                     setSelectedProviders((providers) => [
                       ...providers,
-                      item.id,
+                      item.name,
                     ]);
                   }}
                 >
