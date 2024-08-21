@@ -87,56 +87,58 @@ export default function SignUp({ navigation }) {
     }
   };
 
-  const handleSelection = () => {
-    console.log('button platform', providers.id)
-  }
-
-  const handleSubmit = () => {
+  const handleRegister = () => {
     if (!checkEmail.test(signUpEmail)) {
       setErrorMessage(true);
     } else {
-      fetch(`${baseUrl}users/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: signUpUsername,
-          email: signUpEmail,
-          password: signUpPassword,
-          favouritePlatforms: selectedProviders,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Something went wrong: " + response.status);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          console.log(selectedProviders, "providers");
-          if (data.result === true) {
-            dispatch(
-              login({
-                username: signUpUsername,
-                token: data.token,
-                email: data.email,
-              })
-            );
-            setSignUpEmail("");
-            setSignUpUsername("");
-            setSignUpPassword("");
-            setSelectedProviders([])
-            navigation.navigate("TabNavigator");
-            setPlatformsModalVisible(false);
-          } else {
-            setCredentialError(data.error);
-          }
-          console.log("button clicked");
-        });
+      setPlatformsModalVisible(true);
     }
   };
 
-  
+  const handleSubmit = () => {
+    if(selectedProviders<1){
+      setErrorMessage(true);
+    } else {
+    fetch(`${baseUrl}users/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: signUpUsername,
+        email: signUpEmail,
+        password: signUpPassword,
+        favouritePlatforms: selectedProviders,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Something went wrong: " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        console.log(selectedProviders, "providers");
+        if (data.result === true) {
+          dispatch(
+            login({
+              username: signUpUsername,
+              token: data.token,
+              email: data.email,
+            })
+          );
+          setSignUpEmail("");
+          setSignUpUsername("");
+          setSignUpPassword("");
+          setSelectedProviders([]);
+          navigation.navigate("TabNavigator");
+          setPlatformsModalVisible(false);
+        } else {
+          setCredentialError(data.error);
+        }
+        console.log("button clicked");
+      });
+    }
+  };
 
   const providers = [
     {
@@ -172,7 +174,6 @@ export default function SignUp({ navigation }) {
     { Sky: 210, id: 210, name: "Sky", logo: "" },
     { "Rai Play": 222, id: 222, name: "Rai Play", logo: "" },
   ];
-
 
   return (
     <KeyboardAvoidingView
@@ -248,7 +249,7 @@ export default function SignUp({ navigation }) {
         {/* <Icon name={rightIcon} size={25} /> */}
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setPlatformsModalVisible(true)}
+        onPress={handleRegister}
         style={styles.button}
         activeOpacity={0.8}
       >
@@ -281,7 +282,14 @@ export default function SignUp({ navigation }) {
               data={providers}
               numColumns={1}
               renderItem={({ item }) => (
-                <TouchableOpacity style={styles.providers} onPress={() => {setSelectedProviders((providers) => [...providers, item.id])}}
+                <TouchableOpacity
+                  style={styles.providers}
+                  onPress={() => {
+                    setSelectedProviders((providers) => [
+                      ...providers,
+                      item.id,
+                    ]);
+                  }}
                 >
                   <Text>{item.name}</Text>
                 </TouchableOpacity>
@@ -320,7 +328,7 @@ export default function SignUp({ navigation }) {
                 style={styles.button}
                 activeOpacity={0.8}
               >
-                <Text style={styles.modalTitle}>Save</Text>
+                <Text style={styles.modalTitle}>REGISTER</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -414,7 +422,7 @@ const styles = StyleSheet.create({
   },
   providers: {
     marginTop: 10,
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
     fontSize: 20,
-  }
+  },
 });
