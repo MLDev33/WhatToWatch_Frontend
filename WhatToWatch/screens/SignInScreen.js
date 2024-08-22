@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
 import RecoveredPasswordModal from "../components/SignInUp/RecoveredPassword";
+import { LinearGradient } from 'expo-linear-gradient';
+// import Icon from 'react-native-vector-icons/Ionicons';
 
 
 export default function SignIn({ navigation }) {
@@ -60,6 +62,7 @@ export default function SignIn({ navigation }) {
         console.log(signInPassword);
         if (!data.result) {
           console.log("false");
+          setErrorMessage(true)
         } else {
           dispatch(
             login({
@@ -102,14 +105,26 @@ export default function SignIn({ navigation }) {
       <TouchableOpacity
       onPress={handlePasswordVisibility}>
   {/* <Icon name={rightIcon} size={25} /> */}
-  </TouchableOpacity>
-      <TouchableOpacity
+  {/* <LinearGradient
+          colors={['#7C4DFF', '#F94A56', '#FF1744']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 2, y: 5 }}
+          style={styles.buttonContainer}
+        > */}
+        </TouchableOpacity>
+          <TouchableOpacity
         onPress={() => handleSubmit()}
         style={styles.button}
         activeOpacity={0.8}
       >
-        <Text style={styles.textButton}>LOGIN</Text>
-      </TouchableOpacity>
+
+            <Text style={styles.buttonText}>Login</Text>
+          
+        {/* </LinearGradient> */}
+  </TouchableOpacity>
+  
+        {errorMessage && <Text style={styles.error}>User not found or wrong email</Text>}
+    
       <View style={styles.texts}>
       <Text 
       // style={styles.textButton}
@@ -174,7 +189,24 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       marginTop: 10
     },
-    button2: {
-      fontWeight: '300'
-      },
+    buttonContainer: {
+      borderRadius: 10,
+      marginBottom: 10,
+    },
+    button: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+      paddingVertical: 15,
+      paddingHorizontal: 10,
+      borderRadius: 10,
+      marginBottom: 10,
+      height: 60,
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 16,
+      marginLeft: 10,
+      flex: 1,
+    },
 });

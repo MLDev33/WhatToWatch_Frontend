@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
@@ -257,7 +258,7 @@ export default function SignUp({ navigation }) {
         style={styles.button}
         activeOpacity={0.8}
       >
-        {credentialError && <Text style={styles.error}>{credentialError}{errorMessage}</Text>}
+        {credentialError && <Text style={styles.error}>User already exists</Text>}
         <Text style={styles.textButton}>REGISTER</Text>
       </TouchableOpacity>
       <Text style={styles.textButton}>Or connect with</Text>
