@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
+  Image,
   Platform,
   StyleSheet,
   Text,
@@ -83,32 +84,53 @@ export default function SignIn({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Welcome to {"\n"} What To Watch !</Text>
-      <TextInput
-        placeholder="Username"
-        autoCapitalize="none"
-        onChangeText={(value) => setSignInUsername(value)}
-        value={signInUsername}
-        style={styles.input}
-      />
-      <TextInput
-        secureTextEntry={true}
-        placeholder="Password"
-        keyboardType="password"
-        autoCapitalize="none"
-        onChangeText={(value) => setSignInPassword(value)}
-        value={signInPassword}
-        style={styles.input}
-      />
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Image
+            source={require("../assets/imgsmall.png")}
+            style={styles.logo}
+          />
+        </View>
+      </View>
+
+      <Text style={styles.textH1}>Welcome to {"\n"}What To Watch</Text>
+      <Text style={styles.textH2}>
+        If you're ready to chill and watch a movie, then signin !
+      </Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Username"
+          autoCapitalize="none"
+          onChangeText={(value) => setSignInUsername(value)}
+          value={signInUsername}
+          style={styles.input}
+        />
+        <TextInput
+          secureTextEntry={true}
+          placeholder="Password"
+          keyboardType="password"
+          autoCapitalize="none"
+          onChangeText={(value) => setSignInPassword(value)}
+          value={signInPassword}
+          style={styles.input}
+        />
+      </View>
       <TouchableOpacity onPress={handlePasswordVisibility}>
         {/* <Icon name={rightIcon} size={25} /> */}
       </TouchableOpacity>
-      <LinearGradient
+      {/* <LinearGradient
         colors={["#7C4DFF", "#F94A56", "#FF1744"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 2, y: 5 }}
         style={styles.buttonContainer}
-      >
+      > */}
+
+      {/* </LinearGradient> */}
+
+      {errorMessage && (
+        <Text style={styles.error}>User not found or wrong email</Text>
+      )}
+      <View style={styles.bottomContent}>
         <TouchableOpacity
           onPress={() => handleSubmit()}
           style={styles.button}
@@ -116,44 +138,37 @@ export default function SignIn({ navigation }) {
         >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </LinearGradient>
+        <Text style={styles.textH4}>Or connect with</Text>
+        <Image
+          source={require("../assets/google-logo.png")}
+          style={styles.googleLogo}
+        />
 
-      {errorMessage && (
-        <Text style={styles.error}>User not found or wrong email</Text>
-      )}
-
-      <View style={styles.texts}>
-        <Text
-        // style={styles.textButton}
-        >
-          Don't have an account?
-        </Text>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate("SignUp")}
-        >
-          <Text style={styles.textButton}>Sign up here</Text>
-        </TouchableOpacity>
+        <View style={styles.texts}>
+          <Text style={styles.textH4}>Don't have an account?</Text>
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("SignUp")}
+          >
+            <Text style={styles.textButton}>Sign up here</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.texts}>
+          <Text style={styles.textH4}>Forgotten password? </Text>
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.8}
+            onPress={() => setModalVisible(true)}
+          >
+            <Text style={styles.textButton}>Click here</Text>
+          </TouchableOpacity>
+        </View>
+        <ForgottenPassword
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
       </View>
-      <View style={styles.texts}>
-        <Text
-        // style={styles.textButton}
-        >
-          Forgotten password?{" "}
-        </Text>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.8}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.textButton}>Click here</Text>
-        </TouchableOpacity>
-      </View>
-      <ForgottenPassword
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      />
     </KeyboardAvoidingView>
   );
 }
@@ -161,14 +176,47 @@ export default function SignIn({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#0d0f2b",
+    paddingHorizontal: 10,
+    paddingTop: 20,
+  },
+  header: {
+    alignItems: "flex-start",
+    marginBottom: 40,
+    marginTop: "10%",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    width: 100,
+    height: 80,
+    borderRadius: 40,
   },
   title: {
     width: "80%",
     fontSize: 38,
     fontWeight: "600",
+  },
+  textH1: {
+    textAlign: "flex-start",
+    color: "white",
+    fontSize: 32,
+    fontWeight: "bold",
+    paddingHorizontal: 20,
+  },
+  textH2: {
+    marginTop: 10,
+    marginHorizontal: 7,
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
+  },
+  textH4: {
+    color: "white",
+    marginHorizontal: 5,
+  },
+  inputContainer: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
     width: "80%",
@@ -177,45 +225,39 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     fontSize: 18,
   },
-  //   button: {
-  //     alignItems: 'center',
-  //     paddingTop: 8,
-  //     width: '80%',
-  //     marginTop: 30,
-  //     backgroundColor: '#ec6e5b',
-  //     borderRadius: 10,
-  //     marginBottom: 80,
-  //   },
+  bottomContent: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 50,
+  },
+  googleLogo: {
+    width: 80,
+    height: 80,
+    borderRadius: 30,
+    margin: 30,
+  },
   textButton: {
     fontWeight: "600",
+    color: "white",
   },
   texts: {
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: 30,
+    color: "white",
   },
   buttonContainer: {
     borderRadius: 10,
     marginBottom: 10,
   },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "transparent",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    height: 60,
-  },
   buttonText: {
-    color: "#fff",
+    color: "white",
     fontSize: 16,
     marginLeft: 10,
-    flex: 1,
   },
   error: {
+    textAlign: "center",
     color: "red",
     fontSize: 16,
-    marginLeft: 10,
+    margin: 20,
   },
 });

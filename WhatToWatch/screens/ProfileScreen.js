@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Switch, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, Switch, Image, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useState  } from 'react';
@@ -71,7 +71,7 @@ const ProfileScreen = ({   navigation }) => {
   let username = user.username;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Image 
@@ -146,7 +146,7 @@ const ProfileScreen = ({   navigation }) => {
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}
       /> 
-    </View>
+    </SafeAreaView>
   );
 };
 
