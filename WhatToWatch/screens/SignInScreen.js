@@ -12,9 +12,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
 import RecoveredPasswordModal from "../components/SignInUp/RecoveredPassword";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 // import Icon from 'react-native-vector-icons/Ionicons';
-
 
 export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
@@ -22,7 +21,7 @@ export default function SignIn({ navigation }) {
   const [signInUsername, setSignInUsername] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
-  const [rightIcon, setRightIcon] = useState('eye');
+  const [rightIcon, setRightIcon] = useState("eye");
   const [hidePassword, setHidePassword] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -31,20 +30,20 @@ export default function SignIn({ navigation }) {
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  
+
   // Utiliser une condition pour basculer entre les URLs
   //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-   const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
+  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
-  const handlePasswordVisibility = () => {  
-    if (rightIcon === 'eye') {  
-        setRightIcon('eye-slash');  
-        setHidePassword(!hidePassword);  
-    } else if (rightIcon === 'eye-slash') {  
-        setRightIcon('eye');  
-        setHidePassword(!hidePassword);  
-    }  
-  }
+  const handlePasswordVisibility = () => {
+    if (rightIcon === "eye") {
+      setRightIcon("eye-slash");
+      setHidePassword(!hidePassword);
+    } else if (rightIcon === "eye-slash") {
+      setRightIcon("eye");
+      setHidePassword(!hidePassword);
+    }
+  };
 
   const handleSubmit = () => {
     fetch(`${baseUrl}users/signin`, {
@@ -62,7 +61,7 @@ export default function SignIn({ navigation }) {
         console.log(signInPassword);
         if (!data.result) {
           console.log("false");
-          setErrorMessage(true)
+          setErrorMessage(true);
         } else {
           dispatch(
             login({
@@ -79,13 +78,12 @@ export default function SignIn({ navigation }) {
       });
   };
 
-
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Welcome to {'\n'} What To Watch !</Text>
+      <Text style={styles.title}>Welcome to {"\n"} What To Watch !</Text>
       <TextInput
         placeholder="Username"
         autoCapitalize="none"
@@ -102,54 +100,60 @@ export default function SignIn({ navigation }) {
         value={signInPassword}
         style={styles.input}
       />
-      <TouchableOpacity
-      onPress={handlePasswordVisibility}>
-  {/* <Icon name={rightIcon} size={25} /> */}
-  {/* <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        > */}
+      <TouchableOpacity onPress={handlePasswordVisibility}>
+        {/* <Icon name={rightIcon} size={25} /> */}
+      </TouchableOpacity>
+      <LinearGradient
+        colors={["#7C4DFF", "#F94A56", "#FF1744"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 2, y: 5 }}
+        style={styles.buttonContainer}
+      >
+        <TouchableOpacity
+          onPress={() => handleSubmit()}
+          style={styles.button}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-          <TouchableOpacity
-        onPress={() => handleSubmit()}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
+      </LinearGradient>
 
-            <Text style={styles.buttonText}>Login</Text>
-          
-        {/* </LinearGradient> */}
-  </TouchableOpacity>
-  
-        {errorMessage && <Text style={styles.error}>User not found or wrong email</Text>}
-    
+      {errorMessage && (
+        <Text style={styles.error}>User not found or wrong email</Text>
+      )}
+
       <View style={styles.texts}>
-      <Text 
-      // style={styles.textButton}
-      >
+        <Text
+        // style={styles.textButton}
+        >
           Don't have an account?
         </Text>
-      <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress ={ () => navigation.navigate('SignUp')}
-      >
-        <Text style={styles.textButton}>
-         Sign up here
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("SignUp")}
+        >
+          <Text style={styles.textButton}>Sign up here</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.texts}>
-      <Text 
-      // style={styles.textButton}
-      >Forgotten password? </Text>
-      <TouchableOpacity style={styles.button} activeOpacity={0.8} 
-      onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.textButton}>Click here</Text>
-      </TouchableOpacity>
+        <Text
+        // style={styles.textButton}
+        >
+          Forgotten password?{" "}
+        </Text>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.8}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.textButton}>Click here</Text>
+        </TouchableOpacity>
       </View>
-      <ForgottenPassword modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <ForgottenPassword
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -164,7 +168,7 @@ const styles = StyleSheet.create({
   title: {
     width: "80%",
     fontSize: 38,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   input: {
     width: "80%",
@@ -182,31 +186,36 @@ const styles = StyleSheet.create({
   //     borderRadius: 10,
   //     marginBottom: 80,
   //   },
-    textButton: {
-      fontWeight: '600',
-    },
-    texts:{
-      flexDirection: 'row',
-      marginTop: 10
-    },
-    buttonContainer: {
-      borderRadius: 10,
-      marginBottom: 10,
-    },
-    button: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: 'transparent',
-      paddingVertical: 15,
-      paddingHorizontal: 10,
-      borderRadius: 10,
-      marginBottom: 10,
-      height: 60,
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 16,
-      marginLeft: 10,
-      flex: 1,
-    },
+  textButton: {
+    fontWeight: "600",
+  },
+  texts: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  buttonContainer: {
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "transparent",
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    height: 60,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    marginLeft: 10,
+    flex: 1,
+  },
+  error: {
+    color: "red",
+    fontSize: 16,
+    marginLeft: 10,
+  },
 });

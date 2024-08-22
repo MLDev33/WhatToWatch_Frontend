@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -24,8 +23,12 @@ export default function SignUp({ navigation }) {
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState("false");
+  const [error, setError] =useState(false)
+  const [errorMessage, setErrorMessage] = useState('');
+  const [emailErrorMessage, setEmailErrorMessage] = useState(false);
+  const [wrongEmail, setWrongEmail] =useState(false);
   const [credentialError, setCredentialError] = useState("");
+  const [missingFieldError, setMissingFieldError] = useState(false)
   const [rightIcon, setRightIcon] = useState("eye");
   const [hidePassword, setHidePassword] = useState(true);
   const [validPassword, setValidPassword] = useState(false);
@@ -43,7 +46,7 @@ export default function SignUp({ navigation }) {
   const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
   const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
-  const checkPassword = RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
+  const checkPassword = RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i);
 
   const validatePassword = (input) => {
     let newSuggestions = [];
@@ -94,11 +97,6 @@ export default function SignUp({ navigation }) {
     { "Apple TV": 2, id: 2, name: "Apple TV", logo: "" },
     { Starz: 43, id: 43, name: "Starz", logo: "" },
     { Crunchyroll: 283, id: 283, name: "Crunchyroll", logo: "" },
-    { MUBI: 11, id: 11, name: "MUBI", logo: "" },
-    { YouTube: 192, id: 192, name: "YouTube", logo: "" },
-    { Hulu: 15, id: 15, name: "Hulu", logo: "" },
-    { "Rakuten TV": 35, id: 35, name: "Rakuten TV", logo: "" },
-    { "BBC iPlayer": 38, id: 38, name: "BBC iPlayer", logo: "" },
     { "OCS Go": 56, id: 56, "OCS Go": 56, name: "OCS", logo: "" },
     { ABC: 148, id: 148, name: "ABC", logo: "" },
     {
@@ -125,13 +123,40 @@ export default function SignUp({ navigation }) {
   };
 
   const handleRegister = () => {
-    if (!checkEmail.test(signUpEmail)) {
-      setErrorMessage(true);
-      console.log('errorMessage')
-    } else {
-      setPlatformsModalVisible(true);
-    }
-  };
+    if ((!signUpEmail) || (!signUpPassword) || (!signUpUsername)){
+      setMissingFieldError(true);
+    console.log('errorMessageMissingfield')
+    } 
+    if(!checkEmail.test(signUpEmail)){
+      setWrongEmail(true)
+      console.log('wrongEmail')
+    } 
+    else {
+      fetch(`${baseUrl}users/checkUser`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: signUpUsername,
+          email: signUpEmail
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.result === false ) {
+            console.log(data.error);
+            setError(true);
+            setErrorMessage(data.error);
+          } 
+          else {
+                  setPlatformsModalVisible(true);
+                } 
+          })
+        
+        }
+      }
+    
+  
 
 
   const handleSubmit = () => {
@@ -258,7 +283,9 @@ export default function SignUp({ navigation }) {
         style={styles.button}
         activeOpacity={0.8}
       >
-        {credentialError && <Text style={styles.error}>User already exists</Text>}
+        {missingFieldError && <Text style={styles.error}>Please complete all fields to register!</Text> }
+          {error && <Text style={styles.error}>{errorMessage}</Text>}
+          {/* {emailErrorMessage && <Text style={styles.error}>Email already registered!</Text>} */}
         <Text style={styles.textButton}>REGISTER</Text>
       </TouchableOpacity>
       <Text style={styles.textButton}>Or connect with</Text>
