@@ -95,7 +95,7 @@ const ProfileScreen = ({   navigation }) => {
         <GradientButton iconName="calendar-outline" buttonText="Watch schedule" onPress={() => {}} />
         <GradientButton iconName="people-outline" buttonText="Invite your friends" onPress={() => {}} />
         <GradientButton iconName="tv-outline" buttonText="Streaming platforms" onPress={() => {}} />
-
+      
         <LinearGradient
           colors={['#7C4DFF', '#F94A56', '#FF1744']}
           start={{ x: 0, y: 0 }}
@@ -129,17 +129,12 @@ const ProfileScreen = ({   navigation }) => {
         </LinearGradient>
       </View>
 
-      <LinearGradient
-        colors={['#7C4DFF', '#F94A56', '#FF1744']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 2, y: 5 }}
+      <GradientButton
+        buttonText="Logout"
+        onPress={handleLogOut}
         style={styles.logoutButton}
-      >
-        <TouchableOpacity onPress={handleLogOut}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-      {/* <TouchableOpacity
+      />
+       <TouchableOpacity
         style={styles.button2}
         activeOpacity={0.8}
         onPress={() => setDeleteAccountModalVisible(true)}
@@ -150,7 +145,7 @@ const ProfileScreen = ({   navigation }) => {
       <DeleteAccount
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}
-      /> */}
+      /> 
     </View>
   );
 };
