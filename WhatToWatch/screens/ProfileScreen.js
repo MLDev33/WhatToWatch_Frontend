@@ -7,7 +7,7 @@ import { useSelector , useDispatch } from 'react-redux';
 import { logout } from "../reducers/user";
 import DeleteAccount from "../components/Profile/DeleteAccount";
 import { Avatar } from "react-native-elements";
-
+import GradientButton from '../components/GradientButton';
 
 
 const ProfileScreen = ({   navigation }) => {
@@ -70,7 +70,6 @@ const ProfileScreen = ({   navigation }) => {
   const user = useSelector((state) => state.user.value);
   let username = user.username;
 
-  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -91,66 +90,12 @@ const ProfileScreen = ({   navigation }) => {
       </View>
 
       <View style={styles.section}>
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('ProfileSettingsScreen')}>
-            <Icon name="settings-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Profile setting</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="time-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Watch history</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="calendar-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Watch schedule</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="people-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Invite your friends</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="tv-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Streaming platforms</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
+        <GradientButton iconName="settings-outline" buttonText="Profile setting" onPress={() => {}} />
+        <GradientButton iconName="time-outline" buttonText="Watch history" onPress={() => {}} />
+        <GradientButton iconName="calendar-outline" buttonText="Watch schedule" onPress={() => {}} />
+        <GradientButton iconName="people-outline" buttonText="Invite your friends" onPress={() => {}} />
+        <GradientButton iconName="tv-outline" buttonText="Streaming platforms" onPress={() => {}} />
+      
         <LinearGradient
           colors={['#7C4DFF', '#F94A56', '#FF1744']}
           start={{ x: 0, y: 0 }}
@@ -184,17 +129,12 @@ const ProfileScreen = ({   navigation }) => {
         </LinearGradient>
       </View>
 
-      <LinearGradient
-        colors={['#7C4DFF', '#F94A56', '#FF1744']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 2, y: 5 }}
+      <GradientButton
+        buttonText="Logout"
+        onPress={handleLogOut}
         style={styles.logoutButton}
-      >
-        <TouchableOpacity onPress={handleLogOut}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </LinearGradient>
-      {/* <TouchableOpacity
+      />
+       <TouchableOpacity
         style={styles.button2}
         activeOpacity={0.8}
         onPress={() => setDeleteAccountModalVisible(true)}
@@ -205,7 +145,7 @@ const ProfileScreen = ({   navigation }) => {
       <DeleteAccount
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}
-      /> */}
+      /> 
     </View>
   );
 };
