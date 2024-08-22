@@ -11,7 +11,7 @@ import { Avatar } from "react-native-elements";
 
 
 const ProfileScreen = ({   navigation }) => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const [notifications, setNotifications] = useState(false);
 
   //fonction de claudia
