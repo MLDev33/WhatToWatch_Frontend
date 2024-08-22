@@ -15,7 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
+import GradientButton from "../components/GradientButton";
 
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
@@ -218,6 +218,7 @@ export default function SignUp({ navigation }) {
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Username"
+          placeholderTextColor={'white'}
           autoCapitalize="none"
           onChangeText={(value) => setSignUpUsername(value)}
           value={signUpUsername}
@@ -229,6 +230,7 @@ export default function SignUp({ navigation }) {
           textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
           autoComplete="email"
           placeholder="Email address"
+          placeholderTextColor={'white'}
           onChangeText={(value) => setSignUpEmail(value)}
           value={signUpEmail}
           style={styles.input}
@@ -236,6 +238,7 @@ export default function SignUp({ navigation }) {
         <TextInput
           secureTextEntry={true}
           placeholder="Password"
+          placeholderTextColor={'white'}
           keyboardType="password"
           autoCapitalize="none"
           onChangeText={(value) => {
@@ -286,13 +289,11 @@ export default function SignUp({ navigation }) {
       </TouchableOpacity>
 
       {missingFieldError && (
-            <Text style={styles.error}>
-              Please complete all fields to register!
-            </Text>
-          )}
-          {error && <Text style={styles.error}>{errorMessage}</Text>}
-        
-
+        <Text style={styles.error}>
+          Please complete all fields to register!
+        </Text>
+      )}
+      {error && <Text style={styles.error}>{errorMessage}</Text>}
 
       <View style={styles.bottomContent}>
         <TouchableOpacity
@@ -302,11 +303,13 @@ export default function SignUp({ navigation }) {
         >
           <Text style={styles.textButton}>REGISTER</Text>
         </TouchableOpacity>
-        <Text style={styles.textH4}>Or connect with</Text>
-        <Image
-          source={require("../assets/google-logo.png")}
-          style={styles.googleLogo}
-        />
+        <Text style={styles.textH4}>Or login with</Text>
+        <TouchableOpacity>
+          <Image
+            source={require("../assets/google-logo.png")}
+            style={styles.googleLogo}
+          />
+        </TouchableOpacity>
         <View style={styles.haveAccount}>
           <Text style={styles.textH4}>Already have an account?</Text>
           <TouchableOpacity
@@ -328,7 +331,7 @@ export default function SignUp({ navigation }) {
             <Text style={styles.modalTitle}>
               Choose your streaming services
             </Text>
-            <Text style={styles.modalTitle}>Select at least one platform</Text>
+            <Text style={styles.textH4}>Select at least one platform</Text>
             <FlatList
               data={providers}
               numColumns={1}
@@ -377,7 +380,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0d0f2b",
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingTop: 20,
   },
   header: {
@@ -412,13 +415,15 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 50,
   },
   input: {
-    //to be changed
+    height: 50,
     width: "80%",
-    marginTop: 25,
-    borderBottomColor: "#ec6e5b",
-    borderBottomWidth: 1,
+    backgroundColor: "rgb(108, 122, 137)",
+    borderRadius: 10,
+    marginTop: 20,
+    paddingLeft: 10,
     fontSize: 18,
     color: "white",
   },
@@ -426,7 +431,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "space-around",
-    marginTop: 30,
+    // marginTop: 30,
     paddingHorizontal: 10,
   },
   button: {
@@ -436,7 +441,7 @@ const styles = StyleSheet.create({
     margin: 30,
     // borderRadius: 10,
     // marginBottom: 80,
-    backgroundColorolor: 'white'
+    backgroundColorolor: "white",
   },
   button2: {
     fontWeight: "300",
@@ -454,10 +459,10 @@ const styles = StyleSheet.create({
   bottomContent: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 50,
+    // marginTop: 10,
   },
   suggestionsText: {
-    justifyContent: "center",
+    textAlign: "center",
     alignItems: "center",
     fontWeight: "600",
     color: "red",
@@ -475,15 +480,16 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: 300,
+    width: "80%",
     padding: 20,
-    backgroundColor: "white",
+    backgroundColor: "#0d0f2b",
     borderRadius: 10,
     alignItems: "center",
   },
   modalTitle: {
     fontSize: 20,
     marginBottom: 20,
+    color: "white",
   },
   button: {
     marginHorizontal: 10,
@@ -508,4 +514,20 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     fontSize: 20,
   },
+  // button: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   backgroundColor: 'transparent',
+  //   paddingVertical: 15,
+  //   paddingHorizontal: 10,
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  //   height: 60,
+  // },
+  // buttonText: {
+  //   color: '#fff',
+  //   fontSize: 16,
+  //   marginLeft: 10,
+  //   flex: 1,
+  // },
 });

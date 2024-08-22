@@ -100,6 +100,7 @@ export default function SignIn({ navigation }) {
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Username"
+          placeholderTextColor={'white'}
           autoCapitalize="none"
           onChangeText={(value) => setSignInUsername(value)}
           value={signInUsername}
@@ -108,6 +109,7 @@ export default function SignIn({ navigation }) {
         <TextInput
           secureTextEntry={true}
           placeholder="Password"
+          placeholderTextColor={'white'}
           keyboardType="password"
           autoCapitalize="none"
           onChangeText={(value) => setSignInPassword(value)}
@@ -139,11 +141,12 @@ export default function SignIn({ navigation }) {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <Text style={styles.textH4}>Or connect with</Text>
-        <Image
-          source={require("../assets/google-logo.png")}
-          style={styles.googleLogo}
-        />
-
+        <TouchableOpacity>
+          <Image
+            source={require("../assets/google-logo.png")}
+            style={styles.googleLogo}
+          />
+        </TouchableOpacity>
         <View style={styles.texts}>
           <Text style={styles.textH4}>Don't have an account?</Text>
           <TouchableOpacity
@@ -217,13 +220,17 @@ const styles = StyleSheet.create({
   inputContainer: {
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 50,
   },
   input: {
+    height: 50,
     width: "80%",
-    marginTop: 25,
-    borderBottomColor: "#ec6e5b",
-    borderBottomWidth: 1,
+    backgroundColor: "rgb(108, 122, 137)",
+    borderRadius: 10,
+    marginTop: 20,
     fontSize: 18,
+    color: "white",
+    paddingLeft: 10
   },
   bottomContent: {
     alignItems: "center",
