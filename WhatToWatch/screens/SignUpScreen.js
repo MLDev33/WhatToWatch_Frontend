@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import SectionedMultiSelect from "react-native-sectioned-multi-select";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch();

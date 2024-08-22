@@ -69,6 +69,8 @@ const ProfileScreen = ({   navigation }) => {
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
+
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -95,7 +97,7 @@ const ProfileScreen = ({   navigation }) => {
           end={{ x: 2, y: 5 }}
           style={styles.buttonContainer}
         >
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('ProfileSettingsScreen')}>
             <Icon name="settings-outline" size={20} color="#fff" />
             <Text style={styles.buttonText}>Profile setting</Text>
           </TouchableOpacity>
@@ -192,7 +194,7 @@ const ProfileScreen = ({   navigation }) => {
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </LinearGradient>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.button2}
         activeOpacity={0.8}
         onPress={() => setDeleteAccountModalVisible(true)}
@@ -203,7 +205,7 @@ const ProfileScreen = ({   navigation }) => {
       <DeleteAccount
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}
-      />
+      /> */}
     </View>
   );
 };

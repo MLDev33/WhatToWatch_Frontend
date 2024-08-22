@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Switch, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, Switch, Image, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useState  } from 'react';
@@ -34,7 +34,7 @@ const ProfileSettingsScreen = ({   navigation }) => {
   let username = user.username;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Image 
@@ -49,113 +49,20 @@ const ProfileSettingsScreen = ({   navigation }) => {
             />
           </View>
         </View>
-        <Text style={styles.username}>Profil</Text>
+        <Text style={styles.username}>Profile Settings</Text>
       </View>
 
       <View style={styles.section}>
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="settings-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Profile setting</Text>
-          </TouchableOpacity>
-        </LinearGradient>
+      <Text style={styles.text}>NAME</Text>
+      <Text style={styles.text}>EMAIL</Text>
+      <Text style={styles.text}>PHONE NUMBER</Text>
+      <Text style={styles.text}>LANGUAGE</Text>
+      <Text style={styles.text}>PASSWORD</Text>
+      <Text style={styles.text}>ACCOUNT</Text>
+    
 
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="time-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Watch history</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="calendar-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Watch schedule</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="people-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Invite your friends</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={styles.buttonContainer}
-        >
-          <TouchableOpacity style={styles.button}>
-            <Icon name="tv-outline" size={20} color="#fff" />
-            <Text style={styles.buttonText}>Streaming platforms</Text>
-          </TouchableOpacity>
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={[styles.button, styles.switchContainer]}
-        >
-          <Icon name="moon-outline" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Dark mode</Text>
-          <Switch
-            value={darkMode}
-            onValueChange={setDarkMode}
-            thumbColor={darkMode ? "#3B2077" : "#f4f3f4"}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-          />
-        </LinearGradient>
-
-        <LinearGradient
-          colors={['#7C4DFF', '#F94A56', '#FF1744']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 2, y: 5 }}
-          style={[styles.button, styles.switchContainer]}
-        >
-          <Icon name="notifications-outline" size={20} color="#fff" />
-          <Text style={styles.buttonText}>Publish notifications</Text>
-          <Switch
-            value={notifications}
-            onValueChange={setNotifications}
-            thumbColor={notifications ? "#3B2077" : "#f4f3f4"}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-          />
-        </LinearGradient>
       </View>
 
-      <LinearGradient
-        colors={['#7C4DFF', '#F94A56', '#FF1744']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 2, y: 5 }}
-        style={styles.logoutButton}
-      >
-        <TouchableOpacity onPress={handleLogOut}>
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </LinearGradient>
       <TouchableOpacity
         style={styles.button2}
         activeOpacity={0.8}
@@ -168,7 +75,8 @@ const ProfileSettingsScreen = ({   navigation }) => {
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}
       />
-    </View>
+
+    </SafeAreaView>
   );
 };
 
