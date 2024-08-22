@@ -60,6 +60,7 @@ const ProfileScreen = ({   navigation }) => {
             <Avatar rounded containerStyle={{ height: 50, width: 50 }} />
           </TouchableOpacity>
         )}
+        keyExtractor={avatars.key}
       />
 
     */

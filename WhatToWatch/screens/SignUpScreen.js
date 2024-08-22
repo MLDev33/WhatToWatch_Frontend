@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -77,6 +77,7 @@ export default function SignUp({ navigation }) {
     }
   };
 
+
   const providers = [
     {
       "Amazon Prime Video": 119,
@@ -125,7 +126,7 @@ export default function SignUp({ navigation }) {
   const handleRegister = () => {
     if (!checkEmail.test(signUpEmail)) {
       setErrorMessage(true);
-      console.log(errorMessage)
+      console.log('errorMessage')
     } else {
       setPlatformsModalVisible(true);
     }
@@ -295,27 +296,11 @@ export default function SignUp({ navigation }) {
                   }}
                 >
                   <Text>{item.name}</Text>
+                  {/* <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logo}` }}></Image> */}
                 </TouchableOpacity>
               )}
               keyExtractor={(item) => item.id}
             />
-
-            {/* <SectionedMultiSelect
-              single={false}
-              showDropDowns={false}
-              items={providers}
-              IconRenderer={Icon}
-              uniqueKey="id"
-          
-              onSelectedItemsChange={(data) =>
-                setSelectedProviders((providers) => [...providers, data])
-              }
-              selectedProviders={selectedProviders}
-              selectText="Choose your streaming providers"
-              searchPlaceholderText="Search providers..."
-              modalAnimationType="slide"
-              colors={{ primary: "purple" }}
-            /> */}
 
             <View style={styles.buttons}>
               <TouchableOpacity
