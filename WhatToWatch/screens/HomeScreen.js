@@ -5,6 +5,8 @@ import Movie from '../components/Movie/Movie';
 import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import MyList from '../components/Movie/MyList';
+
 
 export default function HomeScreen() {
   const [movies, setMovies] = useState([]);

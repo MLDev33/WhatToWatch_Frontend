@@ -9,11 +9,13 @@ import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ListScreen from "./screens/ListScreen";
+import LikedMediaScreen from './screens/LikedMediaScreen';
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
-import { useState, useEffect } from "react";
 
+import WatchScheduleScreen from "./screens/WatchScheduleScreen";
+import { useState, useEffect } from "react";
 // import { GoogleSignin } from '@react-native-google-signin/google-signin';
 // import {
 // 	GOOGLE_WEB_CLIENT_ID,
@@ -137,6 +139,8 @@ export default function App() {
      {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
             <Stack.Screen name="ProfileSettingsScreen" component={ProfileSettingsScreen} />
+            <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
+            <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
             {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />  */}
           </Stack.Navigator>
         </NavigationContainer>

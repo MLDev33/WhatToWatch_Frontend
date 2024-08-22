@@ -92,7 +92,7 @@ const ProfileScreen = ({   navigation }) => {
       <View style={styles.section}>
         <GradientButton iconName="settings-outline" buttonText="Profile setting" onPress={() => {}} />
         <GradientButton iconName="time-outline" buttonText="Watch history" onPress={() => {}} />
-        <GradientButton iconName="calendar-outline" buttonText="Watch schedule" onPress={() => {}} />
+        <GradientButton iconName="calendar-outline" buttonText="Watch schedule" onPress={() => navigation.navigate('WatchSchedule')}/>
         <GradientButton iconName="people-outline" buttonText="Invite your friends" onPress={() => {}} />
         <GradientButton iconName="tv-outline" buttonText="Streaming platforms" onPress={() => {}} />
       
