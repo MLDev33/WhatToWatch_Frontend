@@ -15,7 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function SignUp({ navigation }) {
   const dispatch = useDispatch();
@@ -23,12 +23,12 @@ export default function SignUp({ navigation }) {
   const [signUpUsername, setSignUpUsername] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
-  const [error, setError] =useState(false)
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState(false);
-  const [wrongEmail, setWrongEmail] =useState(false);
+  const [wrongEmail, setWrongEmail] = useState(false);
   const [credentialError, setCredentialError] = useState("");
-  const [missingFieldError, setMissingFieldError] = useState(false)
+  const [missingFieldError, setMissingFieldError] = useState(false);
   const [rightIcon, setRightIcon] = useState("eye");
   const [hidePassword, setHidePassword] = useState(true);
   const [validPassword, setValidPassword] = useState(false);
@@ -81,7 +81,6 @@ export default function SignUp({ navigation }) {
     }
   };
 
-
   const providers = [
     {
       "Amazon Prime Video": 119,
@@ -123,122 +122,129 @@ export default function SignUp({ navigation }) {
   };
 
   const handleRegister = () => {
-    if ((!signUpEmail) || (!signUpPassword) || (!signUpUsername)){
+    if (!signUpEmail || !signUpPassword || !signUpUsername) {
       setMissingFieldError(true);
-    console.log('errorMessageMissingfield')
-    } 
-    if(!checkEmail.test(signUpEmail)){
-      setWrongEmail(true)
-      console.log('wrongEmail')
-    } 
-    else {
+      console.log("errorMessageMissingfield");
+    }
+    if (!checkEmail.test(signUpEmail)) {
+      setWrongEmail(true);
+      console.log("wrongEmail");
+    } else {
       fetch(`${baseUrl}users/checkUser`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: signUpUsername,
-          email: signUpEmail
+          email: signUpEmail,
         }),
       })
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
-          if (data.result === false ) {
+          if (data.result === false) {
             console.log(data.error);
             setError(true);
             setErrorMessage(data.error);
-          } 
-          else {
-                  setPlatformsModalVisible(true);
-                } 
-          })
-        
-        }
-      }
-    
-  
-
-
-  const handleSubmit = () => {
-    if(selectedProviders<1){
-      setErrorMessage(true);
-    } else {
-    fetch(`${baseUrl}users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signUpUsername,
-        email: signUpEmail,
-        password: signUpPassword,
-        favouritePlatforms: selectedProviders,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Something went wrong: " + response.status);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        console.log(selectedProviders, "providers");
-        if (data.result === true) {
-          dispatch(
-            login({
-              username: signUpUsername,
-              token: data.token,
-              email: data.email,
-            })
-          );
-          setSignUpEmail("");
-          setSignUpUsername("");
-          setSignUpPassword("");
-          setSelectedProviders([]);
-          navigation.navigate("TabNavigator");
-          setPlatformsModalVisible(false);
-        } else {
-          setCredentialError(data.error);
-        }
-        console.log("button clicked");
-      });
+          } else {
+            setPlatformsModalVisible(true);
+          }
+        });
     }
   };
 
-  
+  const handleSubmit = () => {
+    if (selectedProviders < 1) {
+      setErrorMessage(true);
+    } else {
+      fetch(`${baseUrl}users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: signUpUsername,
+          email: signUpEmail,
+          password: signUpPassword,
+          favouritePlatforms: selectedProviders,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Something went wrong: " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          console.log(selectedProviders, "providers");
+          if (data.result === true) {
+            dispatch(
+              login({
+                username: signUpUsername,
+                token: data.token,
+                email: data.email,
+              })
+            );
+            setSignUpEmail("");
+            setSignUpUsername("");
+            setSignUpPassword("");
+            setSelectedProviders([]);
+            navigation.navigate("TabNavigator");
+            setPlatformsModalVisible(false);
+          } else {
+            setCredentialError(data.error);
+          }
+          console.log("button clicked");
+        });
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <Text style={styles.title}>Welcome to {"\n"} What To Watch !</Text>
-      <TextInput
-        placeholder="Username"
-        autoCapitalize="none"
-        onChangeText={(value) => setSignUpUsername(value)}
-        value={signUpUsername}
-        style={styles.input}
-      />
-      <TextInput
-        autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-        keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-        textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-        autoComplete="email"
-        placeholder="Email address"
-        onChangeText={(value) => setSignUpEmail(value)}
-        value={signUpEmail}
-        style={styles.input}
-      />
-      <TextInput
-        secureTextEntry={true}
-        placeholder="Password"
-        keyboardType="password"
-        autoCapitalize="none"
-        onChangeText={(value) => {
-          setSignUpPassword(value), validatePassword(value);
-        }}
-        value={signUpPassword}
-        style={styles.input}
-      />
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Image
+            source={require("../assets/imgsmall.png")}
+            style={styles.logo}
+          />
+        </View>
+      </View>
+
+      <Text style={styles.textH1}>Welcome to {"\n"}What To Watch</Text>
+      <Text style={styles.textH2}>
+        If you're ready to chill and watch a movie, then signup !
+      </Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Username"
+          autoCapitalize="none"
+          onChangeText={(value) => setSignUpUsername(value)}
+          value={signUpUsername}
+          style={styles.input}
+        />
+        <TextInput
+          autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+          keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+          textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+          autoComplete="email"
+          placeholder="Email address"
+          onChangeText={(value) => setSignUpEmail(value)}
+          value={signUpEmail}
+          style={styles.input}
+        />
+        <TextInput
+          secureTextEntry={true}
+          placeholder="Password"
+          keyboardType="password"
+          autoCapitalize="none"
+          onChangeText={(value) => {
+            setSignUpPassword(value), validatePassword(value);
+          }}
+          value={signUpPassword}
+          style={styles.input}
+        />
+      </View>
       <Text style={styles.strengthText}>{strength}</Text>
       <Text style={styles.suggestionsText}>
         {suggestions.map((suggestion, index) => (
@@ -278,26 +284,39 @@ export default function SignUp({ navigation }) {
       <TouchableOpacity onPress={handlePasswordVisibility}>
         {/* <Icon name={rightIcon} size={25} /> */}
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={handleRegister}
-        style={styles.button}
-        activeOpacity={0.8}
-      >
-        {missingFieldError && <Text style={styles.error}>Please complete all fields to register!</Text> }
+
+      {missingFieldError && (
+            <Text style={styles.error}>
+              Please complete all fields to register!
+            </Text>
+          )}
           {error && <Text style={styles.error}>{errorMessage}</Text>}
-          {/* {emailErrorMessage && <Text style={styles.error}>Email already registered!</Text>} */}
-        <Text style={styles.textButton}>REGISTER</Text>
-      </TouchableOpacity>
-      <Text style={styles.textButton}>Or connect with</Text>
-      <View style={styles.haveAccount}>
-        <Text>Already have an account?</Text>
+        
+
+
+      <View style={styles.bottomContent}>
         <TouchableOpacity
-          style={styles.button2}
+          onPress={handleRegister}
+          style={styles.button}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate("SignIn")}
         >
-          <Text style={styles.textButton}>Sign in here!</Text>
+          <Text style={styles.textButton}>REGISTER</Text>
         </TouchableOpacity>
+        <Text style={styles.textH4}>Or connect with</Text>
+        <Image
+          source={require("../assets/google-logo.png")}
+          style={styles.googleLogo}
+        />
+        <View style={styles.haveAccount}>
+          <Text style={styles.textH4}>Already have an account?</Text>
+          <TouchableOpacity
+            style={styles.button2}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("SignIn")}
+          >
+            <Text style={styles.textButton}>Sign in here!</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <Modal
         animationType="slide"
@@ -357,49 +376,97 @@ export default function SignUp({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "000",
+    backgroundColor: "#0d0f2b",
+    paddingHorizontal: 10,
+    paddingTop: 20,
+  },
+  header: {
+    alignItems: "flex-start",
+    marginBottom: 40,
+    marginTop: "10%",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    width: 100,
+    height: 80,
+    borderRadius: 40,
+  },
+  textH1: {
+    textAlign: "flex-start",
+    color: "white",
+    fontSize: 32,
+    fontWeight: "bold",
+    paddingHorizontal: 20,
+  },
+  textH2: {
+    marginTop: 10,
+    marginHorizontal: 7,
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
+  },
+  textH4: {
+    color: "white",
+    marginHorizontal: 5,
+  },
+  inputContainer: {
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    width: "80%",
-    fontSize: 38,
-    fontWeight: "600",
-    // color:"white",
-  },
   input: {
+    //to be changed
     width: "80%",
     marginTop: 25,
     borderBottomColor: "#ec6e5b",
     borderBottomWidth: 1,
     fontSize: 18,
-    // color:"white",
+    color: "white",
   },
   haveAccount: {
     flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
+    justifyContent: "center",
+    alignItems: "space-around",
+    marginTop: 30,
+    paddingHorizontal: 10,
   },
   button: {
     alignItems: "center",
     paddingTop: 8,
     width: "80%",
-    marginTop: 30,
-    borderRadius: 10,
-    marginBottom: 80,
+    margin: 30,
+    // borderRadius: 10,
+    // marginBottom: 80,
+    backgroundColorolor: 'white'
   },
   button2: {
     fontWeight: "300",
   },
   textButton: {
     fontWeight: "600",
-    // color:"white",
+    color: "white",
+  },
+  googleLogo: {
+    width: 80,
+    height: 80,
+    borderRadius: 30,
+    margin: 30,
+  },
+  bottomContent: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 50,
   },
   suggestionsText: {
     justifyContent: "center",
     alignItems: "center",
     fontWeight: "600",
     color: "red",
+  },
+  error: {
+    textAlign: "center",
+    color: "red",
+    fontSize: 16,
+    margin: 20,
   },
   modalOverlay: {
     flex: 1,
