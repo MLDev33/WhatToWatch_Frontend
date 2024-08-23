@@ -54,26 +54,38 @@ const CustomTabBarIcon = ({ focused, iconName, label }) => {
         <LinearGradient
           colors={["#ec008c", "#fc6767"]}
           style={{
-            padding: 10,
-            borderRadius: 20,
+            paddingVertical: 8, // hauteur
+            paddingHorizontal: 15, //  largeur
+            borderRadius: 15,
             alignItems: "center",
             justifyContent: "center",
           }}
         >
           <FontAwesome name={iconName} size={24} color="#fff" />
+          <Text
+            style={{
+              color: "#fff",
+              marginTop: 5,
+              fontSize: 12,
+            }}
+          >
+            {label}
+          </Text>
         </LinearGradient>
       ) : (
-        <FontAwesome name={iconName} size={24} color="gray" />
+        <>
+          <FontAwesome name={iconName} size={24} color="gray" />
+          <Text
+            style={{
+              color: "gray",
+              marginTop: 5,
+              fontSize: 12,
+            }}
+          >
+            {label}
+          </Text>
+        </>
       )}
-      <Text
-        style={{
-          color: focused ? "#fff" : "gray",
-          marginTop: 5,
-          fontSize: 12,
-        }}
-      >
-        {label}
-      </Text>
     </View>
   );
 };
@@ -110,7 +122,7 @@ const TabNavigator = () => {
         tabBarStyle: {
           backgroundColor: "#0d0f2b",
           borderTopWidth: 0,
-          height: 70,
+          height: 60,
         },
         tabBarLabel: () => null,
         headerShown: false,

@@ -63,6 +63,7 @@ function SearchScreen() {
       <TextInput
         style={styles.input}
         placeholder="Rechercher un film, une série ou un genre"
+        placeholderTextColor="white" 
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
@@ -85,7 +86,7 @@ function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#0d0f2b',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginVertical: 30,
     paddingHorizontal: 10,
+    color: 'white', // Assurez-vous que le texte est blanc
   },
   list: {
     width: '100%',

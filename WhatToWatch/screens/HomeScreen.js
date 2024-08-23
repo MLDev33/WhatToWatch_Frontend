@@ -4,7 +4,7 @@ import { GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import Movie from '../components/Movie/Movie';
 import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import MyList from '../components/Movie/MyList';
 import GradientButton from '../components/GradientButton'; // Importation de GradientButton
 import { FontAwesome } from '@expo/vector-icons'; // Importation de FontAwesome pour l'icône de cœur
@@ -98,8 +98,13 @@ export default function HomeScreen() {
     if (movies.length === 0) {
       fetchTrendings(usertoken);
     }
-    fetchUserLikes();
-  }, [fetchUserLikes, usertoken]);
+  }, [usertoken]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserLikes();
+    }, [fetchUserLikes])
+  );
 
   const openModal = (index) => {
     setSelectedIndex(index);

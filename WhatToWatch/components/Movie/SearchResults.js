@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: 'white', // Assurez-vous que le texte est blanc
   },
   overview: {
     fontSize: 14,
