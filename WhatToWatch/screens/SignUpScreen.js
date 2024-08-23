@@ -75,28 +75,22 @@ export default function SignUp({ navigation }) {
     }
   };
  //penser a ajouter logo 
+ //list updated with platforms that provide results
   const providers = [
     { id: 119, name: "Amazon Prime Video" },
     { id: 337, name: "Disney Plus" },
     { id: 8, name: "Netflix" },
-    { id: 384, name: "HBO Max" },
     { id: 381, name: "Canal+" },
     { id: 2, name: "Apple TV" },
-    { id: 43, name: "Starz" },
     { id: 283, name: "Crunchyroll" },
     { id: 11, name: "MUBI" },
     { id: 192, name: "YouTube" },
-    { id: 15, name: "Hulu" },
     { id: 35, name: "Rakuten TV" },
-    { id: 38, name: "BBC iPlayer" },
     { id: 56, name: "OCS" },
-    { id: 148, name: "ABC" },
+    //universal only one movie on trendings
     { id: 184, name: "Universal Pictures" },
     { id: 234, name: "Arte" },
     { id: 236, name: "France TV" },
-    { id: 248, name: "Boomerang" },
-    { id: 210, name: "Sky" },
-    { id: 222, name: "Rai Play" },
   ];
 
   const handlePasswordVisibility = () => {
@@ -160,12 +154,6 @@ export default function SignUp({ navigation }) {
         }
         return response.json();
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Something went wrong: " + response.status);
-          }
-          return response.json();
-        })
         .then((data) => {
           console.log(data);
           console.log(selectedProviders, "providers");

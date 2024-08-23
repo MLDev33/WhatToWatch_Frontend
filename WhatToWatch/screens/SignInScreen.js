@@ -120,14 +120,6 @@ export default function SignIn({ navigation }) {
       <TouchableOpacity onPress={handlePasswordVisibility}>
         {/* <Icon name={rightIcon} size={25} /> */}
       </TouchableOpacity>
-      {/* <LinearGradient
-        colors={["#7C4DFF", "#F94A56", "#FF1744"]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 2, y: 5 }}
-        style={styles.buttonContainer}
-      > */}
-
-      {/* </LinearGradient> */}
 
       {errorMessage && (
         <Text style={styles.error}>User not found or wrong email</Text>

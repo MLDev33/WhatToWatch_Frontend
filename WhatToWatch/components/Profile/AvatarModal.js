@@ -48,8 +48,7 @@ export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible 
             .then((data) => {
               console.log(data);
             })
-
-        // setAvatarModalVisible(false)
+        setAvatarModalVisible(false)
       }
      
     return (

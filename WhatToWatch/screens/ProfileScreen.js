@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -18,6 +19,16 @@ import { Avatar } from "react-native-elements";
 import GradientButton from "../components/GradientButton";
 import AvatarModal from "../components/Profile/AvatarModal";
 
+
+ //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+ const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+ const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+ 
+ // Utiliser une condition pour basculer entre les URLs
+ //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+  const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
+
+
 const ProfileScreen = ({ navigation }) => {
   const [darkMode, setDarkMode] = useState(true);
   const [notifications, setNotifications] = useState(false);
@@ -28,17 +39,20 @@ const ProfileScreen = ({ navigation }) => {
     useState(false);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 
-
-
-  const handleLogOut = () => {
-    dispatch(logout());
-    console.log("logout");
-    navigation.replace("SignIn");
-  };
-
-
   const user = useSelector((state) => state.user.value);
   let username = user.username;
+  let token = user.token;
+
+
+//   useEffect(() => {
+   
+// }, []);
+
+const handleLogOut = () => {
+  dispatch(logout());
+  console.log("logout");
+  navigation.replace("SignIn");
+};
 
   return (
     <SafeAreaView style={styles.container}>
