@@ -40,7 +40,7 @@ export default function ForgottenPassword({ modalVisible, setModalVisible }) {
                             style={styles.closeButtonContainer}
                             onPress={() => setModalVisible(false)}
                         >
-                            <FontAwesome name="times" size={20} color="black" />
+                            <FontAwesome name="times" size={20} color="white" />
                         </TouchableOpacity>
                         <TextInput
                             autoCapitalize="none"
@@ -48,6 +48,7 @@ export default function ForgottenPassword({ modalVisible, setModalVisible }) {
                             textContentType="emailAddress"
                             autoComplete="email"
                             placeholder="Email address"
+                            placeholderTextColor={'white'}
                             onChangeText={(value) => setEmail(value)}
                             value={email}
                             style={styles.input}
@@ -75,19 +76,30 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        width: 300,
+        width: "80%",
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: "#0d0f2b",
         borderRadius: 10,
-        alignItems: 'center',
+        alignItems: "center",
     },
     modalTitle: {
         fontSize: 20,
         marginBottom: 20,
+        color: "white",
     },
     closeButtonContainer: {
         position: 'absolute',
         top: 10,
         right: 10,
     },
+    input: {
+        height: 50,
+        width: "80%",
+        backgroundColor: "rgb(108, 122, 137)",
+        borderRadius: 10,
+        marginTop: 20,
+        fontSize: 18,
+        color: "white",
+        paddingLeft: 10
+      },
 });

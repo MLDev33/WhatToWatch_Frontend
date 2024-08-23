@@ -28,7 +28,7 @@ const RecoveredPasswordModal = ({ modalVisible, setModalVisible }) => {
               style={styles.closeButtonContainer}
               onPress={() => setModalVisible(false)}
             >
-              <FontAwesome name="times" size={20} color="black" />
+              <FontAwesome name="times" size={20} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -52,16 +52,21 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: 300,
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    alignItems: "center",
+      width: "80%",
+      padding: 40,
+      backgroundColor: "#0d0f2b",
+      borderRadius: 10,
+      alignItems: "center",
   },
   modalTitle: {
-    fontSize: 20,
-    marginBottom: 20,
+      fontSize: 20,
+      marginBottom: 20,
+      color: "white",
   },
+  modalText: {
+    marginBottom: 20,
+    color: "white",
+},
   closeButtonContainer: {
     position: "absolute",
     top: 10,

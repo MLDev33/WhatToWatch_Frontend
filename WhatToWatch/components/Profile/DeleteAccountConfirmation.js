@@ -31,8 +31,13 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
   let token = user.token;
 
   const [userPassword, setUserPassword] = useState("");
+  const [missingFieldError, setMissingFieldError]=useState(true)
 
   const handleDeleteAccount = () => {
+    if (!userPassword) {
+      setMissingFieldError(true);
+      console.log("errorMessageMissingfield");
+    } else {
           fetch(`${baseUrl}users/${token}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
@@ -51,6 +56,7 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
             });
         setUserPassword("");
       };
+    }
   
 
   const handleCloseButton = () => {
@@ -66,27 +72,28 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text>Delete Account</Text>
-          <Text>
+          <Text style={styles.modalTitle}>Delete Account</Text>
+          <Text style={styles.textH2}>
             Please enter your current password to proceed to account deletion.{" "}
           </Text>
           <TextInput
             secureTextEntry={true}
             placeholder="Password"
+            placeholderTextColor={'white'}
             keyboardType="password"
             autoCapitalize="none"
             onChangeText={(value) => setUserPassword(value)}
             value={userPassword}
             style={styles.input}
           />
-          <Text>
+          <Text style={styles.textH3}>
             Deleting your account is permanent and cannot be undone. Please make
             sure that you have saved any important data before proceeding. If
             you have any doubts, please cancel the deleting process.{" "}
           </Text>
 
           <TouchableOpacity onPress={handleDeleteAccount}>
-            <Text>Delete Account</Text>
+            <Text style={styles.modalTitle}>Delete Account</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleCloseButton}>
             <Text>Cancel</Text>
@@ -98,26 +105,53 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
 }
 
 const styles = StyleSheet.create({
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#0d0f2b",
+    borderRadius: 10,
+    alignItems: "center",
+  },
   modalOverlay: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: "90%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginVertical: 10,
-    width: "100%",
-  },
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
+modalTitle: {
+    fontSize: 20,
+    marginBottom: 20,
+    color: "white",
+},
+textH2: {
+  marginTop: 10,
+  marginHorizontal: 7,
+  textAlign: "center",
+  color: "white",
+  fontSize: 16,
+},
+textH3: {
+  marginTop: 10,
+  marginHorizontal: 7,
+  textAlign: "center",
+  color: "red",
+  fontSize: 16,
+},
+inputContainer: {
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: 50,
+},
+input: {
+  height: 50,
+  width: "80%",
+  backgroundColor: "rgb(108, 122, 137)",
+  borderRadius: 10,
+  marginTop: 20,
+  fontSize: 18,
+  color: "white",
+  paddingLeft: 10
+},
 });
 
 export default DeleteAccountConfirmation;

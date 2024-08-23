@@ -43,7 +43,7 @@ const DeleteAccount = ({ deleteAccountModalVisible, setDeleteAccountModalVisible
         <View style={{ flex: 1 }}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text>Delete Account</Text>
+              <Text style={styles.modalTitle}>Delete Account</Text>
 
               <FontAwesome
                 name="exclamation"
@@ -51,13 +51,13 @@ const DeleteAccount = ({ deleteAccountModalVisible, setDeleteAccountModalVisible
                 color="red"
                 style={styles.exclamationIcon}
               />
-              <Text>Are you sure you want to delete your account ?</Text>
+              <Text style={styles.textH2}>Are you sure you want to delete your account ?</Text>
               <View style={styles.buttons}>
                 <TouchableOpacity onPress={handleCloseButton}>
-                  <Text>Cancel</Text>
+                  <Text style={styles.modalTitle}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleDeleteButton}>
-                  <Text>Delete Account</Text>
+                  <Text style={styles.modalTitle}>Delete Account</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -81,12 +81,30 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "90%",
-    backgroundColor: "white",
-    borderRadius: 10,
+    width: "80%",
     padding: 20,
+    backgroundColor: "#0d0f2b",
+    borderRadius: 10,
     alignItems: "center",
   },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
+modalTitle: {
+    fontSize: 20,
+    marginBottom: 20,
+    color: "white",
+},
+textH2: {
+  marginTop: 10,
+  marginHorizontal: 7,
+  textAlign: "center",
+  color: "white",
+  fontSize: 16,
+},
   exclamationIcon: {
     justifyContent: "center",
     alignItems: "center",
