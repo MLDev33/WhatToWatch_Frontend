@@ -29,19 +29,17 @@ const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
   if (!movie) return null;
 
- 
   const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [platformModalVisible, setPlatformModalVisible] = useState(false);
-  console.log(movie.type, movie.genre ,movie.annee);
+  console.log(movie.type, movie.genre, movie.annee);
   const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
   const userToken = useSelector((state) => state.user.value.token);
   console.log("userToken", userToken);
   //-------------------- Fonction pour ajouter un film en favoris-----------------------------//
   const onLike = async (movie) => {
-    console.log("likepress on", movie.titre , "id", movie.id , "for the user", userToken , "annee", movie.annee);
+    console.log("likepress on", movie.titre, "id", movie.id, "for the user", userToken, "annee", movie.annee);
     try {
-     
       const response = await fetch(`${baseUrl}movies/like`, {
         method: "POST",
         headers: {
@@ -89,9 +87,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
       série: "tv",
     };
 
-    const link = `https://www.themoviedb.org/${typeMap[movie.type]}/${
-      movie.id
-    }`;
+    const link = `https://www.themoviedb.org/${typeMap[movie.type]}/${movie.id}`;
 
     try {
       const result = await Share.share({
@@ -138,10 +134,10 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                   style={styles.modalImage}
                   source={{ uri: `${TMDB_IMAGE_BASE_URL}/${movie.poster}` }}
                 />
-                <Text style={styles.modalTitle}>{movie.titre}</Text>
+                <Text style={styles.modalTitle} numberOfLines={1}>{movie.titre}</Text>
                 <Text style={styles.modalDescription}>
                   {movie.description.length > 100
-                    ? `${movie.description.substring(0, 120)}...`
+                    ? `${movie.description.substring(0, 150)}...`
                     : movie.description}
                 </Text>
                 <View style={styles.modalDetailsRow}>
@@ -235,6 +231,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    paddingTop: 50, // Ajout de marge en haut pour éviter l'affichage de la batterie
   },
   modalContent: {
     width: "90%",
@@ -243,13 +240,14 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "flex-start",
     position: "relative",
+    paddingBottom: 40, // Ajout de padding en bas pour remonter les icônes
   },
-closeButton: {
-  position: "absolute",
-  top: 5,
-  right: 8,
-
-},
+  closeButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    zIndex: 1,
+  },
   modalImage: {
     width: "100%",
     height: undefined,
@@ -259,12 +257,12 @@ closeButton: {
     resizeMode: "contain",
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
   },
   modalDescription: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 5,
   },
   modalDetailsRow: {
@@ -295,7 +293,8 @@ closeButton: {
     width: "100%",
   },
   button: {
-    marginHorizontal: 10,
+    marginHorizontal: 0,
+    bottom: 18,
   },
   shareOptionsContainer: {
     marginTop: 10,
@@ -315,6 +314,12 @@ closeButton: {
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  closeButtonContainer: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    zIndex: 1,
   },
 });
 

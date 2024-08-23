@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView  , TextInput  , TouchableOpacity} from 'react-native';
-import {  GestureHandlerRootView, State } from 'react-native-gesture-handler';
+import { useEffect, useState, useCallback } from 'react';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
+import { GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import Movie from '../components/Movie/Movie';
 import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import MyList from '../components/Movie/MyList';
-
+import GradientButton from '../components/GradientButton'; // Importation de GradientButton
+import { FontAwesome } from '@expo/vector-icons'; // Importation de FontAwesome pour l'icône de cœur
 
 export default function HomeScreen() {
   const [movies, setMovies] = useState([]);
@@ -15,6 +16,8 @@ export default function HomeScreen() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(''); // État pour la recherche
+  const [yourLikes, setYourLikes] = useState([]); // État pour les likes de l'utilisateur
+  const [loadingLikes, setLoadingLikes] = useState(true); // État de chargement pour les likes
   const navigation = useNavigation(); // Hook de navigation
   //valeur de test , on recuperera depuis le store
   const user = useSelector((state) => state.user.value);
@@ -65,14 +68,39 @@ export default function HomeScreen() {
     }
   }
 
+  const fetchUserLikes = useCallback(() => {
+    console.log("User token:", usertoken);
+    fetch(`${baseUrl}movies/user-likes?userToken=${usertoken}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          console.log("Liked media:", data.likedMedia);
+          if (Array.isArray(data.likedMedia)) {
+            setYourLikes(data.likedMedia);
+          } else {
+            console.error("likedMedia is not an array");
+          }
+        } else {
+          console.error(data.message);
+        }
+      })
+      .catch((error) => console.error("Fetch error:", error))
+      .finally(() => setLoadingLikes(false));
+  }, [baseUrl, usertoken]);
 
   //on ne fetch pas à l'infini , on fetch une seule fois au chargement de la page , si la liste de film est vide 
   useEffect(() => {
     if (movies.length === 0) {
-    fetchTrendings(usertoken);
-  }
-}, []);
-  
+      fetchTrendings(usertoken);
+    }
+    fetchUserLikes();
+  }, [fetchUserLikes, usertoken]);
+
   const openModal = (index) => {
     setSelectedIndex(index);
     setSelectedMovie(movies[index]);
@@ -101,9 +129,15 @@ export default function HomeScreen() {
     navigation.navigate('Search', { query: searchQuery });
     setSearchQuery(''); // Réinitialisation de la recherche
   };
-    //on envoi en props le resultat de la requete fetch , si on est en chargement , on affiche un message de chargement
-    //Movie est un composant qui affiche un film , on lui envoi en props le poster du film et une fonction qui permet d'ouvrir le modal
-    //l'utilisateur verra un poster du composant Movie puis cliquera dessus pour acceder au composant MovieModal qui affiche le film en grand
+
+  const handleLikesPress = () => {
+    if (yourLikes.length > 0) {
+      navigation.navigate("LikedMedia", { likedMedia: yourLikes });
+    } else {
+      console.log("No liked media to display.");
+    }
+  };
+
   const MovieTrendings = ({ movies }) => (
     <ScrollView 
       horizontal 
@@ -120,47 +154,62 @@ export default function HomeScreen() {
     </ScrollView>
   );
 
-    //modification pour le query du searchscreen
-    return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <Text style={styles.welcomeText}>Welcome {username}</Text>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search for movies..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            onSubmitEditing={handleSearchSubmit}
-          />
-          <TouchableOpacity style={styles.searchButton} onPress={handleSearchSubmit}>
-          <Text style={styles.searchButtonText}>Search</Text>
-        </TouchableOpacity>
-          <View style={styles.movies}>
-            <Text style={styles.moviesHeader}>Trendings on your platforms</Text>
-            {loading ? (
-              <Text>Loading trendings on your platform(s)</Text>
-            ) : (
-              <MovieTrendings movies={movies} />
-            )}
-          </View>
-          <MovieModal
-            visible={modalVisible}
-            movie={selectedMovie}
-            onClose={closeModal}
-            onSwipe={handleSwipe}
-          />
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.welcomeText}>Welcome {username}</Text>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search for movies..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onSubmitEditing={handleSearchSubmit}
+        />
+        <GradientButton
+          iconName="search"
+          buttonText="Search"
+          onPress={handleSearchSubmit}
+        />
+        <View style={styles.movies}>
+          <Text style={styles.moviesHeader}>Trendings on your platforms</Text>
+          {loading ? (
+            <Text>Loading trendings on your platform(s)</Text>
+          ) : (
+            <MovieTrendings movies={movies} />
+          )}
         </View>
-        <View style={styles.listsContainer}>
-        <Text style={styles.createListText}>Create a new list</Text>
-        <TouchableOpacity style={styles.addButton}>
-          <Text style={styles.addButtonText}>Add List</Text>
-        </TouchableOpacity>
-        <View style={styles.userLists}>
-        <TouchableOpacity>
-            <Text>User Like</Text>
+        <MovieModal
+          visible={modalVisible}
+          movie={selectedMovie}
+          onClose={closeModal}
+          onSwipe={handleSwipe}
+        />
+      </View>
+      <View style={styles.listsContainer}>
+        <Text style={styles.createListText}>Your Likes</Text>
+        {loadingLikes ? (
+          <ActivityIndicator size="large" color="#ffffff" />
+        ) : (
+          <TouchableOpacity
+            style={styles.likesContainer}
+            onPress={handleLikesPress}
+          >
+            <Image
+              source={require("../assets/avatar-1.png")} // Remplacez par votre avatar par défaut
+              style={styles.avatar}
+            />
+            <View style={styles.likesInfo}>
+              <Text style={styles.likesName}>Your likes</Text>
+              <Text style={styles.likesDetails}>{yourLikes.length} titles</Text>
+            </View>
+            <FontAwesome
+              name="heart"
+              size={24}
+              color="#ff5b5b"
+              style={styles.heartIcon}
+            />
           </TouchableOpacity>
-          <Text>List map goes here</Text>
-        </View>
+        )}
       </View>
     </GestureHandlerRootView>
   );
@@ -183,20 +232,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 10,
   },
-  // Styling for the search button
-  searchButton: {
-    height: 30,
-    backgroundColor: '#7C4DFF', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    borderRadius: 5, 
-    marginBottom: 10, 
-  },
-  searchButtonText: {
-    color: '#fff', 
-    fontSize: 16, 
-    fontWeight: 'bold', 
-  },
   movies: {
     flex: 1,
   },
@@ -206,7 +241,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   scrollContainer: {
-    flexWrap : 'nowrap',
+    flexWrap: 'nowrap',
   },
   listsContainer: {
     flex: 1,
@@ -218,22 +253,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  addButton: {
-    backgroundColor: '#7C4DFF',
-    padding: 10,
+  likesContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    backgroundColor: "#1c1c1c",
     borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  addButtonText: {
-    color: '#fff',
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15,
+  },
+  likesInfo: {
+    flex: 1,
+  },
+  likesName: {
     fontSize: 16,
+    color: "#ffffff",
   },
-  userLists: {
-    marginTop: 20,
+  likesDetails: {
+    fontSize: 14,
+    color: "#888",
   },
-  listItem: {
-    fontSize: 16,
-    paddingVertical: 5,
+  heartIcon: {
+    marginLeft: 10,
   },
 });

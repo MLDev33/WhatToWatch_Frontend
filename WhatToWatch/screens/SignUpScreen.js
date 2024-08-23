@@ -10,7 +10,6 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
-  ScrollView,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
@@ -34,13 +33,9 @@ export default function SignUp({ navigation }) {
   const [platformsModalVisible, setPlatformsModalVisible] = useState(false);
   const [selectedProviders, setSelectedProviders] = useState([]);
 
-  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-
-  // Utiliser une condition pour basculer entre les URLs
-  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+  const baseUrl = localUrl;
 
   const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
   const checkPassword = RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
@@ -64,7 +59,6 @@ export default function SignUp({ navigation }) {
 
     setSuggestions(newSuggestions);
 
-    // Determine password strength based on suggestions
     if (newSuggestions.length === 0) {
       setStrength("Very Strong Password");
     } else if (newSuggestions.length <= 1) {
@@ -77,41 +71,29 @@ export default function SignUp({ navigation }) {
       setStrength("Too Weak Password");
     }
   };
-
-
+ //penser a ajouter logo 
   const providers = [
-    {
-      "Amazon Prime Video": 119,
-      id: 119,
-      "Amazon Prime Video": 119,
-      name: "Amazon Prime",
-      logo: "",
-    },
-    { "Disney Plus": 337, id: 337, name: "Disney Plus", logo: "" },
-    { Netflix: 8, id: 8, name: "Netflix", logo: "" },
-    { "HBO Max": 384, id: 384, name: "HBO Max", logo: "" },
-    { "Canal+": 381, id: 381, name: "Canal+", logo: "" },
-    { "Apple TV": 2, id: 2, name: "Apple TV", logo: "" },
-    { Starz: 43, id: 43, name: "Starz", logo: "" },
-    { Crunchyroll: 283, id: 283, name: "Crunchyroll", logo: "" },
-    { MUBI: 11, id: 11, name: "MUBI", logo: "" },
-    { YouTube: 192, id: 192, name: "YouTube", logo: "" },
-    { Hulu: 15, id: 15, name: "Hulu", logo: "" },
-    { "Rakuten TV": 35, id: 35, name: "Rakuten TV", logo: "" },
-    { "BBC iPlayer": 38, id: 38, name: "BBC iPlayer", logo: "" },
-    { "OCS Go": 56, id: 56, "OCS Go": 56, name: "OCS", logo: "" },
-    { ABC: 148, id: 148, name: "ABC", logo: "" },
-    {
-      "Universal Pictures": 184,
-      id: 184,
-      name: "Universal Pictures",
-      logo: "",
-    },
-    { Arte: 234, id: 234, name: "Arte", logo: "" },
-    { "France TV": 236, id: 236, name: "France TV", logo: "" },
-    { Boomerang: 248, id: 248, name: "Boomerang", logo: "" },
-    { Sky: 210, id: 210, name: "Sky", logo: "" },
-    { "Rai Play": 222, id: 222, name: "Rai Play", logo: "" },
+    { id: 119, name: "Amazon Prime Video" },
+    { id: 337, name: "Disney Plus" },
+    { id: 8, name: "Netflix" },
+    { id: 384, name: "HBO Max" },
+    { id: 381, name: "Canal+" },
+    { id: 2, name: "Apple TV" },
+    { id: 43, name: "Starz" },
+    { id: 283, name: "Crunchyroll" },
+    { id: 11, name: "MUBI" },
+    { id: 192, name: "YouTube" },
+    { id: 15, name: "Hulu" },
+    { id: 35, name: "Rakuten TV" },
+    { id: 38, name: "BBC iPlayer" },
+    { id: 56, name: "OCS" },
+    { id: 148, name: "ABC" },
+    { id: 184, name: "Universal Pictures" },
+    { id: 234, name: "Arte" },
+    { id: 236, name: "France TV" },
+    { id: 248, name: "Boomerang" },
+    { id: 210, name: "Sky" },
+    { id: 222, name: "Rai Play" },
   ];
 
   const handlePasswordVisibility = () => {
@@ -133,21 +115,20 @@ export default function SignUp({ navigation }) {
     }
   };
 
-
   const handleSubmit = () => {
-    if(selectedProviders<1){
+    if(selectedProviders.length < 1){
       setErrorMessage(true);
     } else {
-    fetch(`${baseUrl}users/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signUpUsername,
-        email: signUpEmail,
-        password: signUpPassword,
-        favouritePlatforms: selectedProviders,
-      }),
-    })
+      fetch(`${baseUrl}users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: signUpUsername,
+          email: signUpEmail,
+          password: signUpPassword,
+          favouritePlatforms: selectedProviders,
+        }),
+      })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Something went wrong: " + response.status);
@@ -179,7 +160,6 @@ export default function SignUp({ navigation }) {
     }
   };
 
-  
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -194,9 +174,9 @@ export default function SignUp({ navigation }) {
         style={styles.input}
       />
       <TextInput
-        autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-        keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-        textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+        autoCapitalize="none"
+        keyboardType="email-address"
+        textContentType="emailAddress"
         autoComplete="email"
         placeholder="Email address"
         onChangeText={(value) => setSignUpEmail(value)}
@@ -251,7 +231,6 @@ export default function SignUp({ navigation }) {
         ></View>
       </View>
       <TouchableOpacity onPress={handlePasswordVisibility}>
-        {/* <Icon name={rightIcon} size={25} /> */}
       </TouchableOpacity>
       <TouchableOpacity
         onPress={handleRegister}
@@ -283,26 +262,26 @@ export default function SignUp({ navigation }) {
               Choose your streaming services
             </Text>
             <Text style={styles.modalTitle}>Select at least one platform</Text>
-            <FlatList
-              data={providers}
-              numColumns={1}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.providers}
-                  onPress={() => {
-                    setSelectedProviders((providers) => [
-                      ...providers,
-                      item.name,
-                    ]);
-                  }}
-                >
-                  <Text>{item.name}</Text>
-                  {/* <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logo}` }}></Image> */}
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item.id}
-            />
-
+            <View style={styles.scrollView}>
+              <FlatList
+                data={providers}
+                numColumns={1}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.providers}
+                    onPress={() => {
+                      setSelectedProviders((providers) => [
+                        ...providers,
+                        item.name,
+                      ]);
+                    }}
+                  >
+                    <Text>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id}
+              />
+            </View>
             <View style={styles.buttons}>
               <TouchableOpacity
                 style={styles.button}
@@ -338,7 +317,6 @@ const styles = StyleSheet.create({
     width: "80%",
     fontSize: 38,
     fontWeight: "600",
-    // color:"white",
   },
   input: {
     width: "80%",
@@ -346,7 +324,6 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ec6e5b",
     borderBottomWidth: 1,
     fontSize: 18,
-    // color:"white",
   },
   haveAccount: {
     flexDirection: "row",
@@ -366,7 +343,6 @@ const styles = StyleSheet.create({
   },
   textButton: {
     fontWeight: "600",
-    // color:"white",
   },
   suggestionsText: {
     justifyContent: "center",
@@ -413,5 +389,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: "grey",
     fontSize: 20,
+  },
+  scrollView: {
+    maxHeight: 200,
   },
 });
