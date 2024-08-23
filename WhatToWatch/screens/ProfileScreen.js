@@ -36,32 +36,6 @@ const ProfileScreen = ({ navigation }) => {
     navigation.replace("SignIn");
   };
 
-  /*
-<Avatar
-        rounded
-        containerStyle={{ height: 50, width: 50 }}
-        source={require("../assets/avatar-1.png")}
-      />
-      <FlatList
-        data={avatars}
-        numColumns={2}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-          // style={styles.providers}
-          // onPress={() => {
-          //   setSelectedProviders((providers) => [
-          //     ...providers,
-          //     item.id,
-          //   ]);
-          // }}
-          >
-            <Avatar rounded containerStyle={{ height: 50, width: 50 }} />
-          </TouchableOpacity>
-        )}
-        keyExtractor={avatars.key}
-      />
-
-    */
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
