@@ -47,36 +47,49 @@ export default function SignIn({ navigation }) {
   };
 
   const handleSubmit = () => {
-    fetch(`${baseUrl}users/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: signInUsername,
-        password: signInPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        console.log(signInUsername);
-        console.log(signInPassword);
-        if (!data.result) {
-          console.log("false");
-          setErrorMessage(true);
-        } else {
-          dispatch(
-            login({
-              username: signInUsername,
-              token: data.token,
-              email: data.email,
-            })
-          );
-          setSignInUsername("");
-          setSignInPassword("");
-          navigation.navigate("TabNavigator");
-        }
-        console.log("button signin clicked");
-      });
+    if (selectedProviders.length < 1) {
+      setErrorMessage(true);
+    } else {
+      fetch(`${baseUrl}users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: signUpUsername,
+          email: signUpEmail,
+          password: signUpPassword,
+          favouritePlatforms: selectedProviders,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Something went wrong: " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          if (data.result === true) {
+            dispatch(
+              login({
+                username: signUpUsername,
+                token: data.token,
+                email: data.email,
+              })
+            );
+            setSignUpEmail("");
+            setSignUpUsername("");
+            setSignUpPassword("");
+            setSelectedProviders([]);
+            setPlatformsModalVisible(false);
+            navigation.navigate("TabNavigator");
+          } else {
+            setCredentialError(data.error);
+          }
+        })
+        .catch((error) => {
+          console.error("Error during sign up:", error);
+        });
+    }
   };
 
   return (

@@ -141,7 +141,7 @@ export default function SignUp({ navigation }) {
   };
 
   const handleSubmit = () => {
-    if(selectedProviders.length < 1){
+    if (selectedProviders.length < 1) {
       setErrorMessage(true);
     } else {
       fetch(`${baseUrl}users/signup`, {
@@ -153,12 +153,6 @@ export default function SignUp({ navigation }) {
           password: signUpPassword,
           favouritePlatforms: selectedProviders,
         }),
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Something went wrong: " + response.status);
-        }
-        return response.json();
       })
         .then((response) => {
           if (!response.ok) {
@@ -187,6 +181,9 @@ export default function SignUp({ navigation }) {
             setCredentialError(data.error);
           }
           console.log("button clicked");
+        })
+        .catch((error) => {
+          console.error("Error during sign up:", error);
         });
     }
   };
@@ -441,9 +438,11 @@ const styles = StyleSheet.create({
   },
   button2: {
     fontWeight: "300",
+    color: "white",
   },
   textButton: {
     fontWeight: "600",
+    color: "white",
   },
   suggestionsText: {
     textAlign: "center",
