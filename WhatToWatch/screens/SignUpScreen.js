@@ -15,8 +15,47 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
 import GradientButton from "../components/GradientButton";
+import { GoogleSignin } from 'expo-auth-session/providers/google';
+// import {
+// 	GOOGLE_WEB_CLIENT_ID,
+// 	GOOGLE_ANDROID_CLIENT_ID,
+// 	GOOGLE_IOS_CLIENT_ID,
+// } from '../@env';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google'
+
+
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function SignUp({ navigation }) {
+  const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com'
+
+  const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
+  
+  const iosClientId= '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
+   
+  const config = {
+    webClientId,
+    iosClientId,
+    androidClientId
+  }
+
+  const [request, response, promptAsync] = Google.useAuthRequest(config);
+
+  const handleToken = () =>
+  {
+    if(response?.type === 'success') {
+      const{authentification} = response;
+      const token = authentification?.accessToken;
+
+    }
+  }
+
+  useEffect(() => {
+    handleToken()
+  }, [response])
+
   const dispatch = useDispatch();
 
   const [signUpUsername, setSignUpUsername] = useState("");
@@ -288,7 +327,7 @@ export default function SignUp({ navigation }) {
           <Text style={styles.textButton}>REGISTER</Text>
         </TouchableOpacity>
         <Text style={styles.textH4}>Or login with</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => promptAsync()}>
           <Image
             source={require("../assets/google-logo.png")}
             style={styles.googleLogo}

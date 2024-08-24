@@ -43,14 +43,8 @@ const ProfileScreen = ({ navigation }) => {
   let username = user.username;
   let token = user.token;
   let avatar = user.avatar;
+
   console.log(avatar)
-
-  let avatarTest = 'avatar-3.png'
-
-
-//   useEffect(() => {
-   
-// }, []);
 
 const handleLogOut = () => {
   dispatch(logout());
@@ -69,6 +63,10 @@ const handleLogOut = () => {
           <View style={styles.textAndImageContainer}>
             <Text style={styles.text}>{username}</Text>
             <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
+              {/* {!avatar && <Image
+                source={require("../assets/avatar-1.png")}
+                style={styles.profileImage}
+              />} */}
               <Image
                 source={{uri: avatar}}
                 style={styles.profileImage}
@@ -83,7 +81,7 @@ const handleLogOut = () => {
         <GradientButton
           iconName="settings-outline"
           buttonText="Profile setting"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("ProfileSettingsScreen")}
         />
         <GradientButton
           iconName="time-outline"

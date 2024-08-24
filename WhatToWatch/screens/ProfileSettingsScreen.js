@@ -10,7 +10,7 @@ import { Avatar } from "react-native-elements";
 
 
 
-const ProfileSettingsScreen = ({   navigation }) => {
+const ProfileSettingsScreen = ({ navigation }) => {
 
 
   const dispatch = useDispatch();

@@ -17,12 +17,26 @@ import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
 import { LinearGradient } from "expo-linear-gradient";
 import WatchScheduleScreen from "./screens/WatchScheduleScreen";
 import { useState, useEffect } from "react";
-// import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from 'expo-auth-session/providers/google';
 // import {
 // 	GOOGLE_WEB_CLIENT_ID,
 // 	GOOGLE_ANDROID_CLIENT_ID,
 // 	GOOGLE_IOS_CLIENT_ID,
 // } from '@env';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google'
+
+const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com'
+
+const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
+
+const iosClientId= '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
+ 
+const config = {
+  webClientId,
+  iosClientId,
+  androidClientId
+}
 
 // GoogleSignin.configure({
 // 	webClientId: GOOGLE_WEB_CLIENT_ID,
@@ -30,6 +44,8 @@ import { useState, useEffect } from "react";
 // 	iosClientId: GOOGLE_IOS_CLIENT_ID,
 // 	scopes: ['profile', 'email'],
 // });
+
+WebBrowser.maybeCompleteAuthSession();
 
 //try fix modal swipping issue
 
