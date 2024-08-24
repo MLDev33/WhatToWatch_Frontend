@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from 'react';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Text, View, TouchableOpacity, StyleSheet, Modal, TextInput, FlatList } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Avatar } from "react-native-elements";
+import { addAvatar } from "../../reducers/user";
 
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -16,26 +17,30 @@ import { Avatar } from "react-native-elements";
 
 export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible }) {
 
+    const dispatch = useDispatch();
+
     const [userAvatar, setUserAvatar]= useState('');
 
     const user = useSelector((state) => state.user.value);
     let token = user.token;
+    let avatar = user.avatar;
+    let username = user.username
 
     const avatars = [
-        { key: 1, source: require("../../assets/avatar-1.png"), src: "../assets/avatar-1.png" },
-        { key: 2, source: require("../../assets/avatar-2.png"), src: "../assets/avatar-2.png" },
-        { key: 3, source: require("../../assets/avatar-3.png"), src: "../assets/avatar-3.png" },
-        { key: 4, source: require("../../assets/avatar-4.png"), src: "../assets/avatar-4.png" },
-        { key: 5, source: require("../../assets/avatar-5.png"), src: "../assets/avatar-5.png" },
-        { key: 6, source: require("../../assets/avatar-6.png"), src: "../assets/avatar-6.png" },
-        { key: 7, source: require("../../assets/avatar-7.png"), src: "../assets/avatar-7.png" },
-        { key: 8, source: require("../../assets/avatar-8.png"), src: "../assets/avatar-8.png" },
-        { key: 9, source: require("../../assets/avatar-9.png"), src: "../assets/avatar-9.png" },
-        { key: 10, source: require("../../assets/avatar-10.png"), src: "../assets/avatar-10.png" },
+        { key: 1, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492055/avatar-1_wrlvvd.png" },
+        { key: 2, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492529/avatar-2_r7qn9b.png" },
+        { key: 3, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492663/avatar-3_wboses.png"  },
+        { key: 4, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492697/avatar-4_up8rg1.png"  },
+        { key: 5, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492742/avatar-5_dwnesx.png"  },
+        { key: 6, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492757/avatar-6_jwwjza.png"  },
+        { key: 7, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492762/avatar-7_n733v6.png"  },
+        { key: 8, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492788/avatar-8_plhqnh.png"  },
+        { key: 9, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492813/avatar-9_l58snb.png"  },
+        { key: 10, url: "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492820/avatar-10_hwbhpp.png" },
       ];
 
       const handleSubmit = () => {
-        console.log(userAvatar);
+        console.log(userAvatar, '1stlog"');
         fetch(`${baseUrl}users/avatar/${token}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -46,11 +51,18 @@ export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible 
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log(data);
+              if(data.result){
+                console.log(data.avatar, '1')
+                dispatch(addAvatar(data.avatar))
+              }
             })
+
         setAvatarModalVisible(false)
+       
       }
-     
+      console.log(avatar, '2')
+
+      
     return (
         <View>
             <Modal
@@ -71,11 +83,13 @@ export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible 
                         <FlatList
         data={avatars}
         numColumns={2}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.avatar} onPress={()=> setUserAvatar(item.src)}>
-            <Avatar rounded containerStyle={{ height: 50, width: 50 }} source={item.source}/>
+        renderItem={({ item }) => {
+          return (
+      
+          <TouchableOpacity style={styles.avatar} onPress={()=> setUserAvatar(item.url)}>
+            <Avatar rounded containerStyle={{ height: 50, width: 50 }} source={{uri: item.url}}/>
           </TouchableOpacity>
-        )}
+    )}}
         keyExtractor={avatars.key}
       />
                      

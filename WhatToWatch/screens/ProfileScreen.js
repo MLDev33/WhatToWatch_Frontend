@@ -42,6 +42,10 @@ const ProfileScreen = ({ navigation }) => {
   const user = useSelector((state) => state.user.value);
   let username = user.username;
   let token = user.token;
+  let avatar = user.avatar;
+  console.log(avatar)
+
+  let avatarTest = 'avatar-3.png'
 
 
 //   useEffect(() => {
@@ -66,7 +70,7 @@ const handleLogOut = () => {
             <Text style={styles.text}>{username}</Text>
             <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
               <Image
-                source={require("../assets/avatar-2.png")}
+                source={{uri: avatar}}
                 style={styles.profileImage}
               />
             </TouchableOpacity>

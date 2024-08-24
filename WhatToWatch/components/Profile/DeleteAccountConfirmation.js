@@ -41,6 +41,9 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
           fetch(`${baseUrl}users/${token}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              password: userPassword,
+            }),
           })
             .then((response) => response.json())
             .then((data) => {

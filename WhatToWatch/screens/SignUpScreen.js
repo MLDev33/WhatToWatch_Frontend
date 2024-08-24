@@ -494,4 +494,15 @@ const styles = StyleSheet.create({
   scrollView: {
     maxHeight: 200,
   },
+  bottomContent: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 50,
+  },
+  googleLogo: {
+    width: 80,
+    height: 80,
+    borderRadius: 30,
+    margin: 30,
+  },
 });
