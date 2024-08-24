@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,7 +14,7 @@ import LikedMediaScreen from './screens/LikedMediaScreen';
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
-
+import { LinearGradient } from "expo-linear-gradient";
 import WatchScheduleScreen from "./screens/WatchScheduleScreen";
 import { useState, useEffect } from "react";
 // import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -46,34 +47,90 @@ const store = configureStore({
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+const CustomTabBarIcon = ({ focused, iconName, label }) => {
+  return (
+    <View style={{ alignItems: "center", justifyContent: "center" }}>
+      {focused ? (
+        <LinearGradient
+          colors={["#ec008c", "#fc6767"]}
+          style={{
+            paddingVertical: 8, // hauteur
+            paddingHorizontal: 15, //  largeur
+            borderRadius: 15,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FontAwesome name={iconName} size={24} color="#fff" />
+          <Text
+            style={{
+              color: "#fff",
+              marginTop: 5,
+              fontSize: 12,
+            }}
+          >
+            {label}
+          </Text>
+        </LinearGradient>
+      ) : (
+        <>
+          <FontAwesome name={iconName} size={24} color="gray" />
+          <Text
+            style={{
+              color: "gray",
+              marginTop: 5,
+              fontSize: 12,
+            }}
+          >
+            {label}
+          </Text>
+        </>
+      )}
+    </View>
+  );
+};
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
+        tabBarIcon: ({ focused }) => {
           let iconName;
+          let label;
           if (route.name === "Home") {
             iconName = "home";
+            label = "Home";
           } else if (route.name === "List") {
             iconName = "list";
+            label = "List";
           } else if (route.name === "Search") {
             iconName = "search";
+            label = "Search";
           } else if (route.name === "Profile") {
             iconName = "user";
+            label = "Profile";
           }
-          return <FontAwesome name={iconName} size={size} color={color} />;
+
+          return (
+            <CustomTabBarIcon
+              focused={focused}
+              iconName={iconName}
+              label={label}
+            />
+          );
         },
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
+        tabBarStyle: {
+          backgroundColor: "#0d0f2b",
+          borderTopWidth: 0,
+          height: 60,
+        },
+        tabBarLabel: () => null,
         headerShown: false,
-        tabBarLabelStyle: {
-          marginBottom: 5,
-        },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="List" component={ListScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="List" component={ListScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );

@@ -128,7 +128,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <FontAwesome name="times" size={20} color="black" />
+                  <FontAwesome name="times" size={20} color="white" />
                 </TouchableOpacity>
                 <Image
                   style={styles.modalImage}
@@ -142,18 +142,18 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                 </Text>
                 <View style={styles.modalDetailsRow}>
                   {movie.genre && movie.genre.length > 0 ? (
-                    <Text>genre : {movie.genre.join(", ")}</Text>
+                    <Text style={styles.modalDetailsText}>genre : {movie.genre.join(", ")}</Text>
                   ) : (
-                    <Text>genre : N/A</Text>
+                    <Text style={styles.modalDetailsText}>genre : N/A</Text>
                   )}
-                  <Text>type : {movie.type}</Text>
-                  <Text style={styles.modalDetails}>Année: {movie.annee}</Text>
-                  <Text style={styles.modalDetails}>
+                  <Text style={styles.modalDetailsText}>type : {movie.type}</Text>
+                  <Text style={styles.modalDetailsText}>Année: {movie.annee}</Text>
+                  <Text style={styles.modalDetailsText}>
                     Popularité: {movie.popularite}
                   </Text>
-                  <Text style={styles.modalDetails}>Votes: {movie.vote}</Text>
+                  <Text style={styles.modalDetailsText}>Votes: {movie.vote}</Text>
                 </View>
-                <Text style={styles.modalDetails}>
+                <Text style={styles.modalDetailsText}>
                   Plateformes:{" "}
                   {Array.isArray(movie.plateformes) &&
                   movie.plateformes.length > 0 ? (
@@ -213,7 +213,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                     style={styles.closeButtonContainer}
                     onPress={() => setPlatformModalVisible(false)}
                   >
-                    <FontAwesome name="times" size={20} color="black" />
+                    <FontAwesome name="times" size={20} color="white" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -231,16 +231,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingTop: 50, // Ajout de marge en haut pour éviter l'affichage de la batterie
+    paddingTop: 50, 
   },
   modalContent: {
     width: "90%",
-    backgroundColor: "white",
+    backgroundColor: "#0d0f2b", 
     borderRadius: 10,
     padding: 20,
     alignItems: "flex-start",
     position: "relative",
-    paddingBottom: 40, // Ajout de padding en bas pour remonter les icônes
+    paddingBottom: 40, 
   },
   closeButton: {
     position: "absolute",
@@ -260,10 +260,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
+    color: "white", 
   },
   modalDescription: {
     fontSize: 14,
     marginBottom: 5,
+    color: "white",
   },
   modalDetailsRow: {
     flexWrap: "wrap",
@@ -272,8 +274,9 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 5,
   },
-  modalDetails: {
+  modalDetailsText: {
     fontSize: 14,
+    color: "white",
   },
   platformContainer: {
     flexDirection: "row",

@@ -3,7 +3,7 @@ import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView, 
 import { useRoute } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { useDispatch, useSelector } from 'react-redux';
 const LikedMediaScreen = ({ navigation }) => {
     const route = useRoute();
     const { likedMedia } = route.params; // Récupère les médias aimés passés en paramètre
@@ -12,13 +12,19 @@ const LikedMediaScreen = ({ navigation }) => {
     const [filteredMedia, setFilteredMedia] = useState(likedMedia);
     const [selectedMedia, setSelectedMedia] = useState(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-    console.log('Liked Media:', likedMedia);
-    likedMedia.forEach(item => {
-        console.log('Providers for', item.title, ':', item.providers);
-    });
+    const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+    const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+    const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.value);
+    const username = user.username;
+    const usertoken = user.token;
+    console.log("username", username , "usertoken", usertoken);
 
     useEffect(() => {
         setFilteredMedia(
@@ -33,16 +39,55 @@ const LikedMediaScreen = ({ navigation }) => {
     };
 
     const handleDateChange = (event, date) => {
-        console.log('Event:', event);
-        console.log('Date:', date);
-        if (event.type === 'dismissed' || event.nativeEvent.type === 'dismissed') {
+        if (event?.type === 'dismissed') {
             setShowDatePicker(false);
             return;
         }
-        const selected = date || selectedDate;
         setShowDatePicker(false);
-        setSelectedDate(selected);
+        setSelectedDate(date || selectedDate);
+        setShowTimePicker(true); // Afficher le time picker après la sélection de la date
+        console.log("Date sélectionnée:", selectedDate);
     };
+
+    const handleTimeChange = (event, time) => {
+        if (event?.type === 'dismissed') {
+            setShowTimePicker(false);
+            return;
+        }
+        const selectedTime = time || selectedDate;
+        setShowTimePicker(false);
+        setSelectedDate(selectedTime);
+        console.log("Date et heure sélectionnées:", selectedTime);
+
+        // Appeler la fonction pour ajouter à la watchlist
+        if (selectedMedia) {
+            addToWatchlist(selectedMedia.tmdbId, selectedTime);
+        }
+    };
+
+    const addToWatchlist = async (tmdbId, scheduledTime) => {
+        try {
+            const payload = { movie_id: tmdbId, scheduled_time: scheduledTime };
+            console.log("Payload:", payload);
+            const response = await fetch(`${baseUrl}movies/watchlist/${usertoken}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ movie_id: tmdbId, scheduled_time: scheduledTime }),
+            });
+
+            const data = await response.json();
+            if (data.result) {
+                console.log('Film/série ajouté(e) à la watchlist:', data.watchlist);
+            } else {
+                console.error('Erreur lors de l\'ajout à la watchlist:', data.error);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête:', error);
+        }
+    };
+
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => handleSelectMedia(item)}>
             <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.poster}` }} style={styles.poster} />
@@ -103,47 +148,55 @@ const LikedMediaScreen = ({ navigation }) => {
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                        <ScrollView>
-    <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}/${selectedMedia.poster}` }} style={styles.modalPoster} />
-    <Text style={styles.modalTitle}>{selectedMedia.title}</Text>
-    <View style={styles.platformsContainer}>
-        {Array.isArray(selectedMedia.providers) && selectedMedia.providers.length > 0 ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {selectedMedia.providers.map((p, index) => (
-                    <View key={index} style={styles.platformContainer}>
-                        <Image
-                            source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logoPath}` }}
-                            style={styles.platformLogo}
-                        />
-                    </View>
-                ))}
-            </ScrollView>
-        ) : (
-            <Text style={styles.details}>Aucune plateforme disponible</Text>
-        )}
-    </View>
-    <Text style={styles.modalDescription}>{selectedMedia.description}</Text>
-    <Text style={styles.modalDetails}>Genre: {selectedMedia.genre.join(", ")}</Text>
-    <Text style={styles.modalDetails}>Année: {new Date(selectedMedia.release_date).getFullYear()}</Text>
-    <Text style={styles.modalDetails}>Popularité: {selectedMedia.popularity}</Text>
-    <Text style={styles.modalDetails}>Votes: {selectedMedia.vote_count}</Text>
-    <View style={styles.likedAtContainer}>
-        <Icon name="heart-outline" size={20} color="#fff" />
-        <Text style={styles.modalDetails}> Aimé le: {new Date(selectedMedia.likedAt).toLocaleDateString()}</Text>
-    </View>
-    <TouchableOpacity style={styles.watchPlannerButton} onPress={() => setShowDatePicker(true)}>
-        <Icon name="calendar-outline" size={30} color="#fff" />
-        <Text style={styles.watchPlannerButtonText}>Watch Planner</Text>
-    </TouchableOpacity>
-    {showDatePicker && (
-        <DateTimePicker
-            value={selectedDate}
-            mode="datetime"
-            display="default"
-            onChange={handleDateChange}
-        />
-    )}
-</ScrollView>
+                            <ScrollView>
+                                <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}/${selectedMedia.poster}` }} style={styles.modalPoster} />
+                                <Text style={styles.modalTitle}>{selectedMedia.title}</Text>
+                                <View style={styles.platformsContainer}>
+                                    {Array.isArray(selectedMedia.providers) && selectedMedia.providers.length > 0 ? (
+                                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                            {selectedMedia.providers.map((p, index) => (
+                                                <View key={index} style={styles.platformContainer}>
+                                                    <Image
+                                                        source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logoPath}` }}
+                                                        style={styles.platformLogo}
+                                                    />
+                                                </View>
+                                            ))}
+                                        </ScrollView>
+                                    ) : (
+                                        <Text style={styles.details}>Aucune plateforme disponible</Text>
+                                    )}
+                                </View>
+                                <Text style={styles.modalDescription}>{selectedMedia.description}</Text>
+                                <Text style={styles.modalDetails}>Genre: {selectedMedia.genre.join(", ")}</Text>
+                                <Text style={styles.modalDetails}>Année: {new Date(selectedMedia.release_date).getFullYear()}</Text>
+                                <Text style={styles.modalDetails}>Popularité: {selectedMedia.popularity}</Text>
+                                <Text style={styles.modalDetails}>Votes: {selectedMedia.vote_count}</Text>
+                                <View style={styles.likedAtContainer}>
+                                    <Icon name="heart-outline" size={20} color="#fff" />
+                                    <Text style={styles.modalDetails}> Aimé le: {new Date(selectedMedia.likedAt).toLocaleDateString()}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.watchPlannerButton} onPress={() => setShowDatePicker(true)}>
+                                    <Icon name="calendar-outline" size={30} color="#fff" />
+                                    <Text style={styles.watchPlannerButtonText}>Watch Planner</Text>
+                                </TouchableOpacity>
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        value={selectedDate}
+                                        mode="date"
+                                        display="default"
+                                        onChange={handleDateChange}
+                                    />
+                                )}
+                                {showTimePicker && (
+                                    <DateTimePicker
+                                        value={selectedDate}
+                                        mode="time"
+                                        display="default"
+                                        onChange={handleTimeChange}
+                                    />
+                                )}
+                            </ScrollView>
                             <TouchableOpacity style={styles.closeButton} onPress={() => setSelectedMedia(null)}>
                                 <Icon name="close-outline" size={30} color="#fff" />
                                 <Text style={styles.closeButtonText}>Fermer</Text>
@@ -216,12 +269,12 @@ const styles = StyleSheet.create({
     details: {
         fontSize: 12,
         color: '#999',
-        marginVertical: 2, // Réduire l'espace vertical entre les détails
+        marginVertical: 2,
     },
     platformsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 2, // Réduire l'espace vertical entre les détails
+        marginVertical: 2,
     },
     platformContainer: {
         marginRight: 10,
@@ -241,15 +294,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#1a1c3b',
         borderRadius: 10,
         padding: 20,
-        alignItems: 'center',
+        elevation: 10,
     },
     modalPoster: {
         width: '100%',
-        height: 250,
+        height: 300,
         borderRadius: 10,
     },
     modalTitle: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
         color: '#fff',
         marginVertical: 10,
@@ -257,39 +310,45 @@ const styles = StyleSheet.create({
     modalDescription: {
         fontSize: 16,
         color: '#ccc',
-        marginVertical: 5,
+        marginVertical: 10,
     },
     modalDetails: {
         fontSize: 14,
         color: '#999',
-        marginVertical: 2, // Réduire l'espace vertical entre les détails
+        marginVertical: 5,
     },
     likedAtContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 2, // Réduire l'espace vertical entre les détails
+        marginVertical: 5,
     },
     watchPlannerButton: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
         marginVertical: 10,
         backgroundColor: '#007BFF',
-        padding: 10,
-        borderRadius: 5,
+        borderRadius: 10,
     },
     watchPlannerButtonText: {
-        fontSize: 18,
+        fontSize: 16,
         color: '#fff',
-        marginLeft: 10,
+        marginLeft: 5,
     },
     closeButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10,
+        justifyContent: 'center',
+        padding: 10,
+        backgroundColor: '#ff4d4d',
+        borderRadius: 10,
+        marginTop: 20,
     },
     closeButtonText: {
         fontSize: 16,
         color: '#fff',
+        marginLeft: 5,
     },
 });
 

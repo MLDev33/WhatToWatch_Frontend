@@ -4,7 +4,7 @@ import { GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import Movie from '../components/Movie/Movie';
 import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import MyList from '../components/Movie/MyList';
 import GradientButton from '../components/GradientButton'; // Importation de GradientButton
 import { FontAwesome } from '@expo/vector-icons'; // Importation de FontAwesome pour l'icône de cœur
@@ -98,8 +98,13 @@ export default function HomeScreen() {
     if (movies.length === 0) {
       fetchTrendings(usertoken);
     }
-    fetchUserLikes();
-  }, [fetchUserLikes, usertoken]);
+  }, [usertoken]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserLikes();
+    }, [fetchUserLikes])
+  );
 
   const openModal = (index) => {
     setSelectedIndex(index);
@@ -161,6 +166,7 @@ export default function HomeScreen() {
         <TextInput
           style={styles.searchInput}
           placeholder="Search for movies..."
+          placeholderTextColor="#888"
           value={searchQuery}
           onChangeText={setSearchQuery}
           onSubmitEditing={handleSearchSubmit}
@@ -173,7 +179,7 @@ export default function HomeScreen() {
         <View style={styles.movies}>
           <Text style={styles.moviesHeader}>Trendings on your platforms</Text>
           {loading ? (
-            <Text>Loading trendings on your platform(s)</Text>
+            <Text style={styles.loadingText}>Loading trendings on your platform(s)</Text>
           ) : (
             <MovieTrendings movies={movies} />
           )}
@@ -186,7 +192,12 @@ export default function HomeScreen() {
         />
       </View>
       <View style={styles.listsContainer}>
-        <Text style={styles.createListText}>Your Likes</Text>
+        <Text style={styles.createListText}>Create a new list</Text>
+        <GradientButton
+          iconName="add"
+          buttonText="Create List"
+          onPress={() => console.log('Create List pressed')}
+        />
         {loadingLikes ? (
           <ActivityIndicator size="large" color="#ffffff" />
         ) : (
@@ -195,7 +206,7 @@ export default function HomeScreen() {
             onPress={handleLikesPress}
           >
             <Image
-              source={require("../assets/avatar-1.png")} // Remplacez par votre avatar par défaut
+              source={require("../assets/avatar-1.png")}
               style={styles.avatar}
             />
             <View style={styles.likesInfo}>
@@ -219,18 +230,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    backgroundColor: '#0d0f2b',
   },
   welcomeText: {
     marginTop: 10,
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#ffffff',
   },
   searchInput: {
-    height: 30,
-    borderColor: 'gray',
+    height: 40,
+    borderColor: '#888',
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
+    color: '#ffffff',
   },
   movies: {
     flex: 1,
@@ -239,6 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#ffffff',
   },
   scrollContainer: {
     flexWrap: 'nowrap',
@@ -246,19 +261,20 @@ const styles = StyleSheet.create({
   listsContainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#0d0f2b',
   },
   createListText: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#ffffff',
   },
   likesContainer: {
     flexDirection: "row",
     alignItems: "center",
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: "#888",
     backgroundColor: "#1c1c1c",
     borderRadius: 5,
     marginBottom: 10,
@@ -282,5 +298,8 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     marginLeft: 10,
+  },
+  loadingText: {
+    color: '#ffffff',
   },
 });
