@@ -20,6 +20,7 @@ export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible 
     const dispatch = useDispatch();
 
     const [userAvatar, setUserAvatar]= useState('');
+    const [hasAvatar, setHasAvatar]= useState(false)
 
     const user = useSelector((state) => state.user.value);
     let token = user.token;
@@ -54,9 +55,10 @@ export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible 
               if(data.result){
                 console.log(data.avatar, '1')
                 dispatch(addAvatar(data.avatar))
+                
               }
             })
-
+            setHasAvatar(true)
         setAvatarModalVisible(false)
        
       }

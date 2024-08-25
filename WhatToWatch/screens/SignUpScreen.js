@@ -281,7 +281,7 @@ export default function SignUp({ navigation }) {
         ))}
       </Text>
       <View style={styles.strengthMeter}>
-        <View
+        {/* <View
           style={{
             width: `${
               strength === "Very Strong"
@@ -294,8 +294,8 @@ export default function SignUp({ navigation }) {
                 ? 25
                 : 0
             }%`,
-            height: 20,
-            backgroundColor:
+            height: 50,
+            color:
               strength === "Too Weak"
                 ? "red"
                 : strength === "Weak"
@@ -305,8 +305,11 @@ export default function SignUp({ navigation }) {
                 : strength === "Strong"
                 ? "green"
                 : "limegreen",
-          }}
-        ></View>
+            justifyContent: 'center',
+            alignItems: 'center'
+
+          }} */}
+        {/* ></View> */}
       </View>
       <TouchableOpacity onPress={handlePasswordVisibility}>
       </TouchableOpacity>
@@ -544,4 +547,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     margin: 30,
   },
+  // strengthMeter : {
+  //   borderColor: 'red',
+  //   color: 'red',
+  //   alignItems: "center",
+  //   justifyContent: "center",
+
+  // }
 });

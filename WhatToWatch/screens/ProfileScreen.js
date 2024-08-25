@@ -29,7 +29,7 @@ import AvatarModal from "../components/Profile/AvatarModal";
   const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
 
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   const [darkMode, setDarkMode] = useState(true);
   const [notifications, setNotifications] = useState(false);
 
@@ -62,11 +62,21 @@ const handleLogOut = () => {
           />
           <View style={styles.textAndImageContainer}>
             <Text style={styles.text}>{username}</Text>
-            <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
-              {/* {!avatar && <Image
-                source={require("../assets/avatar-1.png")}
-                style={styles.profileImage}
-              />} */}
+              {!hasAvatar && 
+              <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
+              <Avatar
+                size="medium"
+                rounded
+                // style={styles.firstAvatar}
+                backgroundColor= 'grey'
+                title="AA"
+                activeOpacity={0.7}
+                  />
+                {/* pencil? */}
+                  {/* <Icon name={'pencil'} containerStyle={styles.icon} onPress={console.log('I was clicked')}/> */}
+                  </TouchableOpacity>
+                  }
+                  <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
               <Image
                 source={{uri: avatar}}
                 style={styles.profileImage}
@@ -253,6 +263,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  //style for the pencil if that works
+  icon: {
+    backgroundColor: '#ccc',
+    position: 'absolute',
+    right: 0,
+    bottom: 0
+   },
+   firstAvatar: {
+    backgroundColor: 'grey',
+
+   }
 });
 
 export default ProfileScreen;
