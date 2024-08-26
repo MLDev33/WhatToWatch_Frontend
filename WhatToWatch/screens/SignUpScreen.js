@@ -15,14 +15,9 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import { MaterialIcons as Icon } from "@expo/vector-icons";
 import GradientButton from "../components/GradientButton";
-import { GoogleSignin } from 'expo-auth-session/providers/google';
-// import {
-// 	GOOGLE_WEB_CLIENT_ID,
-// 	GOOGLE_ANDROID_CLIENT_ID,
-// 	GOOGLE_IOS_CLIENT_ID,
-// } from '../@env';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google'
+import { jwtDecode } from "jwt-decode";
 
 
 
@@ -46,16 +41,19 @@ export default function SignUp({ navigation }) {
   const handleToken = () =>
   {
     if(response?.type === 'success') {
-      const{authentification} = response;
-      const token = authentification?.accessToken;
+      // const{authentication} = response;
+      const token = response?.authentication?.idToken;
+    console.log(jwtDecode(token))
+    }  
 
-    }
   }
+
 
   useEffect(() => {
     handleToken()
   }, [response])
 
+  // console.log(authentification.accessToken)
   const dispatch = useDispatch();
 
   const [signUpUsername, setSignUpUsername] = useState("");
@@ -280,8 +278,8 @@ export default function SignUp({ navigation }) {
           </Text>
         ))}
       </Text>
-      <View style={styles.strengthMeter}>
-        {/* <View
+      {/* <View style={styles.strengthMeter}>
+        <View
           style={{
             width: `${
               strength === "Very Strong"
@@ -308,9 +306,9 @@ export default function SignUp({ navigation }) {
             justifyContent: 'center',
             alignItems: 'center'
 
-          }} */}
-        {/* ></View> */}
-      </View>
+          }}
+        ></View>
+      </View> */}
       <TouchableOpacity onPress={handlePasswordVisibility}>
       </TouchableOpacity>
 
@@ -547,11 +545,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     margin: 30,
   },
-  // strengthMeter : {
-  //   borderColor: 'red',
-  //   color: 'red',
-  //   alignItems: "center",
-  //   justifyContent: "center",
+  strengthMeter : {
+    borderColor: 'red',
+    color: 'red',
+    alignItems: "center",
+    justifyContent: "center",
 
-  // }
+  }
 });

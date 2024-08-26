@@ -18,6 +18,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
 import { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -124,7 +125,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PanGestureHandler onGestureEvent={onSwipe} onHandlerStateChange={onSwipe}>
-          <View style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -218,7 +219,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                 </View>
               </View>
             </Modal>
-          </View>
+          </SafeAreaView>
         </PanGestureHandler>
       </GestureHandlerRootView>
     </Modal>

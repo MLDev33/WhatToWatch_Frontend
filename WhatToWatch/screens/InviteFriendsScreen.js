@@ -19,6 +19,7 @@ const InviteFriendsScreen = () => {
     return (
         <View style={styles.container}>
                     <Text style={styles.sectionTitle}>Invite your friends to join What to Watch</Text>
+                    {/* //react native share// */}
                     <Text style={styles.textH2}>Please enter your friend's email address</Text>
                     <TextInput
           autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize

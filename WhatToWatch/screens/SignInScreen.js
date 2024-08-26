@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Image,
@@ -15,8 +15,43 @@ import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
 import RecoveredPasswordModal from "../components/SignInUp/RecoveredPassword";
 import { LinearGradient } from "expo-linear-gradient";
 // import Icon from 'react-native-vector-icons/Ionicons';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google'
+import { jwtDecode } from "jwt-decode";
+
+
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function SignIn({ navigation }) {
+  const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com'
+
+  const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
+  
+  const iosClientId= '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
+   
+  const config = {
+    webClientId,
+    iosClientId,
+    androidClientId
+  }
+
+  const [request, response, promptAsync] = Google.useAuthRequest(config);
+
+  const handleToken = () =>
+    {
+      if(response?.type === 'success') {
+        const token = response?.authentication?.idToken;
+      console.log(jwtDecode(token))
+      }  
+  
+    }
+  
+  
+    useEffect(() => {
+      handleToken()
+    }, [response])
+
   const dispatch = useDispatch();
 
   const [signInUsername, setSignInUsername] = useState("");
@@ -146,7 +181,7 @@ export default function SignIn({ navigation }) {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <Text style={styles.textH4}>Or connect with</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => promptAsync()}>
           <Image
             source={require("../assets/google-logo.png")}
             style={styles.googleLogo}
