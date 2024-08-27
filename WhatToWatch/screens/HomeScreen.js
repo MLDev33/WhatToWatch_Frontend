@@ -8,6 +8,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import MyList from '../components/Movie/MyList';
 import GradientButton from '../components/GradientButton'; // Importation de GradientButton
 import { FontAwesome } from '@expo/vector-icons'; // Importation de FontAwesome pour l'icône de cœur
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const [movies, setMovies] = useState([]);
@@ -161,7 +162,7 @@ export default function HomeScreen() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.welcomeText}>Welcome {username}</Text>
         <TextInput
           style={styles.searchInput}
@@ -190,7 +191,7 @@ export default function HomeScreen() {
           onClose={closeModal}
           onSwipe={handleSwipe}
         />
-      </View>
+      </SafeAreaView>
       <View style={styles.listsContainer}>
         <Text style={styles.createListText}>Create a new list</Text>
         <GradientButton

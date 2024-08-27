@@ -8,6 +8,8 @@ import {
   StyleSheet,
   Share,
   ScrollView,
+  Platform,
+  Dimensions
 } from "react-native";
 import {
   PanGestureHandler,
@@ -117,15 +119,17 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
   };
 
   return (
+
     <Modal
       animationType="slide"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
+   
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PanGestureHandler onGestureEvent={onSwipe} onHandlerStateChange={onSwipe}>
-          <SafeAreaView style={{ flex: 1 }}>
+     
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -219,10 +223,11 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                 </View>
               </View>
             </Modal>
-          </SafeAreaView>
+      
         </PanGestureHandler>
       </GestureHandlerRootView>
     </Modal>
+
   );
 };
 
@@ -234,6 +239,10 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     paddingTop: 50, 
   },
+  // try1: {
+  //   flex: 1,
+  //   maxHeight: Dimensions.get('window').height - 100
+  // },
   modalContent: {
     width: "90%",
     backgroundColor: "#0d0f2b", 
@@ -315,6 +324,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
+    // height: Dimensions.get('window').height,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",

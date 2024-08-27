@@ -7,31 +7,22 @@ import { useSelector , useDispatch } from 'react-redux';
 import { logout } from "../reducers/user";
 import DeleteAccount from "../components/Profile/DeleteAccount";
 import { Avatar } from "react-native-elements";
+import AvatarModal from "../components/Profile/AvatarModal";
+import { FontAwesome } from '@expo/vector-icons';
 
 
 
-const ProfileSettingsScreen = ({ navigation }) => {
+
+const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
 
   const dispatch = useDispatch();
   const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false);
-
-
-
-    /*
-<Avatar
-        rounded
-        containerStyle={{ height: 50, width: 50 }}
-        source={require("../assets/avatar-1.png")}
-      />
-     
-
-    */
-
-
+  const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
+  let avatar = user.avatar
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,13 +34,30 @@ const ProfileSettingsScreen = ({ navigation }) => {
           />
           <View style={styles.textAndImageContainer}>
             <Text style={styles.text}>{username}</Text>
-            <Image
-              source={require("../assets/avatar-1.png")}
-              style={styles.profileImage}
-            />
+            {avatar === undefined ? (
+              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                <Avatar
+                  size={84}
+                  rounded
+                  icon={{ name: "pencil", type: "font-awesome" }}
+                  containerStyle={{ backgroundColor: "#6733b9" }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                <Image source={{ uri: avatar }} style={styles.profileImage} />
+                <Avatar.Accessory size={24} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <Text style={styles.username}>Profile Settings</Text>
+        <TouchableOpacity
+                            style={styles.closeButtonContainer}
+                            onPress={() => navigation.navigate('ProfileScreen')}
+                        >
+                            <FontAwesome name="times" size={20} color="white" />
+                        </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
@@ -71,6 +79,11 @@ const ProfileSettingsScreen = ({ navigation }) => {
         <Text style={styles.textButton}>DELETE ACCOUNT</Text>
       </TouchableOpacity>
 
+      <AvatarModal
+        avatarModalVisible={avatarModalVisible}
+        setAvatarModalVisible={setAvatarModalVisible}
+      />
+      
       <DeleteAccount
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}

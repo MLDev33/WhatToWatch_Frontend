@@ -3,6 +3,7 @@ import { View, TextInput, Button, StyleSheet, FlatList } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import SearchResults from '../components/Movie/SearchResults';
 import MovieModal from '../components/Movie/MovieModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function SearchScreen() {
   const route = useRoute();
@@ -59,7 +60,7 @@ function SearchScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder="Rechercher un film, une série ou un genre"
@@ -79,7 +80,7 @@ function SearchScreen() {
         movie={selectedMovie}
         onClose={handleModalClose}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
