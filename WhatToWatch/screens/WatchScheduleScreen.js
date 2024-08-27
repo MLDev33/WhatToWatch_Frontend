@@ -74,7 +74,7 @@ const WatchScheduleScreen = () => {
                             ))}
                         </ScrollView>
                     ) : (
-                        <Text style={styles.details}>Aucune plateforme disponible</Text>
+                        <Text style={styles.details}>No platform available yet</Text>
                     )}
                 </View>
             </View>
@@ -88,11 +88,15 @@ const WatchScheduleScreen = () => {
             ) : (
                 <>
                     <Text style={styles.sectionTitle}>Your Likes</Text>
-                    <FlatList
-                        data={likes}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.movie_id._id.toString()}
-                    />
+                    {likes.length === 0 ? (
+                        <Text style={styles.placeholder}>Nothing added yet, like a movie or a serie and plan a viewing session soon</Text>
+                    ) : (
+                        <FlatList
+                            data={likes}
+                            renderItem={renderItem}
+                            keyExtractor={(item) => item.movie_id._id.toString()}
+                        />
+                    )}
                     <Text style={styles.sectionTitle}>Other Lists</Text>
                 </>
             )}

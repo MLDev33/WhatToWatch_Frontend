@@ -1,38 +1,54 @@
-import { useEffect, useState, useCallback } from 'react';
+// HomeScreen.js
+
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { GestureHandlerRootView, State } from 'react-native-gesture-handler';
 import Movie from '../components/Movie/Movie';
-import MovieModal from '../components/Movie/MovieModal'; // Importation de MovieModal
+import MovieModal from '../components/Movie/MovieModal';
 import { useSelector } from 'react-redux';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import MyList from '../components/Movie/MyList';
-import GradientButton from '../components/GradientButton'; // Importation de GradientButton
-import { FontAwesome } from '@expo/vector-icons'; // Importation de FontAwesome pour l'icône de cœur
+import GradientButton from '../components/GradientButton';
+import { FontAwesome } from '@expo/vector-icons';
+
+const MovieTrendings = React.memo(({ movies, openModal }) => (
+  <ScrollView 
+    horizontal 
+    style={styles.scrollContainer}
+    showsHorizontalScrollIndicator={false}
+  >
+    {movies.map((item, index) => (
+      <Movie
+        key={index}
+        poster={item.poster}
+        onPress={() => openModal(index)}
+      />
+    ))}
+  </ScrollView>
+));
 
 export default function HomeScreen() {
   const [movies, setMovies] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [lastAction, setLastAction] = useState(null);
+  const [lastMedia, setLastMedia] = useState(null);
+  const [canUndo, setCanUndo] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState(''); // État pour la recherche
-  const [yourLikes, setYourLikes] = useState([]); // État pour les likes de l'utilisateur
-  const [loadingLikes, setLoadingLikes] = useState(true); // État de chargement pour les likes
-  const navigation = useNavigation(); // Hook de navigation
-  //valeur de test , on recuperera depuis le store
+  const [searchQuery, setSearchQuery] = useState('');
+  const [yourLikes, setYourLikes] = useState([]);
+  const [loadingLikes, setLoadingLikes] = useState(true);
+  const [isLiking, setIsLiking] = useState(false);
+  const navigation = useNavigation();
   const user = useSelector((state) => state.user.value);
   let username = user.username;
   let usertoken = user.token;
 
-  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  
-  // Utiliser une condition pour basculer entre les URLs
-  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-   const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
+  const baseUrl = localUrl;
 
-   async function fetchFavouritePlatforms(usertoken) {
+  const fetchFavouritePlatforms = useCallback(async (usertoken) => {
     try {
       const response = await fetch(`${baseUrl}users/favouritePlatforms/${usertoken}`);
       if (!response.ok) {
@@ -47,14 +63,14 @@ export default function HomeScreen() {
       console.error("Erreur lors de la récupération des plateformes favorites : ", error);
       return [];
     }
-  }
-  
-  async function fetchTrendings(usertoken) {
+  }, [baseUrl]);
+
+  const fetchTrendings = useCallback(async (usertoken) => {
     try {
       const favouritePlatforms = await fetchFavouritePlatforms(usertoken);
       const plateformesParam = encodeURIComponent(JSON.stringify(favouritePlatforms));
       const url = `${baseUrl}movies/trendings?plateformes=${plateformesParam}&region=FR&limite=100`;
-  
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Something went wrong: ' + response.status);
@@ -66,10 +82,9 @@ export default function HomeScreen() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [baseUrl, fetchFavouritePlatforms]);
 
   const fetchUserLikes = useCallback(() => {
-    console.log("User token:", usertoken);
     fetch(`${baseUrl}movies/user-likes?userToken=${usertoken}`)
       .then((response) => {
         if (!response.ok) {
@@ -79,7 +94,6 @@ export default function HomeScreen() {
       })
       .then((data) => {
         if (data.success) {
-          console.log("Liked media:", data.likedMedia);
           if (Array.isArray(data.likedMedia)) {
             setYourLikes(data.likedMedia);
           } else {
@@ -93,12 +107,11 @@ export default function HomeScreen() {
       .finally(() => setLoadingLikes(false));
   }, [baseUrl, usertoken]);
 
-  //on ne fetch pas à l'infini , on fetch une seule fois au chargement de la page , si la liste de film est vide 
   useEffect(() => {
     if (movies.length === 0) {
       fetchTrendings(usertoken);
     }
-  }, [usertoken]);
+  }, [usertoken, fetchTrendings]);
 
   useFocusEffect(
     useCallback(() => {
@@ -106,58 +119,181 @@ export default function HomeScreen() {
     }, [fetchUserLikes])
   );
 
-  const openModal = (index) => {
+  const transformMovie = useCallback((movie) => ({
+    tmdbId: movie.id,
+    mediaType: movie.type,
+    title: movie.titre,
+    poster: movie.poster,
+    genre: movie.genre,
+    description: movie.description,
+    release_date: movie.annee,
+    popularity: movie.popularite,
+    vote_count: movie.vote,
+    providers: movie.plateformes.map((p) => ({
+      providerId: p.id,
+      providerName: p.nom,
+      logoPath: p.logo,
+    })),
+  }), []);
+
+  const handleLike = useCallback(async (movie) => {
+    if (isLiking) return;
+    setIsLiking(true);
+    try {
+      const response = await fetch(`${baseUrl}movies/like`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userToken: usertoken,
+          mediaDetails: transformMovie(movie),
+          listToken: "<list-token>",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setYourLikes([...yourLikes, transformMovie(movie)]);
+        setLastAction('like');
+        setLastMedia(movie);
+        setCanUndo(true);
+        const updatedMovies = movies.filter((m) => m.id !== movie.id);
+        setMovies(updatedMovies);
+        if (selectedIndex < updatedMovies.length - 1) {
+          setSelectedIndex(selectedIndex + 1);
+          setSelectedMovie(updatedMovies[selectedIndex + 1]);
+        } else {
+          closeModal();
+        }
+      } else {
+        alert(`Erreur: ${data.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Une erreur est survenue lors de l'ajout aux favoris.");
+    } finally {
+      setIsLiking(false);
+    }
+  }, [baseUrl, isLiking, movies, selectedIndex, transformMovie, usertoken, yourLikes]);
+
+  const removeLike = useCallback(async (movie) => {
+    try {
+      const response = await fetch(`${baseUrl}movies/unlike`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userToken: usertoken,
+          tmdbId: movie.id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        console.error("Erreur lors de la suppression du like:", data.message);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du like:", error);
+    }
+  }, [baseUrl, usertoken]);
+
+  const handleDislike = useCallback(async (movie) => {
+    const isLiked = yourLikes.some((likedMovie) => likedMovie.tmdbId === movie.id);
+
+    if (isLiked) {
+      try {
+        await removeLike(movie);
+        setYourLikes(yourLikes.filter((likedMovie) => likedMovie.tmdbId !== movie.id));
+      } catch (error) {
+        console.error("Erreur lors de la suppression du like:", error);
+      }
+    }
+
+    const updatedMovies = movies.filter((m) => m.id !== movie.id);
+    setMovies(updatedMovies);
+
+    setLastAction('dislike');
+    setLastMedia(movie);
+    setCanUndo(true);
+
+    if (selectedIndex < updatedMovies.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
+      setSelectedMovie(updatedMovies[selectedIndex + 1]);
+    } else {
+      closeModal();
+    }
+  }, [movies, removeLike, selectedIndex, yourLikes]);
+
+  const handleUndo = useCallback(() => {
+    if (!lastMedia) {
+      console.error("No media to undo");
+      return;
+    }
+
+    let updatedMovies = movies;
+
+    if (lastAction === 'like') {
+      setYourLikes(yourLikes.filter((m) => m.id !== lastMedia.id));
+      updatedMovies = [lastMedia, ...movies];
+      setMovies(updatedMovies);
+    } else if (lastAction === 'dislike') {
+      updatedMovies = [lastMedia, ...movies];
+      setMovies(updatedMovies);
+    }
+
+    setLastAction(null);
+    setLastMedia(null);
+    setCanUndo(false);
+
+    const restoredIndex = updatedMovies.findIndex((m) => m.id === lastMedia.id);
+    if (restoredIndex !== -1) {
+      setSelectedIndex(restoredIndex);
+      setSelectedMovie(updatedMovies[restoredIndex]);
+      setModalVisible(true);
+    } else {
+      closeModal();
+    }
+  }, [lastAction, lastMedia, movies, yourLikes]);
+
+  const openModal = useCallback((index) => {
     setSelectedIndex(index);
     setSelectedMovie(movies[index]);
     setModalVisible(true);
-  };
-  
-  const closeModal = () => {
+  }, [movies]);
+
+  const closeModal = useCallback(() => {
     setModalVisible(false);
     setSelectedMovie(null);
-  };
+  }, []);
 
-  //fonction qui permet de changer de film en swipant
-  //on recupere l'event de swipe , si on swipe vers la gauche , on ouvre le film suivant , si on swipe vers la droite , on ouvre le film precedent
-  //on ne peut pas swipe si on est sur le premier film ou le dernier film
-  // -50 et 50 sont des valeurs en pixels , si on swipe de plus de 50 pixels , on change de film
-  const handleSwipe = ({ nativeEvent }) => {
+  const handleSwipe = useCallback(({ nativeEvent }) => {
     if (nativeEvent.state === State.END) {
       if (nativeEvent.translationX < -50 && selectedIndex < movies.length - 1) {
-        openModal(selectedIndex + 1);
+        setSelectedIndex(selectedIndex + 1);
+        setSelectedMovie(movies[selectedIndex + 1]);
       } else if (nativeEvent.translationX > 50 && selectedIndex > 0) {
-        openModal(selectedIndex - 1);
+        setSelectedIndex(selectedIndex - 1);
+        setSelectedMovie(movies[selectedIndex - 1]);
       }
     }
-  };
-  const handleSearchSubmit = () => {
-    navigation.navigate('Search', { query: searchQuery });
-    setSearchQuery(''); // Réinitialisation de la recherche
-  };
+  }, [movies, selectedIndex]);
 
-  const handleLikesPress = () => {
+  const handleSearchSubmit = useCallback(() => {
+    navigation.navigate('Search', { query: searchQuery });
+    setSearchQuery('');
+  }, [navigation, searchQuery]);
+
+  const handleLikesPress = useCallback(() => {
     if (yourLikes.length > 0) {
       navigation.navigate("LikedMedia", { likedMedia: yourLikes });
     } else {
       console.log("No liked media to display.");
     }
-  };
-
-  const MovieTrendings = ({ movies }) => (
-    <ScrollView 
-      horizontal 
-      style={styles.scrollContainer}
-      showsHorizontalScrollIndicator={false}
-    >
-      {movies.map((item, index) => (
-        <Movie
-          key={index}
-          poster={item.poster}
-          onPress={() => openModal(index)}
-        />
-      ))}
-    </ScrollView>
-  );
+  }, [navigation, yourLikes]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -181,14 +317,20 @@ export default function HomeScreen() {
           {loading ? (
             <Text style={styles.loadingText}>Loading trendings on your platform(s)</Text>
           ) : (
-            <MovieTrendings movies={movies} />
+            <MovieTrendings movies={movies} openModal={openModal} />
           )}
         </View>
         <MovieModal
           visible={modalVisible}
           movie={selectedMovie}
           onClose={closeModal}
+          onLike={handleLike}
+          onDislike={handleDislike}
+          onUndo={handleUndo}
           onSwipe={handleSwipe}
+          canUndo={canUndo}
+          showUndoButton={true}
+          showDislikeButton={true}
         />
       </View>
       <View style={styles.listsContainer}>

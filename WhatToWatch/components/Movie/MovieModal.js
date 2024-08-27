@@ -1,113 +1,48 @@
-import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  Modal,
-  TouchableOpacity,
-  StyleSheet,
-  Share,
-  ScrollView,
-} from "react-native";
-import {
-  PanGestureHandler,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler";
+import React, { useState, useMemo, useCallback } from 'react';
+import { Modal, View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Share } from 'react-native';
+import { useSelector } from 'react-redux';
+import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import LikeButton from '../LikeButton';
+import DislikeButton from '../DislikeButton';
+import ShareButton from '../ShareButton';
+import UndoButton from '../UndoButton';
 
-import { FontAwesome } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
-
-import { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-//-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
-const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
-const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-// Utiliser une condition pour basculer entre les URLs
-//const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-const baseUrl = localUrl; // POUR UTILISER EN LOCAL
-
-const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
+const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onUndo, onSwipe, canUndo, showDislikeButton, showUndoButton }) => {
   if (!movie) return null;
 
   const [selectedPlatform, setSelectedPlatform] = useState(null);
   const [platformModalVisible, setPlatformModalVisible] = useState(false);
-  console.log(movie.type, movie.genre, movie.annee);
+
   const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
   const userToken = useSelector((state) => state.user.value.token);
-  console.log("userToken", userToken);
-  //-------------------- Fonction pour ajouter un film en favoris-----------------------------//
-  const onLike = async (movie) => {
-    console.log("likepress on", movie.titre, "id", movie.id, "for the user", userToken, "annee", movie.annee);
-    try {
-      const response = await fetch(`${baseUrl}movies/like`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userToken: userToken,
-          mediaDetails: {
-            tmdbId: movie.id,
-            mediaType: movie.type,
-            title: movie.titre,
-            poster: movie.poster,
-            genre: movie.genre,
-            description: movie.description,
-            release_date: movie.annee,
-            popularity: movie.popularite,
-            vote_count: movie.vote,
-            providers: movie.plateformes.map((p) => ({
-              providerId: p.providerId,
-              providerName: p.nom,
-              logoPath: p.logo,
-            })),
-          },
-          listToken: "<list-token>", // Optionnel, uniquement si l'element figure dans une liste spécifique
-        }),
-      });
 
-      const data = await response.json();
+  const memoizedMovie = useMemo(() => movie, [movie]);
+  const memoizedUserToken = useMemo(() => userToken, [userToken]);
 
-      if (data.success) {
-        alert("Média ajouté aux favoris");
-      } else {
-        alert(`Erreur: ${data.message}`);
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Une erreur est survenue lors de l'ajout aux favoris.");
-    }
-  };
-  //-------------------- Fonction pour partager le lien de l'application-----------------------------//
+  console.log(memoizedMovie.type, memoizedMovie.genre, memoizedMovie.titre, memoizedMovie.annee);
+  console.log("userToken", memoizedUserToken);
+
   const shareNative = async () => {
-    // Mapper les types de votre application aux types de l'URL
     const typeMap = {
       film: "movie",
       série: "tv",
     };
-
-    const link = `https://www.themoviedb.org/${typeMap[movie.type]}/${movie.id}`;
-
+    const link = `https://www.themoviedb.org/${typeMap[memoizedMovie.type]}/${memoizedMovie.id}`;
     try {
       const result = await Share.share({
-        message: `Regarde ${movie.type === 'film' ? 'ce film' : 'cette série'}: ${movie.titre}\n${link}`,
-        title: `Partager ${movie.titre}`,
-        url: link, // Note: url est seulement supporté sur iOS
-        // Android utilisera message et title
+        message: `Regarde ${memoizedMovie.type === 'film' ? 'ce film' : 'cette série'}: ${memoizedMovie.titre}\n${link}`,
+        title: `Partager ${memoizedMovie.titre}`,
+        url: link,
       });
       if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          console.log("Partagé avec le type d'activité:", result.activityType);
-        } else {
-          console.log("Partagé avec succès");
-        }
+        console.log('Partage réussi');
       } else if (result.action === Share.dismissedAction) {
-        console.log("Partage annulé");
+        console.log('Partage annulé');
       }
     } catch (error) {
-      console.error("Erreur lors du partage:", error.message);
+      console.error('Erreur lors du partage', error);
     }
   };
 
@@ -133,33 +68,33 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                 </TouchableOpacity>
                 <Image
                   style={styles.modalImage}
-                  source={{ uri: `${TMDB_IMAGE_BASE_URL}/${movie.poster}` }}
+                  source={{ uri: `${TMDB_IMAGE_BASE_URL}/${memoizedMovie.poster}` }}
                 />
-                <Text style={styles.modalTitle} numberOfLines={1}>{movie.titre}</Text>
+                <Text style={styles.modalTitle} numberOfLines={1}>{memoizedMovie.titre}</Text>
                 <Text style={styles.modalDescription}>
-                  {movie.description.length > 100
-                    ? `${movie.description.substring(0, 150)}...`
-                    : movie.description}
+                  {memoizedMovie.description.length > 100
+                    ? `${memoizedMovie.description.substring(0, 150)}...`
+                    : memoizedMovie.description}
                 </Text>
                 <View style={styles.modalDetailsRow}>
-                  {movie.genre && movie.genre.length > 0 ? (
-                    <Text style={styles.modalDetailsText}>genre : {movie.genre.join(", ")}</Text>
+                  {memoizedMovie.genre && memoizedMovie.genre.length > 0 ? (
+                    <Text style={styles.modalDetailsText}>genre : {memoizedMovie.genre.join(", ")}</Text>
                   ) : (
                     <Text style={styles.modalDetailsText}>genre : N/A</Text>
                   )}
-                  <Text style={styles.modalDetailsText}>type : {movie.type}</Text>
-                  <Text style={styles.modalDetailsText}>Année: {movie.annee}</Text>
+                  <Text style={styles.modalDetailsText}>type : {memoizedMovie.type}</Text>
+                  <Text style={styles.modalDetailsText}>Année: {memoizedMovie.annee}</Text>
                   <Text style={styles.modalDetailsText}>
-                    Popularité: {movie.popularite}
+                    Popularité: {memoizedMovie.popularite}
                   </Text>
-                  <Text style={styles.modalDetailsText}>Votes: {movie.vote}</Text>
+                  <Text style={styles.modalDetailsText}>Votes: {memoizedMovie.vote}</Text>
                 </View>
                 <Text style={styles.modalDetailsText}>
                   Plateformes:{" "}
-                  {Array.isArray(movie.plateformes) &&
-                  movie.plateformes.length > 0 ? (
+                  {Array.isArray(memoizedMovie.plateformes) &&
+                  memoizedMovie.plateformes.length > 0 ? (
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                      {movie.plateformes.map((p, index) => (
+                      {memoizedMovie.plateformes.map((p, index) => (
                         <TouchableOpacity
                           key={index}
                           onPress={() => handlePlatformClick(p)}
@@ -179,24 +114,10 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
                 </Text>
 
                 <View style={styles.buttonsContainer}>
-                  <TouchableOpacity style={styles.button}>
-                    <FontAwesome name="undo" size={24} color="orange" />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.button}>
-                    <FontAwesome name="close" size={24} color="red" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => onLike(movie)}
-                    style={styles.button}
-                  >
-                    <FontAwesome name="heart" size={24} color="green" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={shareNative}
-                    style={styles.button}
-                  >
-                    <FontAwesome name="share" size={24} color="blue" />
-                  </TouchableOpacity>
+                  <LikeButton onLike={() => onLike(memoizedMovie)} />
+                  {showDislikeButton && <DislikeButton onDislike={() => onDislike(memoizedMovie)} />}
+                  <ShareButton onShare={shareNative} />
+                  {showUndoButton && <UndoButton onUndo={onUndo} disabled={!canUndo} />}
                 </View>
               </View>
             </View>
@@ -224,7 +145,7 @@ const MovieModal = ({ visible, movie, onClose, onSwipe }) => {
       </GestureHandlerRootView>
     </Modal>
   );
-};
+});
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -232,16 +153,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingTop: 50, 
+    paddingTop: 50,
   },
   modalContent: {
     width: "90%",
-    backgroundColor: "#0d0f2b", 
+    backgroundColor: "#0d0f2b",
     borderRadius: 10,
     padding: 20,
     alignItems: "flex-start",
     position: "relative",
-    paddingBottom: 40, 
+    paddingBottom: 40,
   },
   closeButton: {
     position: "absolute",
@@ -261,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
-    color: "white", 
+    color: "white",
   },
   modalDescription: {
     fontSize: 14,
