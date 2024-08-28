@@ -60,7 +60,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <PanGestureHandler onGestureEvent={onSwipe} onHandlerStateChange={onSwipe}>
-          <SafeAreaView style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -140,7 +140,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
                 </View>
               </View>
             </Modal>
-          </SafeAreaView>
+          </View>
         </PanGestureHandler>
       </GestureHandlerRootView>
     </Modal>

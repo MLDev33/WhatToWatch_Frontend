@@ -4,6 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import SearchResults from '../components/Movie/SearchResults';
 import MovieModal from '../components/Movie/MovieModal';
 import { useSelector } from 'react-redux';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function SearchScreen() {
   const route = useRoute();
@@ -120,7 +121,7 @@ function SearchScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder="Search for a movie , serie , or genre"
@@ -148,9 +149,8 @@ function SearchScreen() {
         <Text style={styles.confirmationText}>{likeConfirmation}</Text>
       </View>
     ) : null}
-    </View>
-  );
-}
+    </SafeAreaView>  );
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -14,6 +14,7 @@ import LikedMediaScreen from './screens/LikedMediaScreen';
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
+import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 import { LinearGradient } from "expo-linear-gradient";
 import WatchScheduleScreen from "./screens/WatchScheduleScreen";
 import { useState, useEffect } from "react";
@@ -214,6 +215,8 @@ export default function App() {
             <Stack.Screen name="ProfileSettingsScreen" component={ProfileSettingsScreen} />
             <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
             <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
+            <Stack.Screen name="InviteFriendsScreen" component={InviteFriendsScreen} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
             {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />  */}
           </Stack.Navigator>
         </NavigationContainer>

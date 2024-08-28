@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -19,15 +19,13 @@ import { Avatar } from "react-native-elements";
 import GradientButton from "../components/GradientButton";
 import AvatarModal from "../components/Profile/AvatarModal";
 
+//-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
 
- //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
- const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
- const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
- 
- // Utiliser une condition pour basculer entre les URLs
- //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL 
-
+// Utiliser une condition pour basculer entre les URLs
+//const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
 const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   const [darkMode, setDarkMode] = useState(true);
@@ -44,13 +42,13 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   let token = user.token;
   let avatar = user.avatar;
 
-  console.log(avatar)
+  console.log(avatar);
 
-const handleLogOut = () => {
-  dispatch(logout());
-  console.log("logout");
-  navigation.replace("SignIn");
-};
+  const handleLogOut = () => {
+    dispatch(logout());
+    console.log("logout");
+    navigation.replace("SignIn");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,29 +60,24 @@ const handleLogOut = () => {
           />
           <View style={styles.textAndImageContainer}>
             <Text style={styles.text}>{username}</Text>
-              {!hasAvatar && 
-              <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
-              <Avatar
-                size="medium"
-                rounded
-                // style={styles.firstAvatar}
-                backgroundColor= 'grey'
-                title="AA"
-                activeOpacity={0.7}
-                  />
-                {/* pencil? */}
-                  {/* <Icon name={'pencil'} containerStyle={styles.icon} onPress={console.log('I was clicked')}/> */}
-                  </TouchableOpacity>
-                  }
-                  <TouchableOpacity onPress={()=>setAvatarModalVisible(true)}>
-              <Image
-                source={{uri: avatar}}
-                style={styles.profileImage}
-              />
-            </TouchableOpacity>
+            {avatar === undefined ? (
+              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                <Avatar
+                  size={84}
+                  rounded
+                  icon={{ name: "pencil", type: "font-awesome" }}
+                  containerStyle={{ backgroundColor: "#6733b9" }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                <Image source={{ uri: avatar }} style={styles.profileImage} />
+                <Avatar.Accessory size={24} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        <Text style={styles.username}>Profil</Text>
+        <Text style={styles.username}>Profile</Text>
       </View>
 
       <View style={styles.section}>
@@ -152,20 +145,9 @@ const handleLogOut = () => {
         onPress={handleLogOut}
         style={styles.logoutButton}
       />
-      <TouchableOpacity
-        style={styles.button2}
-        activeOpacity={0.8}
-        onPress={() => setDeleteAccountModalVisible(true)}
-      >
-        <Text style={styles.textButton}>DELETE ACCOUNT</Text>
-      </TouchableOpacity>
-      <AvatarModal 
-      avatarModalVisible={avatarModalVisible}
-          setAvatarModalVisible={setAvatarModalVisible}
-          />
-      <DeleteAccount
-        deleteAccountModalVisible={deleteAccountModalVisible}
-        setDeleteAccountModalVisible={setDeleteAccountModalVisible}
+      <AvatarModal
+        avatarModalVisible={avatarModalVisible}
+        setAvatarModalVisible={setAvatarModalVisible}
       />
     </SafeAreaView>
   );
@@ -265,15 +247,14 @@ const styles = StyleSheet.create({
   },
   //style for the pencil if that works
   icon: {
-    backgroundColor: '#ccc',
-    position: 'absolute',
+    backgroundColor: "#ccc",
+    position: "absolute",
     right: 0,
-    bottom: 0
-   },
-   firstAvatar: {
-    backgroundColor: 'grey',
-
-   }
+    bottom: 0,
+  },
+  firstAvatar: {
+    backgroundColor: "grey",
+  },
 });
 
 export default ProfileScreen;

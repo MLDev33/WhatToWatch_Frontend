@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons"; // Importation de FontAwesome pour l'icône de cœur
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const ListScreen = ({ navigation }) => {
   const [yourLikes, setYourLikes] = useState([]);
@@ -101,7 +101,7 @@ const ListScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.header}>Your Likes</Text>
         {loadingLikes ? (
@@ -148,7 +148,7 @@ const ListScreen = ({ navigation }) => {
           </Text>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

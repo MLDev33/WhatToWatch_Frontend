@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import GradientButton from '../components/GradientButton';
 import { FontAwesome } from '@expo/vector-icons';
-
+import { SafeAreaView } from 'react-native-safe-area-context';
 const MovieTrendings = React.memo(({ movies, openModal }) => (
   <ScrollView 
     horizontal 
@@ -297,7 +297,7 @@ export default function HomeScreen() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.welcomeText}>Welcome {username}</Text>
         <TextInput
           style={styles.searchInput}
@@ -332,7 +332,7 @@ export default function HomeScreen() {
           showUndoButton={true}
           showDislikeButton={true}
         />
-      </View>
+      </SafeAreaView>
       <View style={styles.listsContainer}>
         <Text style={styles.createListText}>Create a new list</Text>
         <GradientButton
