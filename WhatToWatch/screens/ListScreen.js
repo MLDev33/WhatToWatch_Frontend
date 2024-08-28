@@ -10,7 +10,6 @@ import {
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons"; // Importation de FontAwesome pour l'icône de cœur
-import MyList from "../components/Movie/MyList";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const ListScreen = ({ navigation }) => {
@@ -87,20 +86,18 @@ const ListScreen = ({ navigation }) => {
       //fetchUserLists(); // Désactivé car la route n'est pas encore implémentée
     }, [fetchUserLikes, fetchUserLists])
   );
-
+  //Handlepress non utilisé pour le moment , pour les listes peut etre
+  /*
   const handlePress = (item) => {
     navigation.navigate("MediaDetail", { media: item });
   };
+  */
   const handleLikesPress = () => {
     if (yourLikes.length > 0) {
       navigation.navigate("LikedMedia", { likedMedia: yourLikes });
     } else {
       console.log("No liked media to display.");
     }
-  };
-  const handleSchedule = (item) => {
-    // Logique pour planifier le visionnage du média
-    console.log("Planifier le visionnage de :", item);
   };
 
   return (
