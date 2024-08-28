@@ -36,6 +36,10 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
+  const [userPassword, setUserPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [missingFieldError, setMissingFieldError] = useState(false)
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
@@ -90,6 +94,40 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         }
         console.log("button change email clicked");
       });
+  };
+
+  const handleChangePassword = () => {
+    if (!userPassword || !newPassword || !confirmNewPassword) {
+      setMissingFieldError(true);
+      console.log("errorMessageMissingfield");
+    }
+    if (!checkEmail.test(signUpEmail)) {
+      setWrongEmail(true);
+      console.log("wrongEmail");
+    } else {
+    console.log(userPassword, newPassword, confirmNewPassword)
+    // fetch(`${baseUrl}users/updatePassword/${token}`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     token: token,
+    //     password: newPassword,
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     console.log(data);
+
+        // if (!data.result) {
+        //   console.log("false");
+        // } else {
+        //   dispatch(updateEmail(data.email))
+        //   console.log('true')
+        //   setNewEmail('')
+        // }
+        console.log("button change password clicked");
+      // });
+    };
   };
 
   return (
@@ -156,9 +194,47 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           <TouchableOpacity style={styles.button2} onPress={() => handleNewEmail()}>
           <Text>Confirm</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>PHONE NUMBER</Text>
         <Text style={styles.text}>LANGUAGE</Text>
         <Text style={styles.text}>PASSWORD</Text>
+        <TextInput
+          secureTextEntry={true}
+          placeholder="Current Password"
+          placeholderTextColor={'white'}
+          keyboardType="password"
+          autoCapitalize="none"
+          onChangeText={(value) => {
+            setUserPassword(value)
+          }}
+          value={userPassword}
+          style={styles.input}
+        />
+            <TextInput
+          secureTextEntry={true}
+          placeholder="New Password"
+          placeholderTextColor={'white'}
+          keyboardType="password"
+          autoCapitalize="none"
+          onChangeText={(value) => {
+            setNewPassword(value)
+          }}
+          value={newPassword}
+          style={styles.input}
+        />
+            <TextInput
+          secureTextEntry={true}
+          placeholder="Confirm New Password"
+          placeholderTextColor={'white'}
+          keyboardType="password"
+          autoCapitalize="none"
+          onChangeText={(value) => {
+            setConfirmNewPassword(value)
+          }}
+          value={confirmNewPassword}
+          style={styles.input}
+        />
+        <TouchableOpacity style={styles.button2} onPress={() => handleChangePassword()}>
+          <Text>Confirm Password</Text>
+        </TouchableOpacity>
         <Text style={styles.text}>ACCOUNT</Text>
       </View>
 
