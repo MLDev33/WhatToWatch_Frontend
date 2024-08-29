@@ -5,7 +5,7 @@ import SearchResults from '../components/Movie/SearchResults';
 import MovieModal from '../components/Movie/MovieModal';
 import { useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import Header from '../components/Header';
 function SearchScreen() {
   const route = useRoute();
   const initialQuery = route.params?.query || '';
@@ -21,8 +21,11 @@ function SearchScreen() {
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
   const baseUrl = localUrl;
-
-  const usertoken = useSelector((state) => state.user.value.token);
+  let user = useSelector((state) => state.user.value);
+  let username = user.username;
+  let avatar = user.avatar;
+  let usertoken = user.token;
+  
 
 
   const handleSearch = async () => {
@@ -122,6 +125,12 @@ function SearchScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+    <Header
+        username={username}
+        avatar={avatar}
+        isProfileScreen={false}
+        setAvatarModalVisible = {()=>{}}
+      />
       <TextInput
         style={styles.input}
         placeholder="Search for a movie , serie , or genre"
@@ -157,7 +166,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0d0f2b',
     alignItems: 'center',
+    paddingHorizontal: 10,
     justifyContent: 'center',
+    paddingTop: 20,
   },
   input: {
     width: '80%',

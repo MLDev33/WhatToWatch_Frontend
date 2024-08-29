@@ -1,5 +1,4 @@
 import React from "react";
-// import { useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -18,20 +17,16 @@ import DeleteAccount from "../components/Profile/DeleteAccount";
 import { Avatar } from "react-native-elements";
 import GradientButton from "../components/GradientButton";
 import AvatarModal from "../components/Profile/AvatarModal";
+import Header from "../components/Header"; // Importer le nouveau composant Header
 
-//-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
 const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-
-// Utiliser une condition pour basculer entre les URLs
-//const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+const baseUrl = localUrl;
 
 const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   const [darkMode, setDarkMode] = useState(true);
   const [notifications, setNotifications] = useState(false);
 
-  //fonction de claudia
   const dispatch = useDispatch();
   const [deleteAccountModalVisible, setDeleteAccountModalVisible] =
     useState(false);
@@ -39,7 +34,6 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
-  let token = user.token;
   let avatar = user.avatar;
 
   console.log(avatar);
@@ -52,33 +46,12 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Image
-            source={require("../assets/imgsmall.png")}
-            style={styles.logo}
-          />
-          <View style={styles.textAndImageContainer}>
-            <Text style={styles.text}>{username}</Text>
-            {avatar === undefined ? (
-              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                <Avatar
-                  size={84}
-                  rounded
-                  icon={{ name: "pencil", type: "font-awesome" }}
-                  containerStyle={{ backgroundColor: "#6733b9" }}
-                />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                <Image source={{ uri: avatar }} style={styles.profileImage} />
-                <Avatar.Accessory size={24} />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-        <Text style={styles.username}>Profile</Text>
-      </View>
+      <Header
+        username={username}
+        avatar={avatar}
+        setAvatarModalVisible={setAvatarModalVisible}
+        isProfileScreen={true}
+      />
 
       <View style={styles.section}>
         <GradientButton
@@ -160,41 +133,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 20,
   },
-  header: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  headerContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    paddingHorizontal: 20,
-  },
-  textAndImageContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 20,
-    color: "#fff",
-    marginRight: 10,
-  },
-  logo: {
-    width: 100,
-    height: 80,
-    borderRadius: 40,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-  },
-  username: {
-    fontSize: 20,
-    color: "#fff",
-    fontWeight: "bold",
-    marginTop: 5,
-  },
   section: {
     marginBottom: 20,
   },
@@ -245,7 +183,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  //style for the pencil if that works
   icon: {
     backgroundColor: "#ccc",
     position: "absolute",

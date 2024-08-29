@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons"; // Importation de FontAwesome pour l'icône de cœur
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import Header from "../components/Header";
 const ListScreen = ({ navigation }) => {
   const [yourLikes, setYourLikes] = useState([]);
   const [userLists, setUserLists] = useState([]);
@@ -21,7 +21,11 @@ const ListScreen = ({ navigation }) => {
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
   const baseUrl = localUrl; // Changez en vercelUrl pour utiliser avec Vercel
+  let user = useSelector((state) => state.user.value);
+  let username = user.username;
+  let userAvatar = user.avatar;
   const userToken = useSelector((state) => state.user.value.token);
+  
 
   const fetchUserLikes = useCallback(() => {
     console.log("User token:", userToken);
@@ -102,6 +106,12 @@ const ListScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header 
+        username = {username}
+        avatar= {userAvatar}
+        isProfileScreen={false}
+        setAvatarModalVisible = {()=>{}}
+      />
       <View style={styles.section}>
         <Text style={styles.header}>Your Likes</Text>
         {loadingLikes ? (
@@ -112,7 +122,7 @@ const ListScreen = ({ navigation }) => {
             onPress={handleLikesPress}
           >
             <Image
-              source={require("../assets/avatar-1.png")} // Remplacez par votre avatar par défaut
+              source={userAvatar ? { uri: userAvatar } : require("../assets/avatar-1.png")}
               style={styles.avatar}
             />
             <View style={styles.likesInfo}>

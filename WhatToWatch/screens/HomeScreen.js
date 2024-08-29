@@ -10,6 +10,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import GradientButton from '../components/GradientButton';
 import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../components/Header';
 const MovieTrendings = React.memo(({ movies, openModal }) => (
   <ScrollView 
     horizontal 
@@ -43,7 +44,7 @@ export default function HomeScreen() {
   const user = useSelector((state) => state.user.value);
   let username = user.username;
   let usertoken = user.token;
-
+  let userAvatar = user.avatar;
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
   const baseUrl = localUrl;
@@ -298,7 +299,13 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome {username}</Text>
+      <Header
+          welcomeText="Welcome"
+          username={username}
+          avatar={userAvatar}
+          isProfileScreen={false}
+          setAvatarModalVisible = {()=>{}}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Search for movies..."
@@ -348,7 +355,7 @@ export default function HomeScreen() {
             onPress={handleLikesPress}
           >
             <Image
-              source={require("../assets/avatar-1.png")}
+              source={userAvatar ? { uri: userAvatar } : require("../assets/avatar-1.png")}
               style={styles.avatar}
             />
             <View style={styles.likesInfo}>
@@ -371,25 +378,21 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#0d0f2b',
-  },
-  welcomeText: {
-    marginTop: 10,
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    backgroundColor: "#0d0f2b",
+    paddingHorizontal: 10,
+    paddingTop: 20,
   },
   searchInput: {
     height: 40,
     borderColor: '#888',
     borderWidth: 1,
-    marginBottom: 20,
+    marginBottom: 10,
     paddingHorizontal: 10,
     color: '#ffffff',
   },
   movies: {
     flex: 1,
+    marginBottom: -15,
   },
   moviesHeader: {
     fontSize: 16,
@@ -398,11 +401,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   scrollContainer: {
-    flexWrap: 'nowrap',
+   flexWrap : 'nowrap',
   },
   listsContainer: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: '#0d0f2b',
   },
   createListText: {
