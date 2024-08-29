@@ -54,6 +54,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
   return (
     <Modal
       animationType="slide"
+      // presentationStyle='pageSheet'
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
