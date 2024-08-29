@@ -10,29 +10,31 @@ import SignUp from "./screens/SignUpScreen";
 import SignIn from "./screens/SignInScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ListScreen from "./screens/ListScreen";
-import LikedMediaScreen from './screens/LikedMediaScreen';
+import LikedMediaScreen from "./screens/LikedMediaScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
-import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 import { LinearGradient } from "expo-linear-gradient";
 import WatchScheduleScreen from "./screens/WatchScheduleScreen";
+import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 import { useState, useEffect } from "react";
 // import {
 // 	GOOGLE_WEB_CLIENT_ID,
 // 	GOOGLE_ANDROID_CLIENT_ID,
 // 	GOOGLE_IOS_CLIENT_ID,
 // } from '@env';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google'
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 
+const webClientId =
+  "226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com";
 
-const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com'
+const androidClientId =
+  "226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com";
 
-const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
+const iosClientId =
+  "226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com";
 
-const iosClientId= '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
- 
 // const config = {
 //   webClientId,
 //   iosClientId,
@@ -56,7 +58,6 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
 
-
 const store = configureStore({
   reducer: { user },
 });
@@ -71,6 +72,7 @@ const CustomTabBarIcon = ({ focused, iconName, label }) => {
         <LinearGradient
           colors={["#ec008c", "#fc6767"]}
           style={{
+            marginVertical: -10,
             paddingVertical: 8, // hauteur
             paddingHorizontal: 15, //  largeur
             borderRadius: 15,
@@ -148,11 +150,25 @@ const TabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="List" component={ListScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Profile" component={UserProfileNavigationLayout} />
     </Tab.Navigator>
   );
 };
 
+function UserProfileNavigationLayout() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen
+        name="ProfileSettingsScreen"
+        component={ProfileSettingsScreen}
+      />
+      <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
+      <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
+      <Stack.Screen name="InviteFriends" component={InviteFriendsScreen} />
+    </Stack.Navigator>
+  );
+}
 // function RetrievePassword() {
 //   return (
 //     <NavigationContainer>
@@ -190,7 +206,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <NavigationContainer>
-        {/* <Stack.Screen
+          {/* <Stack.Screen
           name="RetrievePassword"
           component={AuthNavigation}
           options={{ headerShown: false }}
@@ -206,17 +222,17 @@ export default function App() {
               </>
             )}
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-            
+
             <Stack.Screen name="SignIn" component={SignIn} />
-            
+
             {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-     {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
+            {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            <Stack.Screen name="ProfileSettingsScreen" component={ProfileSettingsScreen} />
-            <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
+            {/* <Stack.Screen name="ProfileSettingsScreen" component={ProfileSettingsScreen} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
+            {/* <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
             <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
-            <Stack.Screen name="InviteFriendsScreen" component={InviteFriendsScreen} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="InviteFriends" component={InviteFriendsScreen} />
             {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />  */}
           </Stack.Navigator>
         </NavigationContainer>

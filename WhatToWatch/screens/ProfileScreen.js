@@ -72,7 +72,7 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         <GradientButton
           iconName="people-outline"
           buttonText="Invite your friends"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("InviteFriends")}
         />
         <GradientButton
           iconName="tv-outline"

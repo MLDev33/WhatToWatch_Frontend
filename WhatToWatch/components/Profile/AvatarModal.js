@@ -60,7 +60,6 @@ export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible 
             })
             setHasAvatar(true)
         setAvatarModalVisible(false)
-       
       }
       console.log(avatar, '2')
 

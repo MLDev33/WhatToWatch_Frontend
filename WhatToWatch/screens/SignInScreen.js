@@ -38,13 +38,42 @@ export default function SignIn({ navigation }) {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
-  const handleToken = () =>
-    {
+  const handleToken = () => {
       if(response?.type === 'success') {
         const token = response?.authentication?.idToken;
-      console.log(jwtDecode(token))
-      }  
-  
+        const decodedToken = jwtDecode(token)
+        const googleUser = decodedToken?.name;
+        const googleUserEmail = decodedToken?.email;
+      console.log(jwtDecode(token),googleUserEmail, 'google ok !')
+      fetch(`${baseUrl}users/signinWithGoogle`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: googleUserEmail,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (!data.result) {
+            console.log("false");
+          } else {
+            dispatch(
+              login({
+                username: data.username,
+                token: data.token,
+                email: data.email,
+                selectedPlatforms: data.selectedPlatforms
+              })
+            );
+            // setSignInUsername("");
+            // setSignInPassword("");
+            navigation.navigate("TabNavigator");
+          }
+          console.log("button signin clicked");
+
+      } )
+    }
     }
   
   
@@ -61,7 +90,7 @@ export default function SignIn({ navigation }) {
   const [hidePassword, setHidePassword] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+  // const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -113,6 +142,8 @@ export default function SignIn({ navigation }) {
         console.log("button signin clicked");
       });
   };
+
+
 
   return (
     <KeyboardAvoidingView

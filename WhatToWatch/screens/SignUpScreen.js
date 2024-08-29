@@ -43,7 +43,33 @@ export default function SignUp({ navigation }) {
     if(response?.type === 'success') {
       // const{authentication} = response;
       const token = response?.authentication?.idToken;
-    console.log(jwtDecode(token))
+      const decodedToken = jwtDecode(token)
+      const googleUser = decodedToken?.name;
+      const googleUserEmail = decodedToken?.email
+    console.log(jwtDecode(token),googleUser, 'google ok !')
+    // console.log(jwtDecode(googleUser), 'google ok !')
+    fetch(`${baseUrl}users/checkUser`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: googleUser,
+        email: googleUserEmail,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.result === false) {
+          console.log(data.error);
+          setError(true);
+          setErrorMessage(data.error);
+        } else {
+          setGoogleUser(googleUser);
+          setGoogleUserEmail(googleUserEmail);
+          setPlatformsModalVisible(true);
+          setIsGoogleUser(true);
+        }
+      });
     }  
 
   }
@@ -72,6 +98,9 @@ export default function SignUp({ navigation }) {
   const [strength, setStrength] = useState("");
   const [platformsModalVisible, setPlatformsModalVisible] = useState(false);
   const [selectedProviders, setSelectedProviders] = useState([]);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const [googleUser, setGoogleUser] = useState('');
+  const [googleUserEmail, setGoogleUserEmail] = useState('');
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -166,6 +195,7 @@ export default function SignUp({ navigation }) {
             setErrorMessage(data.error);
           } else {
             setPlatformsModalVisible(true);
+            setGoogleUser(false);
           }
         });
     }
@@ -216,6 +246,51 @@ export default function SignUp({ navigation }) {
         .catch((error) => {
           console.error("Error during sign up:", error);
         });
+    }
+  };
+
+  const handleSubmitWithGoogle = () => {
+    if (selectedProviders.length < 1) {
+      setErrorMessage(true);
+    } else {
+      fetch(`${baseUrl}users/signupWithGoogle`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: googleUser,
+          email: googleUserEmail,
+          favouritePlatforms: selectedProviders,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Something went wrong: " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          console.log(selectedProviders, "providers");
+          if (data.result === true) {
+            dispatch(
+              login({
+                username: googleUser,
+                token: data.token,
+                email: data.email,
+              })
+            );
+            setSelectedProviders([]);
+            navigation.navigate("TabNavigator");
+            setPlatformsModalVisible(false);
+          } else {
+            setCredentialError(data.error);
+          }
+          console.log("button clicked");
+        })
+        .catch((error) => {
+          console.error("Error during sign up:", error);
+        });
+      console.log(googleUser, googleUserEmail)
     }
   };
 
@@ -384,7 +459,15 @@ export default function SignUp({ navigation }) {
               >
                 <Text style={styles.modalTitle}>Cancel</Text>
               </TouchableOpacity>
-
+                {isGoogleUser ?
+              <TouchableOpacity
+                onPress={() => handleSubmitWithGoogle()}
+                style={styles.button}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.modalTitle}>REGISTER</Text>
+              </TouchableOpacity>
+              :
               <TouchableOpacity
                 onPress={() => handleSubmit()}
                 style={styles.button}
@@ -392,6 +475,7 @@ export default function SignUp({ navigation }) {
               >
                 <Text style={styles.modalTitle}>REGISTER</Text>
               </TouchableOpacity>
+              }
             </View>
           </View>
         </View>
