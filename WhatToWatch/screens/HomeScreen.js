@@ -45,6 +45,7 @@ export default function HomeScreen() {
   let username = user.username;
   let usertoken = user.token;
   let userAvatar = user.avatar;
+  
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
   const baseUrl = localUrl;

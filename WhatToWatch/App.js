@@ -149,11 +149,23 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Search" component={SearchScreen} />
-      <Tab.Screen name="List" component={ListScreen} />
+      <Tab.Screen name="List" component={UserListNavigationLayout} />
       <Tab.Screen name="Profile" component={UserProfileNavigationLayout} />
     </Tab.Navigator>
   );
 };
+
+
+function UserListNavigationLayout() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ListScreen" component={ListScreen} />
+      <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
+    </Stack.Navigator>
+  );
+}
+
+
 
 function UserProfileNavigationLayout() {
   return (
@@ -164,7 +176,6 @@ function UserProfileNavigationLayout() {
         component={ProfileSettingsScreen}
       />
       <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
-      <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
       <Stack.Screen name="InviteFriends" component={InviteFriendsScreen} />
     </Stack.Navigator>
   );
@@ -197,7 +208,6 @@ export default function App() {
     });
   }, []);
 
-  // not to see the onboarding screen while loading and setting the state to true
   if (isFirstLaunch === null) {
     return;
   }
@@ -206,11 +216,6 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <NavigationContainer>
-          {/* <Stack.Screen
-          name="RetrievePassword"
-          component={AuthNavigation}
-          options={{ headerShown: false }}
-        /> */}
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!isFirstLaunch && (
               <>
@@ -221,19 +226,8 @@ export default function App() {
                 <Stack.Screen name="SignUp" component={SignUp} />
               </>
             )}
-            {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-
             <Stack.Screen name="SignIn" component={SignIn} />
-
-            {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
-            {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} /> */}
             <Stack.Screen name="TabNavigator" component={TabNavigator} />
-            {/* <Stack.Screen name="ProfileSettingsScreen" component={ProfileSettingsScreen} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
-            {/* <Stack.Screen name="WatchSchedule" component={WatchScheduleScreen} />
-            <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
-            <Stack.Screen name="InviteFriends" component={InviteFriendsScreen} />
-            {/* <Stack.Screen name="ForgottenPassword" component={ForgottenPassword} />  */}
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
