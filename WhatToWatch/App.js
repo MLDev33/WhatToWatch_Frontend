@@ -18,35 +18,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import WatchScheduleScreen from "./screens/WatchScheduleScreen";
 import InviteFriendsScreen from "./screens/InviteFriendsScreen";
 import { useState, useEffect } from "react";
-// import {
-// 	GOOGLE_WEB_CLIENT_ID,
-// 	GOOGLE_ANDROID_CLIENT_ID,
-// 	GOOGLE_IOS_CLIENT_ID,
-// } from '@env';
+
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 
-const webClientId =
-  "226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com";
 
-const androidClientId =
-  "226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com";
-
-const iosClientId =
-  "226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com";
-
-// const config = {
-//   webClientId,
-//   iosClientId,
-//   androidClientId
-// }
-
-// GoogleSignin.configure({
-// 	webClientId: GOOGLE_WEB_CLIENT_ID,
-// 	androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-// 	iosClientId: GOOGLE_IOS_CLIENT_ID,
-// 	scopes: ['profile', 'email'],
-// });
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -169,15 +145,7 @@ function UserProfileNavigationLayout() {
     </Stack.Navigator>
   );
 }
-// function RetrievePassword() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator name="SignUp" component={SignUp} />
-//       <Stack.Navigator name="SignIn" component={SignIn} />
-//       <Stack.Navigator name="ForgottenPassword" component={ForgottenPassword} />
-//     </NavigationContainer>
-//   );
-// }
+
 
 //<Stack.Screen name="OnBoardingOne" component={OnBoardingOne} /> a replacer ligne 73
 export default function App() {
@@ -206,11 +174,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <NavigationContainer>
-          {/* <Stack.Screen
-          name="RetrievePassword"
-          component={AuthNavigation}
-          options={{ headerShown: false }}
-        /> */}
+ 
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!isFirstLaunch && (
               <>
