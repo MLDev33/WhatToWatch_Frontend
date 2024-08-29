@@ -62,12 +62,8 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
             <Text style={styles.text}>{username}</Text>
             {avatar === undefined ? (
               <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                <Avatar
-                  size={84}
-                  rounded
-                  icon={{ name: "pencil", type: "font-awesome" }}
-                  containerStyle={{ backgroundColor: "#6733b9" }}
-                />
+               <Image source={require("../assets/avatar-1.png")} style={styles.profileImage} />
+               <Avatar.Accessory size={24} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
@@ -99,7 +95,7 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         <GradientButton
           iconName="people-outline"
           buttonText="Invite your friends"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("InviteFriends")}
         />
         <GradientButton
           iconName="tv-outline"

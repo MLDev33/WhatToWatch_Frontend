@@ -19,32 +19,39 @@ import { Avatar } from "react-native-elements";
 import AvatarModal from "../components/Profile/AvatarModal";
 import { FontAwesome } from "@expo/vector-icons";
 
-
 const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
-
-    //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
 
   // Utiliser une condition pour basculer entre les URLs
   //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
   const baseUrl = localUrl; // POUR UTILISER EN LOCAL
-  
+
   const dispatch = useDispatch();
   const [deleteAccountModalVisible, setDeleteAccountModalVisible] =
     useState(false);
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
-  const [userPassword, setUserPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [missingFieldError, setMissingFieldError] = useState(false)
+  const [userPassword, setUserPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [missingFieldError, setMissingFieldError] = useState(false);
+  const [PasswordError, setPasswordError] = useState(false);
+  const [PasswordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [wrongEmail, setWrongEmail] = useState(false);
+  const [wrongEmailMessage, setWrongEmailMessage] = useState("");
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
   let avatar = user.avatar;
   let token = user.token;
+
+  const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+  const checkPassword = RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i);
 
   const handleNewUsername = () => {
     console.log("button change username clicked");
@@ -62,10 +69,12 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         // console.log(newUsername);
         if (!data.result) {
           console.log("false");
+          setError(true);
+          setErrorMessage(data.error);
         } else {
-          dispatch(updateUsername(data.username))
-          console.log('true')
-          setNewUsername('')
+          dispatch(updateUsername(data.username));
+          console.log("true");
+          setNewUsername("");
         }
         console.log("button change username clicked");
       });
@@ -73,61 +82,81 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   const handleNewEmail = () => {
     console.log("button change email clicked", newEmail);
-    fetch(`${baseUrl}users/updateEmail/${token}`, {
+    if (!checkEmail.test(newEmail)) {
+      setWrongEmail(true);
+      setWrongEmailMessage("Please enter a valid email address!");
+      console.log("wrongEmail");
+    } else {
+      fetch(`${baseUrl}users/updateEmail/${token}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: token,
+          email: newEmail,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          console.log(newUsername);
+          if (!data.result) {
+            console.log("false");
+            setWrongEmail(true);
+            setWrongEmailMessage(data.error);
+          } else {
+            dispatch(updateEmail(data.email));
+            console.log("true");
+            setNewEmail("");
+          }
+          console.log("button change email clicked");
+        });
+    }
+  };
+
+  const handleChangePassword = () => {
+    if (!userPassword || !newPassword || !confirmNewPassword) {
+      setPasswordError(true);
+      setPasswordErrorMessage("Please fill in all fields");
+      console.log("errorMessageMissingfield");
+    } else if (
+      checkPassword.test(userPassword) ||
+      checkPassword.test(newPassword) ||
+      checkPassword.test(confirmNewPassword)
+    ) {
+      setPasswordError(true);
+      setPasswordErrorMessage("Invalid Password");
+      console.log("true");
+    } else {
+      if (newPassword !== confirmNewPassword) {
+        console.log("password not matching");
+      } else {
+        console.log(userPassword, newPassword, confirmNewPassword);
+      }
+    }
+    fetch(`${baseUrl}users/updatePassword/${token}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         token: token,
-        email: newEmail,
+        userPassword: userPassword,
+        newPassword: newPassword,
+        confirmNewPassword: confirmNewPassword
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        console.log(newUsername);
-        if (!data.result) {
-          console.log("false");
-        } else {
-          dispatch(updateEmail(data.email))
-          console.log('true')
-          setNewEmail('')
-        }
-        console.log("button change email clicked");
-      });
-  };
 
-  const handleChangePassword = () => {
-    if (!userPassword || !newPassword || !confirmNewPassword) {
-      setMissingFieldError(true);
-      console.log("errorMessageMissingfield");
-    }
-    if (!checkEmail.test(signUpEmail)) {
-      setWrongEmail(true);
-      console.log("wrongEmail");
+    if (!data.result) {
+      console.log("false");
     } else {
-    console.log(userPassword, newPassword, confirmNewPassword)
-    // fetch(`${baseUrl}users/updatePassword/${token}`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     token: token,
-    //     password: newPassword,
-    //   }),
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-
-        // if (!data.result) {
-        //   console.log("false");
-        // } else {
-        //   dispatch(updateEmail(data.email))
-        //   console.log('true')
-        //   setNewEmail('')
-        // }
-        console.log("button change password clicked");
-      // });
-    };
+     
+      console.log('true')
+      
+    }
+    console.log("button change password clicked");
+    });
+    
   };
 
   return (
@@ -142,12 +171,11 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
             <Text style={styles.text}>{username}</Text>
             {avatar === undefined ? (
               <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                <Avatar
-                  size={84}
-                  rounded
-                  icon={{ name: "pencil", type: "font-awesome" }}
-                  containerStyle={{ backgroundColor: "#6733b9" }}
+                <Image
+                  source={require("../assets/avatar-1.png")}
+                  style={styles.profileImage}
                 />
+                <Avatar.Accessory size={24} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
@@ -176,7 +204,12 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           value={newUsername}
           style={styles.input}
         />
-        <TouchableOpacity style={styles.button2} onPress={() => handleNewUsername()}>
+        {error && <Text style={styles.error}>{errorMessage}</Text>}
+
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={() => handleNewUsername()}
+        >
           <Text>Confirm</Text>
         </TouchableOpacity>
         <Text style={styles.text}>EMAIL</Text>
@@ -186,12 +219,16 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
           autoComplete="email"
           placeholder="Email address"
-          placeholderTextColor={'white'}
+          placeholderTextColor={"white"}
           onChangeText={(value) => setNewEmail(value)}
           value={newEmail}
           style={styles.input}
         />
-          <TouchableOpacity style={styles.button2} onPress={() => handleNewEmail()}>
+        {wrongEmail && <Text style={styles.error}>{wrongEmailMessage}</Text>}
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={() => handleNewEmail()}
+        >
           <Text>Confirm</Text>
         </TouchableOpacity>
         <Text style={styles.text}>LANGUAGE</Text>
@@ -199,40 +236,46 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         <TextInput
           secureTextEntry={true}
           placeholder="Current Password"
-          placeholderTextColor={'white'}
+          placeholderTextColor={"white"}
           keyboardType="password"
           autoCapitalize="none"
           onChangeText={(value) => {
-            setUserPassword(value)
+            setUserPassword(value);
           }}
           value={userPassword}
           style={styles.input}
         />
-            <TextInput
+        <TextInput
           secureTextEntry={true}
           placeholder="New Password"
-          placeholderTextColor={'white'}
+          placeholderTextColor={"white"}
           keyboardType="password"
           autoCapitalize="none"
           onChangeText={(value) => {
-            setNewPassword(value)
+            setNewPassword(value);
           }}
           value={newPassword}
           style={styles.input}
         />
-            <TextInput
+        <TextInput
           secureTextEntry={true}
           placeholder="Confirm New Password"
-          placeholderTextColor={'white'}
+          placeholderTextColor={"white"}
           keyboardType="password"
           autoCapitalize="none"
           onChangeText={(value) => {
-            setConfirmNewPassword(value)
+            setConfirmNewPassword(value);
           }}
           value={confirmNewPassword}
           style={styles.input}
         />
-        <TouchableOpacity style={styles.button2} onPress={() => handleChangePassword()}>
+        {PasswordError && (
+          <Text style={styles.error}>{PasswordErrorMessage}</Text>
+        )}
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={() => handleChangePassword()}
+        >
           <Text>Confirm Password</Text>
         </TouchableOpacity>
         <Text style={styles.text}>ACCOUNT</Text>
@@ -368,6 +411,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingLeft: 10,
     fontSize: 18,
+  },
+  error: {
+    textAlign: "center",
+    color: "red",
+    fontSize: 16,
+    margin: 20,
   },
 });
 
