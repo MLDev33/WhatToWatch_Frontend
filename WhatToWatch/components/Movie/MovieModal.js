@@ -54,7 +54,6 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
   return (
     <Modal
       animationType="slide"
-      // presentationStyle='pageSheet'
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
@@ -108,7 +107,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
                           </View>
                         </TouchableOpacity>
                       ))}
-                    </ScrollView>
+                     </ScrollView>
                   ) : (
                     "N/A"
                   )}
@@ -154,9 +153,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingTop: 50,
+    // paddingTop: 500,
+    // marginBottom: -200,
   },
   modalContent: {
+    height: '92%',
     width: "90%",
     backgroundColor: "#0d0f2b",
     borderRadius: 10,
@@ -195,21 +196,25 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 5,
+    marginBottom: 15,
   },
   modalDetailsText: {
     fontSize: 14,
     color: "white",
   },
   platformContainer: {
+    // borderBottomColor: 'red',
+    // borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
     marginRight: 10,
+    // height: '10%'
   },
   platformLogo: {
     width: 30,
     height: 30,
     marginRight: 5,
+    // marginBottom:0,
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -217,6 +222,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     width: "100%",
+    // height: '20%',
   },
   button: {
     marginHorizontal: 0,
