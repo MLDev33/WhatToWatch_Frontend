@@ -29,7 +29,9 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
 
   const user = useSelector((state) => state.user.value);
   let token = user.token;
+  let isGoogleUser = user.googleUser; 
 
+  const [userUsername, setUserUsername] = useState('');
   const [userPassword, setUserPassword] = useState("");
   const [missingFieldError, setMissingFieldError]=useState(true)
 
@@ -60,6 +62,34 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
         setUserPassword("");
       };
     }
+
+    const handleDeleteGoogleAccount = () => {
+      if (!userUsername) {
+        setMissingFieldError(true);
+        console.log("errorMessageMissingfield");
+      } else {
+            fetch(`${baseUrl}users/deleteWithGoogle/${token}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: userUsername,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data);
+                if (!data.result) {
+                  console.log("falseR");
+                } else {
+                  console.log("trueR");
+                  dispatch(logout());
+                  navigation.navigate("SignUp");
+                }
+                console.log("button delete google account clicked");
+              });
+          setUserUsername("");
+        };
+      }
   
 
   const handleCloseButton = () => {
@@ -76,28 +106,55 @@ const DeleteAccountConfirmation = ({ modalVisible, setModalVisible }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Delete Account</Text>
+          {isGoogleUser ?
+         ( <>
           <Text style={styles.textH2}>
-            Please enter your current password to proceed to account deletion.{" "}
+            Please confirm your username in order to proceed to account deletion.{" "}
           </Text>
           <TextInput
-            secureTextEntry={true}
-            placeholder="Password"
-            placeholderTextColor={'white'}
-            keyboardType="password"
-            autoCapitalize="none"
-            onChangeText={(value) => setUserPassword(value)}
-            value={userPassword}
-            style={styles.input}
-          />
+          placeholder="Username"
+          placeholderTextColor={'white'}
+          autoCapitalize="none"
+          onChangeText={(value) => setUserUsername(value)}
+          value={userUsername}
+          style={styles.input}
+        />
+          </>) :  
+          (<>
+          <Text style={styles.textH2}>
+          Please enter your current password to proceed to account deletion.{" "}
+        </Text>
+        <TextInput
+          secureTextEntry={true}
+          placeholder="Password"
+          placeholderTextColor={'white'}
+          keyboardType="password"
+          autoCapitalize="none"
+          onChangeText={(value) => setUserPassword(value)}
+          value={userPassword}
+          style={styles.input}
+        />
+        </>)
+        }
           <Text style={styles.textH3}>
             Deleting your account is permanent and cannot be undone. Please make
             sure that you have saved any important data before proceeding. If
             you have any doubts, please cancel the deleting process.{" "}
           </Text>
-
+        {isGoogleUser ? 
+        <>
+          <TouchableOpacity onPress={handleDeleteGoogleAccount}>
+            <Text style={styles.modalTitle}>Delete Account</Text>
+          </TouchableOpacity>
+          </>
+          :
+          <>
           <TouchableOpacity onPress={handleDeleteAccount}>
             <Text style={styles.modalTitle}>Delete Account</Text>
           </TouchableOpacity>
+          </>
+
+}
           <TouchableOpacity onPress={handleCloseButton}>
             <Text>Cancel</Text>
           </TouchableOpacity>

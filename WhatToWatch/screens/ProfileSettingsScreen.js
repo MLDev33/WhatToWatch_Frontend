@@ -19,7 +19,11 @@ import { Avatar } from "react-native-elements";
 import AvatarModal from "../components/Profile/AvatarModal";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
+const ProfileSettingsScreen = ({
+  navigation,
+  hasAvatar,
+  setHasAvatar,
+}) => {
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -49,6 +53,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   let username = user.username;
   let avatar = user.avatar;
   let token = user.token;
+  let isGoogleUser = user.googleUser;
 
   const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
   const checkPassword = RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i);
@@ -131,32 +136,31 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         console.log("password not matching");
       } else {
         console.log(userPassword, newPassword, confirmNewPassword);
+        fetch(`${baseUrl}users/updatePassword/${token}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token: token,
+            userpassword: userPassword,
+            newPassword: newPassword,
+            confirmNewPassword: confirmNewPassword,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // if (!data.result) {
+            //   console.log("false");
+            // } else {
+            //   console.log("true");
+            // }
+            console.log("button change password clicked");
+          });
+
+
       }
     }
-    fetch(`${baseUrl}users/updatePassword/${token}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: token,
-        userPassword: userPassword,
-        newPassword: newPassword,
-        confirmNewPassword: confirmNewPassword
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-
-    if (!data.result) {
-      console.log("false");
-    } else {
-     
-      console.log('true')
-      
-    }
-    console.log("button change password clicked");
-    });
-    
+ 
   };
 
   return (
@@ -212,72 +216,80 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         >
           <Text>Confirm</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>EMAIL</Text>
-        <TextInput
-          autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-          keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-          textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-          autoComplete="email"
-          placeholder="Email address"
-          placeholderTextColor={"white"}
-          onChangeText={(value) => setNewEmail(value)}
-          value={newEmail}
-          style={styles.input}
-        />
-        {wrongEmail && <Text style={styles.error}>{wrongEmailMessage}</Text>}
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => handleNewEmail()}
-        >
-          <Text>Confirm</Text>
-        </TouchableOpacity>
-        <Text style={styles.text}>LANGUAGE</Text>
-        <Text style={styles.text}>PASSWORD</Text>
-        <TextInput
-          secureTextEntry={true}
-          placeholder="Current Password"
-          placeholderTextColor={"white"}
-          keyboardType="password"
-          autoCapitalize="none"
-          onChangeText={(value) => {
-            setUserPassword(value);
-          }}
-          value={userPassword}
-          style={styles.input}
-        />
-        <TextInput
-          secureTextEntry={true}
-          placeholder="New Password"
-          placeholderTextColor={"white"}
-          keyboardType="password"
-          autoCapitalize="none"
-          onChangeText={(value) => {
-            setNewPassword(value);
-          }}
-          value={newPassword}
-          style={styles.input}
-        />
-        <TextInput
-          secureTextEntry={true}
-          placeholder="Confirm New Password"
-          placeholderTextColor={"white"}
-          keyboardType="password"
-          autoCapitalize="none"
-          onChangeText={(value) => {
-            setConfirmNewPassword(value);
-          }}
-          value={confirmNewPassword}
-          style={styles.input}
-        />
-        {PasswordError && (
-          <Text style={styles.error}>{PasswordErrorMessage}</Text>
+        {!isGoogleUser ? (
+          <>
+            <Text style={styles.text}>EMAIL</Text>
+            <TextInput
+              autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+              keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+              textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+              autoComplete="email"
+              placeholder="Email address"
+              placeholderTextColor={"white"}
+              onChangeText={(value) => setNewEmail(value)}
+              value={newEmail}
+              style={styles.input}
+            />
+            {wrongEmail && (
+              <Text style={styles.error}>{wrongEmailMessage}</Text>
+            )}
+            <TouchableOpacity
+              style={styles.button2}
+              onPress={() => handleNewEmail()}
+            >
+              <Text>Confirm</Text>
+            </TouchableOpacity>
+            <Text style={styles.text}>LANGUAGE</Text>
+            <Text style={styles.text}>PASSWORD</Text>
+            <TextInput
+              secureTextEntry={true}
+              placeholder="Current Password"
+              placeholderTextColor={"white"}
+              keyboardType="password"
+              autoCapitalize="none"
+              onChangeText={(value) => {
+                setUserPassword(value);
+              }}
+              value={userPassword}
+              style={styles.input}
+            />
+            <TextInput
+              secureTextEntry={true}
+              placeholder="New Password"
+              placeholderTextColor={"white"}
+              keyboardType="password"
+              autoCapitalize="none"
+              onChangeText={(value) => {
+                setNewPassword(value);
+              }}
+              value={newPassword}
+              style={styles.input}
+            />
+            <TextInput
+              secureTextEntry={true}
+              placeholder="Confirm New Password"
+              placeholderTextColor={"white"}
+              keyboardType="password"
+              autoCapitalize="none"
+              onChangeText={(value) => {
+                setConfirmNewPassword(value);
+              }}
+              value={confirmNewPassword}
+              style={styles.input}
+            />
+            {PasswordError && (
+              <Text style={styles.error}>{PasswordErrorMessage}</Text>
+            )}
+            <TouchableOpacity
+              style={styles.button2}
+              onPress={() => handleChangePassword()}
+            >
+              <Text>Confirm Password</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <></>
         )}
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => handleChangePassword()}
-        >
-          <Text>Confirm Password</Text>
-        </TouchableOpacity>
         <Text style={styles.text}>ACCOUNT</Text>
       </View>
 

@@ -277,6 +277,7 @@ export default function SignUp({ navigation }) {
                 username: googleUser,
                 token: data.token,
                 email: data.email,
+                googleUser: true,
               })
             );
             setSelectedProviders([]);

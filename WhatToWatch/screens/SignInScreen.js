@@ -28,7 +28,7 @@ export default function SignIn({ navigation }) {
 
   const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
   
-  const iosClientId= '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
+  const iosClientId = '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
    
   const config = {
     webClientId,
@@ -63,11 +63,12 @@ export default function SignIn({ navigation }) {
                 username: data.username,
                 token: data.token,
                 email: data.email,
-                selectedPlatforms: data.selectedPlatforms
+                selectedPlatforms: data.selectedPlatforms,
+                googleUser: true,
               })
+              
             );
-            // setSignInUsername("");
-            // setSignInPassword("");
+            setIsGoogleUser(true);
             navigation.navigate("TabNavigator");
           }
           console.log("button signin clicked");
@@ -89,6 +90,7 @@ export default function SignIn({ navigation }) {
   const [rightIcon, setRightIcon] = useState("eye");
   const [hidePassword, setHidePassword] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
 
   // const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
