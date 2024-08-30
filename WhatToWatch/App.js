@@ -147,13 +147,24 @@ const TabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeNavigationLayout} />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen name="List" component={UserListNavigationLayout} />
       <Tab.Screen name="Profile" component={UserProfileNavigationLayout} />
     </Tab.Navigator>
   );
 };
+
+
+
+function HomeNavigationLayout() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
+    </Stack.Navigator>
+  );
+}
 
 
 function UserListNavigationLayout() {

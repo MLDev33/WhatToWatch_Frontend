@@ -9,15 +9,19 @@ import {
   ScrollView,
   TextInput,
   Modal,
+  Dimensions
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import moment from "moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
 const LikedMediaScreen = ({ navigation }) => {
   const route = useRoute();
-  const { likedMedia } = route.params; // Récupère les médias aimés passés en paramètre
+  const { likedMedia } = route.params;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredMedia, setFilteredMedia] = useState(likedMedia);
@@ -26,17 +30,14 @@ const LikedMediaScreen = ({ navigation }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+  const baseUrl = localUrl;
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const username = user.username;
   const usertoken = user.token;
-  //console.log("username", username , "usertoken", usertoken , "welcome to likedmediascreen");
-  console.log("selectedMedia:", selectedMedia);
 
   useEffect(() => {
     setFilteredMedia(
@@ -57,8 +58,7 @@ const LikedMediaScreen = ({ navigation }) => {
     }
     setShowDatePicker(false);
     setSelectedDate(date || selectedDate);
-    setShowTimePicker(true); // Afficher le time picker après la sélection de la date
-    console.log("Date sélectionnée:", selectedDate);
+    setShowTimePicker(true);
   };
 
   const handleTimeChange = (event, time) => {
@@ -69,9 +69,7 @@ const LikedMediaScreen = ({ navigation }) => {
     const selectedTime = time || selectedDate;
     setShowTimePicker(false);
     setSelectedDate(selectedTime);
-    console.log("Date et heure sélectionnées:", selectedTime);
 
-    // Appeler la fonction pour ajouter à la watchlist
     if (selectedMedia) {
       addToWatchlist(selectedMedia.tmdbId, selectedTime);
     }
@@ -80,16 +78,12 @@ const LikedMediaScreen = ({ navigation }) => {
   const addToWatchlist = async (tmdbId, scheduledTime) => {
     try {
       const payload = { movie_id: tmdbId, scheduled_time: scheduledTime };
-      console.log("Payload:", payload);
       const response = await fetch(`${baseUrl}movies/watchlist/${usertoken}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          movie_id: tmdbId,
-          scheduled_time: scheduledTime,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -108,48 +102,40 @@ const LikedMediaScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    console.log("item", item),
-    (
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => handleSelectMedia(item)}
-      >
-        <Image
-          source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.poster}` }}
-          style={styles.poster}
+    <TouchableOpacity style={styles.card} onPress={() => handleSelectMedia(item)}>
+      <View style={styles.posterContainer}>
+        <Image 
+          source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.poster}` }} 
+          style={styles.poster} 
+          resizeMode="cover"
         />
-        <View style={styles.infoContainer}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.details}>Type: {item.mediaType}</Text>
-          <Text style={styles.description} numberOfLines={3}>
-            {item.description}
-          </Text>
-          <Text style={styles.details}>Genre: {item.genre.join(", ")}</Text>
-          <Text style={styles.details}>
-            Année: {new Date(item.release_date).getFullYear()}
-          </Text>
-          <Text style={styles.details}>Popularité: {item.popularity}</Text>
-          <Text style={styles.details}>Votes: {item.vote_count}</Text>
-          <View style={styles.platformsContainer}>
-            <Text style={styles.details}>Plateformes: </Text>
-            {Array.isArray(item.providers) && item.providers.length > 0 ? (
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {item.providers.map((p, index) => (
-                  <View key={index} style={styles.platformContainer}>
-                    <Image
-                      source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logoPath}` }}
-                      style={styles.platformLogo}
-                    />
-                  </View>
-                ))}
-              </ScrollView>
-            ) : (
-              <Text style={styles.details}>Aucune plateforme disponible</Text>
-            )}
-          </View>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+        <Text style={styles.description} numberOfLines={3}>{item.description}</Text>
+        <Text style={styles.details}>Genre: {item.genre.join(", ")}</Text>
+        <Text style={styles.details}>Année: {new Date(item.release_date).getFullYear()}</Text>
+        <Text style={styles.details}>Popularité: {item.popularity}</Text>
+        <Text style={styles.details}>Votes: {item.vote_count}</Text>
+        <View style={styles.platformsContainer}>
+          <Text style={styles.details}>Plateformes: </Text>
+          {Array.isArray(item.providers) && item.providers.length > 0 ? (
+            <View style={styles.platformsList}>
+              {item.providers.map((p, index) => (
+                <View key={index} style={styles.platformContainer}>
+                  <Image
+                    source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logoPath}` }}
+                    style={styles.platformLogo}
+                  />
+                </View>
+              ))}
+            </View>
+          ) : (
+            <Text style={styles.details}>Aucune plateforme disponible</Text>
+          )}
         </View>
-      </TouchableOpacity>
-    )
+      </View>
+    </TouchableOpacity>
   );
 
   const currentDate = new Date();
@@ -259,7 +245,7 @@ const LikedMediaScreen = ({ navigation }) => {
                     mode="date"
                     display="default"
                     onChange={handleDateChange}
-                    minimumDate={currentDate} // Bloque les dates antérieures à aujourd'hui
+                    minimumDate={currentDate}
                   />
                 )}
                 {showTimePicker && (
@@ -297,6 +283,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0d0f2b",
+    paddingHorizontal: 10,
+    paddingTop: 20,
   },
   header: {
     flexDirection: "row",
@@ -328,44 +316,64 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   card: {
-    margin: 10,
-    backgroundColor: "#1a1c3b",
-    borderRadius: 10,
-    overflow: "hidden",
-    elevation: 5,
+    flexDirection: 'row',
+    backgroundColor: '#1c1c1c',
+    borderRadius: 5,
+    marginBottom: 10,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 0,
+    paddingHorizontal: 0, 
+  },
+  posterContainer: {
+    width: screenWidth * 0.35,
+    aspectRatio: 2 / 3,
+    flex: 1,
   },
   poster: {
-    width: "100%",
-    height: 200,
+    width: '100%',
+    height: '100%',
   },
   infoContainer: {
-    padding: 10,
+    flex: 1,
+    padding: 5,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#ffffff',
+    marginBottom: 5,
   },
   description: {
     fontSize: 14,
-    color: "#ccc",
+    color: '#a0a0a0',
+    marginBottom: 5,
   },
   details: {
     fontSize: 12,
-    color: "#999",
-    marginVertical: 2,
+    color: '#ffffff',
+    marginBottom: 3,
   },
   platformsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+    flexWrap: 'wrap',
+  },
+  platformsList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   platformContainer: {
-    marginRight: 10,
+    marginRight: 5,
+    marginBottom: 5,
   },
   platformLogo: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
+    borderRadius: 5,
   },
   modalContainer: {
     flex: 1,

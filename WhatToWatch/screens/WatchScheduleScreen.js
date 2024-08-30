@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import { Dimensions } from 'react-native';
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 const WatchScheduleScreen = () => {
@@ -51,7 +53,13 @@ const WatchScheduleScreen = () => {
 
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => handleSelectMedia(item)}>
-            <Image source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.movie_id.poster}` }} style={styles.poster} />
+            <View style={styles.posterContainer}>
+                <Image 
+                    source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.movie_id.poster}` }} 
+                    style={styles.poster} 
+                    resizeMode="cover"
+                />
+            </View>
             <View style={styles.infoContainer}>
                 <Text style={styles.title}>{item.movie_id.title}</Text>
                 <Text style={styles.description} numberOfLines={3}>{item.movie_id.description}</Text>
@@ -63,7 +71,7 @@ const WatchScheduleScreen = () => {
                 <View style={styles.platformsContainer}>
                     <Text style={styles.details}>Plateformes: </Text>
                     {Array.isArray(item.movie_id.providers) && item.movie_id.providers.length > 0 ? (
-                        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        <View style={styles.platformsList}>
                             {item.movie_id.providers.map((p, index) => (
                                 <View key={index} style={styles.platformContainer}>
                                     <Image
@@ -72,7 +80,7 @@ const WatchScheduleScreen = () => {
                                     />
                                 </View>
                             ))}
-                        </ScrollView>
+                        </View>
                     ) : (
                         <Text style={styles.details}>No platform available yet</Text>
                     )}
@@ -84,10 +92,10 @@ const WatchScheduleScreen = () => {
     return (
         <View style={styles.container}>
             {error ? (
-                <Text>Erreur: {error}</Text>
+                <Text style={styles.errorText}>Erreur: {error}</Text>
             ) : (
                 <>
-                    <Text style={styles.sectionTitle}>Your Likes</Text>
+                    <Text style={styles.sectionTitle}>Watch Schedule</Text>
                     {likes.length === 0 ? (
                         <Text style={styles.placeholder}>Nothing added yet, like a movie or a serie and plan a viewing session soon</Text>
                     ) : (
@@ -95,6 +103,7 @@ const WatchScheduleScreen = () => {
                             data={likes}
                             renderItem={renderItem}
                             keyExtractor={(item) => item.movie_id._id.toString()}
+                            contentContainerStyle={{ flexGrow: 1 }}
                         />
                     )}
                     <Text style={styles.sectionTitle}>Other Lists</Text>
@@ -118,49 +127,75 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     card: {
+ flexDirection: 'row',
         backgroundColor: '#1c1c1c',
         borderRadius: 5,
         marginBottom: 10,
         overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 0,
+        paddingHorizontal: 0, 
+    },
+    posterContainer: {
+        width: screenWidth * 0.35,
+        aspectRatio: 2 / 3,
+        flex: 1,
     },
     poster: {
         width: '100%',
-        height: 200,
+        height: '100%',
     },
     infoContainer: {
-        padding: 10,
+        flex: 1,
+        padding: 5,
+        justifyContent: 'center',
     },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
         color: '#ffffff',
+        marginBottom: 5,
     },
     description: {
         fontSize: 14,
-        color: '#888',
-        marginVertical: 5,
+        color: '#a0a0a0',
+        marginBottom: 5,
     },
     details: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#ffffff',
+        marginBottom: 3,
     },
     platformsContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginTop: 5,
+        flexWrap: 'wrap',
+    },
+    platformsList: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     },
     platformContainer: {
-        marginRight: 10,
+        marginRight: 5,
+        marginBottom: 5,
     },
     platformLogo: {
-        width: 30,
-        height: 30,
+        width: 20,
+        height: 20,
+        borderRadius: 5,
     },
     placeholder: {
         fontSize: 16,
         color: '#888',
         textAlign: 'center',
         marginVertical: 20,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 16,
+        textAlign: 'center',
     },
 });
 
