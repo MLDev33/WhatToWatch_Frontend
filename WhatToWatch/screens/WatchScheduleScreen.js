@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
 const WatchScheduleScreen = () => {
+    const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
     let usertoken = user.token;
     const [likes, setLikes] = useState([]);
@@ -91,11 +93,17 @@ const WatchScheduleScreen = () => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                    <Text style={styles.backButtonText}>Retour</Text>
+                </TouchableOpacity>
+                <Text style={styles.headerTitle}>Watch Schedule</Text>
+            </View>
+            <View style={styles.separator} />
             {error ? (
                 <Text style={styles.errorText}>Erreur: {error}</Text>
             ) : (
                 <>
-                    <Text style={styles.sectionTitle}>Watch Schedule</Text>
                     {likes.length === 0 ? (
                         <Text style={styles.placeholder}>Nothing added yet, like a movie or a serie and plan a viewing session soon</Text>
                     ) : (
@@ -120,6 +128,31 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingTop: 20,
     },
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: 10,
+        backgroundColor: "#1a1c3b",
+        elevation: 5,
+    },
+    backButton: {
+        padding: 10,
+    },
+    backButtonText: {
+        fontSize: 16,
+        color: "#007BFF",
+    },
+    headerTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#fff",
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#444',
+        marginVertical: 10,
+    },
     sectionTitle: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -127,7 +160,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     card: {
- flexDirection: 'row',
+        flexDirection: 'row',
         backgroundColor: '#1c1c1c',
         borderRadius: 5,
         marginBottom: 10,

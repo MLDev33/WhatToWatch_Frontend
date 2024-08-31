@@ -433,24 +433,33 @@ export default function SignUp({ navigation }) {
             </Text>
             <Text style={styles.modalTitle}>Select at least one platform</Text>
             <View style={styles.scrollView}>
-              <FlatList
-                data={providers}
-                numColumns={1}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.providers}
-                    onPress={() => {
-                      setSelectedProviders((providers) => [
-                        ...providers,
-                        item.name,
-                      ]);
-                    }}
-                  >
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id}
-              />
+            <FlatList
+  data={providers}
+  numColumns={1}
+  renderItem={({ item }) => {
+    const isSelected = selectedProviders.includes(item.name);
+    return (
+      <TouchableOpacity
+        style={[
+          styles.providers,
+          isSelected && styles.selectedProvider,
+        ]}
+        onPress={() => {
+          setSelectedProviders((prevProviders) =>
+            prevProviders.includes(item.name)
+              ? prevProviders.filter((provider) => provider !== item.name)
+              : [...prevProviders, item.name]
+          );
+        }}
+      >
+        <Text style={isSelected ? styles.selectedProviderText : null}>
+          {item.name}
+        </Text>
+      </TouchableOpacity>
+    );
+  }}
+  keyExtractor={(item) => item.id.toString()}
+/>
             </View>
             <View style={styles.buttons}>
               <TouchableOpacity
@@ -635,6 +644,18 @@ const styles = StyleSheet.create({
     color: 'red',
     alignItems: "center",
     justifyContent: "center",
-
-  }
+  },
+  providers: {
+    marginTop: 10,
+    backgroundColor: "grey",
+    fontSize: 20,
+    padding: 10,
+    borderRadius: 5,
+  },
+  selectedProvider: {
+    backgroundColor: "green",
+  },
+  selectedProviderText: {
+    color: "white",
+  },
 });

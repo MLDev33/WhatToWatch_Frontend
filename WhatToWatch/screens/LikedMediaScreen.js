@@ -29,6 +29,7 @@ const LikedMediaScreen = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -49,6 +50,7 @@ const LikedMediaScreen = ({ navigation }) => {
 
   const handleSelectMedia = (item) => {
     setSelectedMedia(item);
+    setShowFullDescription(false);
   };
 
   const handleDateChange = (event, date) => {
@@ -101,6 +103,7 @@ const LikedMediaScreen = ({ navigation }) => {
     return moment(date).format("DD/MM/YYYY");
   };
 
+  //affichage des elements likes sur la page LikedMediaScreen (non pressé)
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => handleSelectMedia(item)}>
       <View style={styles.posterContainer}>
@@ -180,6 +183,7 @@ const LikedMediaScreen = ({ navigation }) => {
                   style={styles.modalPoster}
                 />
                 <Text style={styles.modalTitle}>{selectedMedia.title}</Text>
+                <Text style={styles.details}>Disponible sur :</Text>
                 <View style={styles.platformsContainer}>
                   {Array.isArray(selectedMedia.providers) &&
                   selectedMedia.providers.length > 0 ? (
@@ -205,9 +209,19 @@ const LikedMediaScreen = ({ navigation }) => {
                   )}
                 </View>
 
-                <Text style={styles.modalDescription}>
+                <Text
+                  style={styles.modalDescription}
+                  numberOfLines={showFullDescription ? undefined : 3}
+                >
                   {selectedMedia.description}
                 </Text>
+                <TouchableOpacity
+                  onPress={() => setShowFullDescription(!showFullDescription)}
+                >
+                  <Text style={styles.readMoreText}>
+                    {showFullDescription ? "Lire moins" : "Lire plus"}
+                  </Text>
+                </TouchableOpacity>
                 <Text style={styles.modalDetails}>
                   Type: {selectedMedia.mediaType}
                 </Text>
@@ -230,47 +244,47 @@ const LikedMediaScreen = ({ navigation }) => {
                     Aimé le: {formatDate(selectedMedia.likedAt)}
                   </Text>
                 </View>
+              </ScrollView>
+              <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.watchPlannerButton}
                   onPress={() => setShowDatePicker(true)}
                 >
                   <Icon name="calendar-outline" size={30} color="#fff" />
-                  <Text style={styles.watchPlannerButtonText}>
-                    Watch Planner
-                  </Text>
+                  <Text style={styles.watchPlannerButtonText}>Watch Planner</Text>
                 </TouchableOpacity>
-                {showDatePicker && (
-                  <DateTimePicker
-                    value={selectedDate}
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
-                    minimumDate={currentDate}
-                  />
-                )}
-                {showTimePicker && (
-                  <DateTimePicker
-                    value={selectedDate}
-                    mode="time"
-                    display="default"
-                    onChange={(event, time) => {
-                      const selectedTime = time || selectedDate;
-                      if (selectedTime < currentDate) {
-                        alert("Veuillez sélectionner une heure future.");
-                        return;
-                      }
-                      handleTimeChange(event, selectedTime);
-                    }}
-                  />
-                )}
-              </ScrollView>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setSelectedMedia(null)}
-              >
-                <Icon name="close-outline" size={30} color="#fff" />
-                <Text style={styles.closeButtonText}>Fermer</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setSelectedMedia(null)}
+                >
+                  <Icon name="close-outline" size={30} color="#fff" />
+                  <Text style={styles.closeButtonText}>Fermer</Text>
+                </TouchableOpacity>
+              </View>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="date"
+                  display="default"
+                  onChange={handleDateChange}
+                  minimumDate={currentDate}
+                />
+              )}
+              {showTimePicker && (
+                <DateTimePicker
+                  value={selectedDate}
+                  mode="time"
+                  display="default"
+                  onChange={(event, time) => {
+                    const selectedTime = time || selectedDate;
+                    if (selectedTime < currentDate) {
+                      alert("Veuillez sélectionner une heure future.");
+                      return;
+                    }
+                    handleTimeChange(event, selectedTime);
+                  }}
+                />
+              )}
             </View>
           </View>
         </Modal>
@@ -371,8 +385,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   platformLogo: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     borderRadius: 5,
   },
   modalContainer: {
@@ -387,6 +401,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     elevation: 10,
+    position: 'relative', // Ajouté pour positionner le bouton "Fermer"
   },
   modalPoster: {
     width: "100%",
@@ -404,28 +419,47 @@ const styles = StyleSheet.create({
     color: "#ccc",
     marginVertical: 10,
   },
+  readMoreText: {
+    fontSize: 14,
+    color: "#007BFF",
+    marginVertical: 5,
+  },
   modalDetails: {
     fontSize: 14,
     color: "#999",
-    marginVertical: 5,
+    marginVertical: 3, // Réduire la marge verticale
   },
   likedAtContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 5,
+    marginVertical: 3, // Réduire la marge verticale
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    backgroundColor: '#1a1c3b',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
   },
   watchPlannerButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
-    marginVertical: 10,
-    backgroundColor: "#007BFF",
-    borderRadius: 10,
+    marginVertical: 5,
+    backgroundColor: "#0056b3",
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flex: 1,
+    marginRight: 5,
   },
   watchPlannerButtonText: {
-    fontSize: 16,
-    color: "#fff",
+    color: "#fff", // Texte en blanc
     marginLeft: 5,
   },
   closeButton: {
@@ -433,13 +467,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
-    backgroundColor: "#ff4d4d",
-    borderRadius: 10,
-    marginTop: 20,
+    marginVertical: 5,
+    backgroundColor: "#e60000",
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    flex: 1,
+    marginLeft: 5,
   },
   closeButtonText: {
-    fontSize: 16,
-    color: "#fff",
+    color: "#fff", // Texte en blanc
     marginLeft: 5,
   },
 });
