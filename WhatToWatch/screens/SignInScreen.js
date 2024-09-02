@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Image,
   KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
@@ -35,6 +36,28 @@ export default function SignIn({ navigation }) {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
+  const dispatch = useDispatch();
+
+  const [signInUsername, setSignInUsername] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [rightIcon, setRightIcon] = useState("eye");
+  const [hidePassword, setHidePassword] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
+
+  const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+
+  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+
+  // Utiliser une condition pour basculer entre les URLs
+  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+
+//handleToken for Google login
   const handleToken = () => {
     if (response?.type === 'success') {
       const token = response?.authentication?.idToken;

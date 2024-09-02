@@ -7,6 +7,7 @@ import {
   Modal
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import GradientButton from "../GradientButton";
 
 const RecoveredPasswordModal = ({ modalVisible, setModalVisible }) => {
   return (
@@ -30,14 +31,13 @@ const RecoveredPasswordModal = ({ modalVisible, setModalVisible }) => {
             >
               <FontAwesome name="times" size={20} color="white" />
             </TouchableOpacity>
-
-            <TouchableOpacity
-            //   onPress={handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.modalTitle}>Resend Email</Text>
-            </TouchableOpacity>
+            <View style={styles.mainButtonContainer}>
+            <GradientButton
+              // iconName="login"
+              style={{ height: 40, width: 40 }}
+              buttonText="Resend Email"
+            />
+          </View>
           </View>
         </View>
       </Modal>
@@ -62,8 +62,10 @@ const styles = StyleSheet.create({
       fontSize: 20,
       marginBottom: 20,
       color: "white",
+      fontWeight: 'bold',
   },
   modalText: {
+    textAlign: 'center',
     marginBottom: 20,
     color: "white",
 },
@@ -71,6 +73,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
+  },
+  mainButtonContainer: {
+    marginTop: 40,
+    height: 40,
+    width: "80%",
+    justifyContent: "center",
+    textAlign: "center",
   },
 });
 
