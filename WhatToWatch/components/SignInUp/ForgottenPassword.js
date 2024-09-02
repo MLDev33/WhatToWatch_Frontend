@@ -11,6 +11,7 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import RecoveredPasswordModal from "./RecoveredPassword";
 import GradientButton from "../GradientButton";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
@@ -47,32 +48,21 @@ export default function ForgottenPassword({ modalVisible, setModalVisible }) {
             >
               <FontAwesome name="times" size={20} color="white" />
             </TouchableOpacity>
-            <TextInput
-              autoCapitalize="none"
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              autoComplete="email"
-              placeholder="Email address"
-              placeholderTextColor={"white"}
-              onChangeText={(value) => setEmail(value)}
-              value={email}
-              style={styles.input}
-            />
-            {/* <GradientButton
-              // iconName="login"
-            //   style={{ height: 30, width: 100 }}
-              buttonText="Login"
-              onPress={() => handleSubmit()}
-            /> */}
-            {/* <TouchableOpacity
-              onPress={() => handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.modalTitle}>Recover Password</Text>
-            </TouchableOpacity> */}
-
-            <View style={styles.mainButtonContainer}>
+            <View style={styles.inputWrapper}>
+              <Icon name="mail-outline" size={24} color="#fff" style={styles.inputIcon} />
+              <TextInput
+                autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+                keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+                textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+                autoComplete="email"
+                placeholder="Email address"
+                placeholderTextColor="#8e8e93"
+                onChangeText={(value) => setEmail(value)}
+                value={email}
+                style={styles.input}
+              />
+              </View>
+            <View style={styles.buttonWrapper}>
               <GradientButton
                 buttonText="Recover Password"
                 onPress={() => handleSubmit()}
@@ -98,7 +88,6 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "80%",
-    // height: "60%",
     padding: 20,
     backgroundColor: "#0d0f2b",
     borderRadius: 10,
@@ -122,21 +111,28 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
   },
-  input: {
-    height: 50,
-    width: "80%",
-    backgroundColor: "rgb(108, 122, 137)",
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 10,
-    marginTop: 20,
-    fontSize: 18,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+  },
+  inputIcon: {
+    paddingLeft: 5,
+  },
+  input: {
+    flex: 1,
+    height: 50,
     color: "white",
     paddingLeft: 10,
   },
-  mainButtonContainer: {
-    marginTop: 40,
+  buttonWrapper: {
+    marginTop: 10, 
+    marginBottom: 20,
     height: 40,
     width: "80%",
-    justifyContent: "center",
     textAlign: "center",
   },
 });

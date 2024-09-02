@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
-  Image,
   Platform,
   StyleSheet,
   Text,
@@ -20,10 +19,13 @@ import * as Google from 'expo-auth-session/providers/google';
 import jwtDecode from "jwt-decode";
 import Icon from "react-native-vector-icons/Ionicons";
 import GradientButton from "../components/GradientButton";
+import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignIn({ navigation }) {
+
+  //google login //
   const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com';
   const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com';
   const iosClientId = '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com';
@@ -36,26 +38,8 @@ export default function SignIn({ navigation }) {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
-  const dispatch = useDispatch();
 
-  const [signInUsername, setSignInUsername] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [rightIcon, setRightIcon] = useState("eye");
-  const [hidePassword, setHidePassword] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [isGoogleUser, setIsGoogleUser] = useState(false);
-
-  const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
-
-  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
-  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
-  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-
-  // Utiliser une condition pour basculer entre les URLs
-  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+  // const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
 //handleToken for Google login
   const handleToken = () => {
@@ -96,10 +80,13 @@ export default function SignIn({ navigation }) {
   const [rightIcon, setRightIcon] = useState("eye");
   const [hidePassword, setHidePassword] = useState(true);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
   const baseUrl = localUrl;
+
+  const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
   const handlePasswordVisibility = () => {
     setRightIcon(rightIcon === "eye" ? "eye-slash" : "eye");
@@ -159,7 +146,7 @@ export default function SignIn({ navigation }) {
             <View style={styles.content}>
               <Text style={styles.title}>Welcome to{'\n'}What to Watch</Text>
               <Text style={styles.subtitle}>
-                If you're ready to chill and watch a movie, then sign up!
+                If you're ready to chill and watch a movie, then sign in!
               </Text>
             </View>
           </ImageBackground>
@@ -212,13 +199,24 @@ export default function SignIn({ navigation }) {
             </TouchableOpacity>
 
             <View style={styles.bottomLinks}>
+            <Text style={styles.link}>Don't have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-                <Text style={styles.link}>Don't have an account? Sign up here</Text>
+                <Text style={styles.button2}> Sign up here!</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
-                <Text style={styles.link}>Forgotten password? Click here</Text>
+              </View>
+              <View style={styles.bottomLinks}>
+              <Text style={styles.link}>Forgotten password? </Text>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <Text style={styles.button2}> Click here</Text>
               </TouchableOpacity>
             </View>
+
+
+            <ForgottenPassword
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -255,12 +253,13 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     marginLeft: 20,
-    marginTop: 20, // Ajuster la marge pour positionner le logo en haut à gauche
+    marginTop: 10, // Ajuster la marge pour positionner le logo en haut à gauche
   },
   logo: {
     width: 100, // Augmenter la taille du logo
     height: 100,
     resizeMode: 'contain',
+    // marginBottom: 50,
   },
   content: {
     paddingHorizontal: 30,
@@ -327,14 +326,19 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   googleLogo: {
-    width: 40,
-    height: 40,
+    width: 80,
+    height: 80,
   },
   bottomLinks: {
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   link: {
     color: "#8e8e93",
     marginBottom: 10,
+  },
+  button2: {
+    fontWeight: "350",
+    color: "white",
   },
 });

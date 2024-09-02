@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -10,76 +10,75 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
+  ImageBackground,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import { MaterialIcons as Icon } from "@expo/vector-icons";
 import GradientButton from "../components/GradientButton";
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google'
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
 import { jwtDecode } from "jwt-decode";
-
-
+import Icon from "react-native-vector-icons/Ionicons";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignUp({ navigation }) {
-  const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com'
+  //google signup//
+  const webClientId =
+    "226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com";
+  const androidClientId =
+    "226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com";
+  const iosClientId =
+    "226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com";
 
-  const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
-  
-  const iosClientId= '226449682566-3inppfas8ej8qmd99qpf9pqlgp9pp4pn.apps.googleusercontent.com'
-   
   const config = {
     webClientId,
     iosClientId,
-    androidClientId
-  }
+    androidClientId,
+  };
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
-  const handleToken = () =>
-  {
-    if(response?.type === 'success') {
+  const handleToken = () => {
+    if (response?.type === "success") {
       // const{authentication} = response;
       const token = response?.authentication?.idToken;
-      const decodedToken = jwtDecode(token)
+      const decodedToken = jwtDecode(token);
       const googleUser = decodedToken?.name;
-      const googleUserEmail = decodedToken?.email
-    console.log(jwtDecode(token),googleUser, 'google ok !')
-    // console.log(jwtDecode(googleUser), 'google ok !')
-    fetch(`${baseUrl}users/checkUser`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: googleUser,
-        email: googleUserEmail,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.result === false) {
-          console.log(data.error);
-          setError(true);
-          setErrorMessage(data.error);
-        } else {
-          setGoogleUser(googleUser);
-          setGoogleUserEmail(googleUserEmail);
-          setPlatformsModalVisible(true);
-          setIsGoogleUser(true);
-        }
-      });
-    }  
-
-  }
-
+      const googleUserEmail = decodedToken?.email;
+      console.log(jwtDecode(token), googleUser, "google ok !");
+      // console.log(jwtDecode(googleUser), 'google ok !')
+      fetch(`${baseUrl}users/checkUser`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: googleUser,
+          email: googleUserEmail,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.result === false) {
+            console.log(data.error);
+            setError(true);
+            setErrorMessage(data.error);
+          } else {
+            setGoogleUser(googleUser);
+            setGoogleUserEmail(googleUserEmail);
+            setPlatformsModalVisible(true);
+            setIsGoogleUser(true);
+          }
+        });
+    }
+  };
 
   useEffect(() => {
-    handleToken()
-  }, [response])
+    handleToken();
+  }, [response]);
 
-  // console.log(authentification.accessToken)
   const dispatch = useDispatch();
 
   const [signUpUsername, setSignUpUsername] = useState("");
@@ -99,8 +98,8 @@ export default function SignUp({ navigation }) {
   const [platformsModalVisible, setPlatformsModalVisible] = useState(false);
   const [selectedProviders, setSelectedProviders] = useState([]);
   const [isGoogleUser, setIsGoogleUser] = useState(false);
-  const [googleUser, setGoogleUser] = useState('');
-  const [googleUserEmail, setGoogleUserEmail] = useState('');
+  const [googleUser, setGoogleUser] = useState("");
+  const [googleUserEmail, setGoogleUserEmail] = useState("");
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -140,8 +139,9 @@ export default function SignUp({ navigation }) {
       setStrength("Too Weak Password");
     }
   };
- //penser a ajouter logo 
- //list updated with platforms that provide results
+
+  //penser a ajouter logo
+  //list updated with platforms that provide results
   const providers = [
     { id: 119, name: "Amazon Prime Video" },
     { id: 337, name: "Disney Plus" },
@@ -160,22 +160,17 @@ export default function SignUp({ navigation }) {
   ];
 
   const handlePasswordVisibility = () => {
-    if (rightIcon === "eye") {
-      setRightIcon("eye-slash");
-      setHidePassword(!hidePassword);
-    } else if (rightIcon === "eye-slash") {
-      setRightIcon("eye");
-      setHidePassword(!hidePassword);
-    }
+    setRightIcon(rightIcon === "eye" ? "eye-slash" : "eye");
+    setHidePassword(!hidePassword);
   };
 
   const handleRegister = () => {
     if (!signUpEmail || !signUpPassword || !signUpUsername) {
       setError(true);
       setMissingFieldError(true);
-      setErrorMessage('Please complete all fields to register !')
+      setErrorMessage("Please complete all fields to register !");
       console.log("errorMessageMissingfield");
-      return
+      return;
     }
     if (!checkEmail.test(signUpEmail)) {
       setWrongEmail(true);
@@ -187,7 +182,7 @@ export default function SignUp({ navigation }) {
     //   setValidPassword(false);
     //   console.log("wrongEmail");
     // }
-     else {
+    else {
       fetch(`${baseUrl}users/checkUser`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -301,207 +296,247 @@ export default function SignUp({ navigation }) {
         .catch((error) => {
           console.error("Error during sign up:", error);
         });
-      console.log(googleUser, googleUserEmail)
+      console.log(googleUser, googleUserEmail);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-       <Image source={require('../assets/background.png')} style={styles.background} />
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Image
-            source={require("../assets/imgsmall.png")}
-            style={styles.logo}
-          />
-        </View>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ImageBackground
+            source={require("../assets/background.png")} // Votre image d'arrière-plan
+            style={styles.backgroundImage}
+            imageStyle={styles.backgroundImageStyle} // Pour ajuster l'image d'arrière-plan
+          >
+            <View style={styles.overlay} />
+            <View style={styles.header}>
+              {/* <View style={styles.headerContent}> */}
+              <Image
+                source={require("../assets/imgsmall.png")}
+                style={styles.logo}
+              />
+            </View>
+            {/* </View> */}
 
-      <Text style={styles.textH1}>Welcome to {"\n"}What To Watch</Text>
-      <Text style={styles.textH2}>
-        If you're ready to chill and watch a movie, then signup !
-      </Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Username"
-          placeholderTextColor={'white'}
-          autoCapitalize="none"
-          onChangeText={(value) => setSignUpUsername(value)}
-          value={signUpUsername}
-          style={styles.input}
-        />
-        <TextInput
-          autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-          keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-          textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-          autoComplete="email"
-          placeholder="Email address"
-          placeholderTextColor={'white'}
-          onChangeText={(value) => setSignUpEmail(value)}
-          value={signUpEmail}
-          style={styles.input}
-        />
-        <TextInput
-          secureTextEntry={true}
-          placeholder="Password"
-          placeholderTextColor={'white'}
-          keyboardType="password"
-          autoCapitalize="none"
-          onChangeText={(value) => {
-            setSignUpPassword(value), validatePassword(value);
-          }}
-          value={signUpPassword}
-          style={styles.input}
-        />
-      </View>
-      <Text style={styles.strengthText}>{strength}</Text>
-      <Text style={styles.suggestionsText}>
-        {suggestions.map((suggestion, index) => (
-          <Text key={index}>
-            {suggestion} {"\n"}
-          </Text>
-        ))}
-      </Text>
-      {/* <View style={styles.strengthMeter}>
-        <View
-          style={{
-            width: `${
-              strength === "Very Strong"
-                ? 100
-                : strength === "Strong"
-                ? 75
-                : strength === "Moderate"
-                ? 50
-                : strength === "Weak"
-                ? 25
-                : 0
-            }%`,
-            height: 50,
-            color:
-              strength === "Too Weak"
-                ? "red"
-                : strength === "Weak"
-                ? "orange"
-                : strength === "Moderate"
-                ? "yellow"
-                : strength === "Strong"
-                ? "green"
-                : "limegreen",
-            justifyContent: 'center',
-            alignItems: 'center'
+            <View style={styles.content}>
+              <Text style={styles.title}>Welcome to {"\n"}What To Watch</Text>
+              <Text style={styles.subtitle}>
+                If you're ready to chill and watch a movie, then signup !
+              </Text>
+            </View>
+          </ImageBackground>
 
-          }}
-        ></View>
-      </View> */}
-      <TouchableOpacity onPress={handlePasswordVisibility}>
-      </TouchableOpacity>
+          <View style={styles.formContent}>
+            <View style={styles.inputContainer}>
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="person-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  placeholder="Username"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setSignUpUsername(value)}
+                  value={signUpUsername}
+                  style={styles.input}
+                />
+              </View>
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="mail-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+                  keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+                  textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+                  autoComplete="email"
+                  placeholder="Email address"
+                  placeholderTextColor="#8e8e93"
+                  onChangeText={(value) => setSignUpEmail(value)}
+                  value={signUpEmail}
+                  style={styles.input}
+                />
+              </View>
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  secureTextEntry={true}
+                  placeholder="Password"
+                  placeholderTextColor="#8e8e93"
+                  keyboardType="password"
+                  autoCapitalize="none"
+                  onChangeText={(value) => {
+                    setSignUpPassword(value), validatePassword(value);
+                  }}
+                  value={signUpPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
 
-      {/* {missingFieldError && (
+            <Text style={styles.strengthText}>{strength}</Text>
+            <Text style={styles.suggestionsText}>
+              {suggestions.map((suggestion, index) => (
+                <Text key={index}>
+                  {suggestion} {"\n"}
+                </Text>
+              ))}
+            </Text>
+
+            <TouchableOpacity
+              onPress={handlePasswordVisibility}
+            ></TouchableOpacity>
+
+            {/* {missingFieldError && (
         <Text style={styles.error}>
           Please complete all fields to register!
         </Text>
       )} */}
-      {error && <Text style={styles.error}>{errorMessage}</Text>}
+            {error && <Text style={styles.error}>{errorMessage}</Text>}
 
-      <View style={styles.bottomContent}>
-        <TouchableOpacity
-          onPress={handleRegister}
-          style={styles.button}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.textButton}>REGISTER</Text>
-        </TouchableOpacity>
-        <Text style={styles.textH4}>Or login with</Text>
-        <TouchableOpacity onPress={() => promptAsync()}>
-          <Image
-            source={require("../assets/google-logo.png")}
-            style={styles.googleLogo}
-          />
-        </TouchableOpacity>
-        <View style={styles.haveAccount}>
-          <Text style={styles.textH4}>Already have an account?</Text>
-          <TouchableOpacity
-            style={styles.button2}
-            activeOpacity={0.8}
-            onPress={() => navigation.navigate("SignIn")}
-          >
-            <Text style={styles.textButton}>Sign in here!</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={platformsModalVisible}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>
-              Choose your streaming services
-            </Text>
-            <Text style={styles.modalTitle}>Select at least one platform</Text>
-            <View style={styles.scrollView}>
-            <FlatList
-  data={providers}
-  numColumns={1}
-  renderItem={({ item }) => {
-    const isSelected = selectedProviders.includes(item.name);
-    return (
-      <TouchableOpacity
-        style={[
-          styles.providers,
-          isSelected && styles.selectedProvider,
-        ]}
-        onPress={() => {
-          setSelectedProviders((prevProviders) =>
-            prevProviders.includes(item.name)
-              ? prevProviders.filter((provider) => provider !== item.name)
-              : [...prevProviders, item.name]
-          );
-        }}
-      >
-        <Text style={isSelected ? styles.selectedProviderText : null}>
-          {item.name}
-        </Text>
-      </TouchableOpacity>
-    );
-  }}
-  keyExtractor={(item) => item.id.toString()}
-/>
+            <View style={styles.buttonWrapper}>
+              <GradientButton
+                iconName="log-in"
+                buttonText="Sign Up"
+                onPress={handleRegister}
+              />
             </View>
-            <View style={styles.buttons}>
-              <TouchableOpacity
-                style={styles.button}
-                activeOpacity={0.8}
-                onPress={() => setPlatformsModalVisible(false)}
-              >
-                <Text style={styles.modalTitle}>Cancel</Text>
+            <View style={styles.bottomContent}>
+              <Text style={styles.textH4}>or sign up with</Text>
+
+              <TouchableOpacity onPress={() => promptAsync()}>
+                <Image
+                  source={require("../assets/google-logo-dark.png")}
+                  style={styles.googleLogo}
+                />
               </TouchableOpacity>
-                {isGoogleUser ?
-              <TouchableOpacity
-                onPress={() => handleSubmitWithGoogle()}
-                style={styles.button}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.modalTitle}>REGISTER</Text>
-              </TouchableOpacity>
-              :
-              <TouchableOpacity
-                onPress={() => handleSubmit()}
-                style={styles.button}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.modalTitle}>REGISTER</Text>
-              </TouchableOpacity>
-              }
+
+              <View style={styles.bottomLinks}>
+                <Text style={styles.link}>Already have an account? </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => navigation.navigate("SignIn")}
+                >
+                  <Text style={styles.button2}> Sign in here!</Text>
+                </TouchableOpacity>
+              </View>
             </View>
+
+            {/* //platform modal // */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={platformsModalVisible}
+            >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>
+                    Choose your streaming services
+                  </Text>
+                  <Text style={styles.modalTitle}>
+                    Select at least one platform
+                  </Text>
+                  <View style={styles.scrollView}>
+                    <FlatList
+                      data={providers}
+                      numColumns={1}
+                      renderItem={({ item }) => {
+                        const isSelected = selectedProviders.includes(
+                          item.name
+                        );
+                        return (
+                          <TouchableOpacity
+                            style={[
+                              styles.providers,
+                              isSelected && styles.selectedProvider,
+                            ]}
+                            onPress={() => {
+                              setSelectedProviders((prevProviders) =>
+                                prevProviders.includes(item.name)
+                                  ? prevProviders.filter(
+                                      (provider) => provider !== item.name
+                                    )
+                                  : [...prevProviders, item.name]
+                              );
+                            }}
+                          >
+                            <Text
+                              style={
+                                isSelected ? styles.selectedProviderText : null
+                              }
+                            >
+                              {item.name}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      }}
+                      keyExtractor={(item) => item.id.toString()}
+                    />
+                  </View>
+                  <View style={styles.buttons}>
+                    <View style={styles.buttonWrapper}>
+                      <GradientButton
+                        // iconName="log-in"
+                        buttonText="Cancel"
+                        onPress={() => setPlatformsModalVisible(false)}
+                      />
+                    </View>
+                    {isGoogleUser ? (
+                      <View style={styles.buttonWrapper}>
+                        <GradientButton
+                          iconName="log-in"
+                          buttonText="Sign Up"
+                          onPress={() => handleSubmitWithGoogle()}
+                        />
+                      </View>
+                    ) : (
+                      <View style={styles.buttonWrapper}>
+                        <GradientButton
+                          iconName="log-in"
+                          buttonText="Sign Up"
+                          onPress={() => handleSubmit()}
+                        />
+                      </View>
+                    )}
+
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            {/* //end of modal// */}
+
           </View>
-        </View>
-      </Modal>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -509,78 +544,144 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0d0f2b",
-    // paddingHorizontal: 10,
-    paddingTop: 20,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: "center",
+    paddingBottom: 20,
+    opacity: 0.9,
+    height: "100%",
+  },
+  backgroundImageStyle: {
+    resizeMode: "cover", // Pour que l'image de fond couvre tout l'espace défini
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Overlay semi-transparent
   },
   header: {
-    alignItems: "flex-start",
-    marginBottom: 40,
-    marginTop: "10%",
-    paddingHorizontal: 20,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    marginLeft: 20,
+    marginTop: 5, // Ajuster la marge pour positionner le logo en haut à gauche
   },
   logo: {
-    width: 100,
-    height: 80,
-    borderRadius: 40,
+    width: 100, // Augmenter la taille du logo
+    height: 100,
+    resizeMode: "contain",
   },
-  textH1: {
-    textAlign: "flex-start",
-    color: "white",
-    fontSize: 32,
-    fontWeight: "bold",
-    paddingHorizontal: 20,
-  },
-  textH2: {
-    marginTop: 10,
-    marginHorizontal: 7,
-    textAlign: "center",
-    color: "white",
-    fontSize: 16,
-  },
-  textH4: {
-    color: "white",
-    marginHorizontal: 5,
-  },
-  inputContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+  content: {
+    paddingHorizontal: 30,
+    marginTop: 50,
+    justifyContent: "center", // Centre le texte à l'intérieur de l'image de fond
   },
   title: {
-    width: "80%",
-    fontSize: 38,
-    fontWeight: "600",
+    color: "white",
+    fontSize: 40, // Augmenter la taille de la police pour plus de visibilité
+    fontWeight: "bold",
+    marginBottom: 30,
+    textAlign: 'left',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)', // Ajouter une ombre pour plus de visibilité
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
-  input: {
-    height: 50,
-    width: "80%",
-    backgroundColor: "rgb(108, 122, 137)",
-    borderRadius: 10,
-    marginTop: 20,
-    paddingLeft: 10,
-    fontSize: 18,
+  subtitle: {
+    color: "white", // Changer la couleur en blanc
+    fontSize: 20, // Augmenter la taille de la police pour plus de visibilité
+    marginBottom: 30,
+    textAlign: "left",
+    textShadowColor: "rgba(0, 0, 0, 0.75)", // Ajouter une ombre pour plus de visibilité
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
-  haveAccount: {
+  formContent: {
+    paddingHorizontal: 30, // Pour aligner le formulaire avec le texte
+    marginTop: 0, // Ajoute un espacement entre l'image de fond et le champ email
+  },
+  textH4: {
+    color: "#8e8e93",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  inputWrapper: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "space-around",
-    // marginTop: 30,
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 10,
+    marginBottom: 15,
     paddingHorizontal: 10,
   },
-  button: {
+  inputIcon: {
+    paddingLeft: 5,
+  },
+  input: {
+    flex: 1,
+    height: 50,
+    color: "white",
+    paddingLeft: 10,
+  },
+  eyeIcon: {
+    paddingRight: 15,
+  },
+  buttonWrapper: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  googleButton: {
     alignItems: "center",
-    paddingTop: 8,
-    width: "80%",
-    margin: 30,
-    // borderRadius: 10,
-    // marginBottom: 80,
-    backgroundColorolor: "white",
+  },
+  googleLogo: {
+    width: 80,
+    height: 80,
+    marginBottom: 30,
+  },
+  bottomLinks: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  link: {
+    color: "#8e8e93",
+    marginBottom: 10,
   },
   button2: {
-    fontWeight: "300",
+    fontWeight: "350",
     color: "white",
   },
-  textButton: {
-    fontWeight: "600",
+
+  // // input: {
+  // //   height: 50,
+  // //   width: "80%",
+  // //   backgroundColor: "rgb(108, 122, 137)",
+  // //   borderRadius: 10,
+  // //   marginTop: 20,
+  // //   paddingLeft: 10,
+  // //   fontSize: 18,
+  // // },
+  // haveAccount: {
+  //   flexDirection: "row",
+  //   justifyContent: "center",
+  //   alignItems: "space-around",
+  //   // marginTop: 30,
+  //   paddingHorizontal: 10,
+  // },
+  // button: {
+  //   alignItems: "center",
+  //   paddingTop: 8,
+  //   width: "80%",
+  //   margin: 30,
+  //   // borderRadius: 10,
+  //   // marginBottom: 80,
+  //   backgroundColorolor: "white",
+  // },
+  button2: {
+    fontWeight: "350",
     color: "white",
   },
   suggestionsText: {
@@ -594,6 +695,10 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     margin: 20,
+  },
+  bottomContent: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   modalOverlay: {
     flex: 1,
@@ -639,23 +744,13 @@ const styles = StyleSheet.create({
   scrollView: {
     maxHeight: 200,
   },
-  bottomContent: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 50,
-  },
-  googleLogo: {
-    width: 80,
-    height: 80,
-    borderRadius: 30,
-    margin: 30,
-  },
-  strengthMeter : {
-    borderColor: 'red',
-    color: 'red',
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
+  // strengthMeter: {
+  //   borderColor: "red",
+  //   color: "red",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
   providers: {
     marginTop: 10,
     backgroundColor: "grey",
@@ -669,15 +764,15 @@ const styles = StyleSheet.create({
   selectedProviderText: {
     color: "white",
   },
-  background: {
-    overflow: 'hidden',
-    position: 'absolute',
-    width: '100%',
-    height: '32%',
-    margin: 10,
-    marginTop: 52,
-    opacity: 0.4,
-    backgroundSize: 'cover',
-    borderRadius: 10,
-  }
+  // background: {
+  //   overflow: "hidden",
+  //   position: "absolute",
+  //   width: "100%",
+  //   height: "32%",
+  //   margin: 10,
+  //   marginTop: 52,
+  //   opacity: 0.4,
+  //   backgroundSize: "cover",
+  //   borderRadius: 10,
+  // },
 });
