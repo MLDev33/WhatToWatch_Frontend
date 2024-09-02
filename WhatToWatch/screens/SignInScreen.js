@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {
-  KeyboardAvoidingView,
   Image,
+  KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
@@ -12,18 +12,20 @@ import {
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
-import RecoveredPasswordModal from "../components/SignInUp/RecoveredPassword";
-import { LinearGradient } from "expo-linear-gradient";
-// import Icon from 'react-native-vector-icons/Ionicons';
+// import RecoveredPasswordModal from "../components/SignInUp/RecoveredPassword";
+// import { LinearGradient } from "expo-linear-gradient";
+import Icon from 'react-native-vector-icons/Ionicons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google'
 import { jwtDecode } from "jwt-decode";
+import GradientButton from '../components/GradientButton';
 
-
-
+  //google login //
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignIn({ navigation }) {
+
+  //google login //
   const webClientId = '226449682566-nqg576flhhq5oq2cu9174i2u1pfup607.apps.googleusercontent.com'
 
   const androidClientId = '226449682566-6865tj5olk8helr5ovkquli7otr2pljq.apps.googleusercontent.com'
@@ -38,6 +40,28 @@ export default function SignIn({ navigation }) {
 
   const [request, response, promptAsync] = Google.useAuthRequest(config);
 
+  const dispatch = useDispatch();
+
+  const [signInUsername, setSignInUsername] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [rightIcon, setRightIcon] = useState("eye");
+  const [hidePassword, setHidePassword] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isGoogleUser, setIsGoogleUser] = useState(false);
+
+  const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+
+  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
+  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
+  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
+
+  // Utiliser une condition pour basculer entre les URLs
+  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
+  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+
+//handleToken for Google login
   const handleToken = () => {
       if(response?.type === 'success') {
         const token = response?.authentication?.idToken;
@@ -82,25 +106,7 @@ export default function SignIn({ navigation }) {
       handleToken()
     }, [response])
 
-  const dispatch = useDispatch();
 
-  const [signInUsername, setSignInUsername] = useState("");
-  const [signInPassword, setSignInPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(false);
-  const [rightIcon, setRightIcon] = useState("eye");
-  const [hidePassword, setHidePassword] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [isGoogleUser, setIsGoogleUser] = useState(false);
-
-  // const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
-
-  //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
-  const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
-  const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-
-  // Utiliser une condition pour basculer entre les URLs
-  //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
   const handlePasswordVisibility = () => {
     if (rightIcon === "eye") {
@@ -128,6 +134,8 @@ export default function SignIn({ navigation }) {
         console.log(signInPassword);
         if (!data.result) {
           console.log("false");
+          setError(true)
+          setErrorMessage(data.error)
         } else {
           dispatch(
             login({
@@ -152,6 +160,7 @@ export default function SignIn({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <Image source={require('../assets/background.png')} style={styles.background} />
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Image
@@ -184,22 +193,37 @@ export default function SignIn({ navigation }) {
           value={signInPassword}
           style={styles.input}
         />
-      </View>
-      <TouchableOpacity onPress={handlePasswordVisibility}>
-        {/* <Icon name={rightIcon} size={25} /> */}
-      </TouchableOpacity>
 
-      {errorMessage && (
-        <Text style={styles.error}>User not found or wrong email</Text>
+        
+      </View>
+      {/* <TouchableOpacity onPress={handlePasswordVisibility}>
+        <Icon name={rightIcon} size={25} />
+      </TouchableOpacity> */}
+
+      {error && (
+        <Text style={styles.error}>{errorMessage}</Text>
       )}
-      <View style={styles.bottomContent}>
-        <TouchableOpacity
+      {/* <View style={styles.bottomContent}> */}
+     
+        <View style={styles.mainButtonContainer}>
+           <GradientButton
+          // iconName="login"
+          style={{height: 40, width: 40}}
+          buttonText="Login"
+          onPress={() => handleSubmit()}
+        />
+        </View>
+
+             {/* <TouchableOpacity
           onPress={() => handleSubmit()}
           style={styles.button}
           activeOpacity={0.8}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        > */}
+          {/* <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity> */}
+
+
+        <View style={styles.bottomContent}>
         <Text style={styles.textH4}>Or connect with</Text>
         <TouchableOpacity onPress={() => promptAsync()}>
           <Image
@@ -327,4 +351,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 20,
   },
+  mainButtonContainer:{
+    marginTop: 40,
+    // alignItems: "center",
+    justifyContent: "center",
+    textAlign: 'center'
+  },
+  login: {
+    // alignItems: 'center',
+    // height: 40,
+    // width: "80%",
+    textAlign: 'center'
+  },
+  background: {
+    overflow: 'hidden',
+    position: 'absolute',
+    width: '100%',
+    height: '32%',
+    margin: 10,
+    marginTop: 52,
+    opacity: 0.4,
+    backgroundSize: 'cover',
+    borderRadius: 10,
+  }
 });

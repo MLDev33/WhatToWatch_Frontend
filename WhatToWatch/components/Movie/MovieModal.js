@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Modal, View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Share } from 'react-native';
+import { Modal, View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Share, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { PanGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -107,7 +107,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
                           </View>
                         </TouchableOpacity>
                       ))}
-                     </ScrollView>
+                    </ScrollView>
                   ) : (
                     "N/A"
                   )}
@@ -153,11 +153,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    // paddingTop: 500,
-    // marginBottom: -200,
+    paddingTop: 50,
   },
   modalContent: {
-    height: '92%',
     width: "90%",
     backgroundColor: "#0d0f2b",
     borderRadius: 10,
@@ -196,33 +194,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 15,
+    marginBottom: 5,
   },
   modalDetailsText: {
     fontSize: 14,
     color: "white",
+    // marginBottom: 15,
+    height: Platform.OS === "ios" ? 30 : 30,
   },
   platformContainer: {
-    // borderBottomColor: 'red',
-    // borderWidth: 1,
     flexDirection: "row",
     alignItems: "center",
     marginRight: 10,
-    // height: '10%'
   },
   platformLogo: {
     width: 30,
     height: 30,
     marginRight: 5,
-    // marginBottom:0,
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 50,
     width: "100%",
-    // height: '20%',
   },
   button: {
     marginHorizontal: 0,

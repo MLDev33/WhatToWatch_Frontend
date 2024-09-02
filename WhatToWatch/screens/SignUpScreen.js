@@ -171,13 +171,23 @@ export default function SignUp({ navigation }) {
 
   const handleRegister = () => {
     if (!signUpEmail || !signUpPassword || !signUpUsername) {
+      setError(true);
       setMissingFieldError(true);
+      setErrorMessage('Please complete all fields to register !')
       console.log("errorMessageMissingfield");
+      return
     }
     if (!checkEmail.test(signUpEmail)) {
       setWrongEmail(true);
       console.log("wrongEmail");
-    } else {
+    }
+    // else if (!checkPassword.test(signUpPassword)) {
+    //   setError(true);
+    //   setErrorMessage('Password not valid')
+    //   setValidPassword(false);
+    //   console.log("wrongEmail");
+    // }
+     else {
       fetch(`${baseUrl}users/checkUser`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -300,6 +310,7 @@ export default function SignUp({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+       <Image source={require('../assets/background.png')} style={styles.background} />
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Image
@@ -388,11 +399,11 @@ export default function SignUp({ navigation }) {
       <TouchableOpacity onPress={handlePasswordVisibility}>
       </TouchableOpacity>
 
-      {missingFieldError && (
+      {/* {missingFieldError && (
         <Text style={styles.error}>
           Please complete all fields to register!
         </Text>
-      )}
+      )} */}
       {error && <Text style={styles.error}>{errorMessage}</Text>}
 
       <View style={styles.bottomContent}>
@@ -658,4 +669,15 @@ const styles = StyleSheet.create({
   selectedProviderText: {
     color: "white",
   },
+  background: {
+    overflow: 'hidden',
+    position: 'absolute',
+    width: '100%',
+    height: '32%',
+    margin: 10,
+    marginTop: 52,
+    opacity: 0.4,
+    backgroundSize: 'cover',
+    borderRadius: 10,
+  }
 });
