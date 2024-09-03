@@ -4,11 +4,10 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Switch,
   Image,
   SafeAreaView,
   TextInput,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -20,11 +19,7 @@ import { Avatar } from "react-native-elements";
 import AvatarModal from "../components/Profile/AvatarModal";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ProfileSettingsScreen = ({
-  navigation,
-  hasAvatar,
-  setHasAvatar,
-}) => {
+const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -49,6 +44,8 @@ const ProfileSettingsScreen = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [wrongEmailMessage, setWrongEmailMessage] = useState("");
+  const [rightIcon, setRightIcon] = useState("eye");
+  const [hidePassword, setHidePassword] = useState(true);
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
@@ -81,6 +78,8 @@ const ProfileSettingsScreen = ({
           dispatch(updateUsername(data.username));
           console.log("true");
           setNewUsername("");
+          setError(true);
+          setErrorMessage('Username updated!');
         }
         console.log("button change username clicked");
       });
@@ -93,6 +92,7 @@ const ProfileSettingsScreen = ({
       setWrongEmailMessage("Please enter a valid email address!");
       console.log("wrongEmail");
     } else {
+      setWrongEmail(false)
       fetch(`${baseUrl}users/updateEmail/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -113,10 +113,17 @@ const ProfileSettingsScreen = ({
             dispatch(updateEmail(data.email));
             console.log("true");
             setNewEmail("");
+            setWrongEmail(true);
+      setWrongEmailMessage("Email address updated!");
           }
           console.log("button change email clicked");
         });
     }
+  };
+
+  const handlePasswordVisibility = () => {
+    setRightIcon(rightIcon === "eye" ? "eye-slash" : "eye");
+    setHidePassword(!hidePassword);
   };
 
   const handleChangePassword = () => {
@@ -134,6 +141,8 @@ const ProfileSettingsScreen = ({
       console.log("true");
     } else {
       if (newPassword !== confirmNewPassword) {
+        setPasswordError(true);
+      setPasswordErrorMessage("Passwords not matching");
         console.log("password not matching");
       } else {
         console.log(userPassword, newPassword, confirmNewPassword);
@@ -156,162 +165,194 @@ const ProfileSettingsScreen = ({
             //   console.log("true");
             // }
             console.log("button change password clicked");
+            setPasswordError(true);
+            setPasswordErrorMessage("Password updated !");
           });
-
-
       }
     }
- 
   };
 
   return (
     <SafeAreaView style={styles.container}>
-    <ScrollView>
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Image
-            source={require("../assets/imgsmall.png")}
-            style={styles.logo}
-          />
-          <View style={styles.textAndImageContainer}>
-            <Text style={styles.text}>{username}</Text>
-            {avatar === undefined ? (
-              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                <Image
-                  source={require("../assets/avatar-1.png")}
-                  style={styles.profileImage}
-                />
-                <Avatar.Accessory size={24} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                <Image source={{ uri: avatar }} style={styles.profileImage} />
-                <Avatar.Accessory size={24} />
-              </TouchableOpacity>
-            )}
+      <ScrollView>
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <Image
+              source={require("../assets/imgsmall.png")}
+              style={styles.logo}
+            />
+            <View style={styles.textAndImageContainer}>
+              <Text style={styles.text}>{username}</Text>
+              {avatar === undefined ? (
+                <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                  <Image
+                    source={require("../assets/avatar-1.png")}
+                    style={styles.profileImage}
+                  />
+                  <Avatar.Accessory size={24} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                  <Image source={{ uri: avatar }} style={styles.profileImage} />
+                  <Avatar.Accessory size={24} />
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Icon name='chevron-back-outline' size={24} color="blue" style={styles.inputIcon} />
+                    <Text style={styles.backButtonText}>Back</Text>
+                </TouchableOpacity>
+          <Text style={styles.username}>Profile Settings</Text>
+          {/* tBChanged !!!!! to back !!!! */}
+          {/* <TouchableOpacity
+            style={styles.closeButtonContainer}
+            onPress={() => navigation.navigate("ProfileScreen")}
+          >
+            <FontAwesome name="times" size={20} color="white" />
+          </TouchableOpacity> */}
         </View>
-        <Text style={styles.username}>Profile Settings</Text>
-        <TouchableOpacity
-          style={styles.closeButtonContainer}
-          onPress={() => navigation.navigate("ProfileScreen")}
-        >
-          <FontAwesome name="times" size={20} color="white" />
-        </TouchableOpacity>
-      </View>
 
-      <View style={styles.section}>
-        <Text style={styles.text}>NAME</Text>
-        <TextInput
-          placeholder="Username"
-          placeholderTextColor={"white"}
-          autoCapitalize="none"
-          onChangeText={(value) => setNewUsername(value)}
-          value={newUsername}
-          style={styles.input}
-        />
-        {error && <Text style={styles.error}>{errorMessage}</Text>}
+        <View style={styles.section}>
+          <Text style={styles.text}>NAME</Text>
+          <View style={styles.inputWrapper}>
+          <Icon name="person-outline" size={24} color="#fff" style={styles.inputIcon} />
+            <TextInput
+              placeholder="Username"
+              placeholderTextColor="#8e8e93"
+              autoCapitalize="none"
+              onChangeText={(value) => setNewUsername(value)}
+              value={newUsername}
+              style={styles.input}
+            />
+          </View>
+    
+          {error && <Text style={styles.error}>{errorMessage}</Text>}
+
+          <TouchableOpacity
+            style={styles.button2}
+            onPress={() => handleNewUsername()}
+          >
+            <Text style={styles.buttonText}>Change Username</Text>
+          </TouchableOpacity>
+
+          {/* if GoogleUser, user cannot change email or password */}
+          {!isGoogleUser ? (
+            <>
+              <Text style={styles.text}>EMAIL</Text>
+
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="mail-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+                  keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+                  textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+                  autoComplete="email"
+                  placeholder="Email address"
+                  placeholderTextColor="#8e8e93"
+                  onChangeText={(value) => setNewEmail(value)}
+                  value={newEmail}
+                  style={styles.input}
+                />
+              </View>
+
+              {wrongEmail && (
+                <Text style={styles.error}>{wrongEmailMessage}</Text>
+              )}
+              <TouchableOpacity
+                style={styles.button2}
+                onPress={() => handleNewEmail()}
+              >
+                <Text style={styles.buttonText}>Change Email</Text>
+              </TouchableOpacity>
+              <Text style={styles.text}>LANGUAGE</Text>
+
+              <Text style={styles.text}>PASSWORD</Text>
+
+              <View style={styles.inputWrapper}>
+                <Icon name="lock-closed-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <TextInput
+                  secureTextEntry={hidePassword}
+                  placeholder="Current Password"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setUserPassword(value)}
+                  value={userPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
+                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputWrapper}>
+                <Icon name="lock-closed-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <TextInput
+                  secureTextEntry={hidePassword}
+                  placeholder="New Password"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setNewPassword(value)}
+                  value={newPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
+                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputWrapper}>
+                <Icon name="lock-closed-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <TextInput
+                  secureTextEntry={hidePassword}
+                  placeholder="Confirm New Password"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setConfirmNewPassword(value)}
+                  value={confirmNewPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
+                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                </TouchableOpacity>
+              </View>
+
+              {PasswordError && (
+                <Text style={styles.error}>{PasswordErrorMessage}</Text>
+              )}
+              <TouchableOpacity
+                style={styles.button2}
+                onPress={() => handleChangePassword()}
+              >
+                <Text style={styles.buttonText}>Change Password</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <></>
+          )}
+          <Text style={styles.text}>ACCOUNT</Text>
+        </View>
 
         <TouchableOpacity
           style={styles.button2}
-          onPress={() => handleNewUsername()}
+          activeOpacity={0.8}
+          onPress={() => setDeleteAccountModalVisible(true)}
         >
-          <Text>Confirm</Text>
+          <Text style={styles.textButton}>DELETE ACCOUNT</Text>
         </TouchableOpacity>
-        {!isGoogleUser ? (
-          <>
-            <Text style={styles.text}>EMAIL</Text>
-            <TextInput
-              autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-              keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-              textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-              autoComplete="email"
-              placeholder="Email address"
-              placeholderTextColor={"white"}
-              onChangeText={(value) => setNewEmail(value)}
-              value={newEmail}
-              style={styles.input}
-            />
-            {wrongEmail && (
-              <Text style={styles.error}>{wrongEmailMessage}</Text>
-            )}
-            <TouchableOpacity
-              style={styles.button2}
-              onPress={() => handleNewEmail()}
-            >
-              <Text>Confirm</Text>
-            </TouchableOpacity>
-            <Text style={styles.text}>LANGUAGE</Text>
-            <Text style={styles.text}>PASSWORD</Text>
-            <TextInput
-              secureTextEntry={true}
-              placeholder="Current Password"
-              placeholderTextColor={"white"}
-              keyboardType="password"
-              autoCapitalize="none"
-              onChangeText={(value) => {
-                setUserPassword(value);
-              }}
-              value={userPassword}
-              style={styles.input}
-            />
-            <TextInput
-              secureTextEntry={true}
-              placeholder="New Password"
-              placeholderTextColor={"white"}
-              keyboardType="password"
-              autoCapitalize="none"
-              onChangeText={(value) => {
-                setNewPassword(value);
-              }}
-              value={newPassword}
-              style={styles.input}
-            />
-            <TextInput
-              secureTextEntry={true}
-              placeholder="Confirm New Password"
-              placeholderTextColor={"white"}
-              keyboardType="password"
-              autoCapitalize="none"
-              onChangeText={(value) => {
-                setConfirmNewPassword(value);
-              }}
-              value={confirmNewPassword}
-              style={styles.input}
-            />
-            {PasswordError && (
-              <Text style={styles.error}>{PasswordErrorMessage}</Text>
-            )}
-            <TouchableOpacity
-              style={styles.button2}
-              onPress={() => handleChangePassword()}
-            >
-              <Text>Confirm Password</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <></>
-        )}
-        <Text style={styles.text}>ACCOUNT</Text>
-      </View>
 
-      <TouchableOpacity
-        style={styles.button2}
-        activeOpacity={0.8}
-        onPress={() => setDeleteAccountModalVisible(true)}
-      >
-        <Text style={styles.textButton}>DELETE ACCOUNT</Text>
-      </TouchableOpacity>
+        <AvatarModal
+          avatarModalVisible={avatarModalVisible}
+          setAvatarModalVisible={setAvatarModalVisible}
+        />
 
-      <AvatarModal
-        avatarModalVisible={avatarModalVisible}
-        setAvatarModalVisible={setAvatarModalVisible}
-      />
-
-      <DeleteAccount
-        deleteAccountModalVisible={deleteAccountModalVisible}
-        setDeleteAccountModalVisible={setDeleteAccountModalVisible}
-      />
+        <DeleteAccount
+          deleteAccountModalVisible={deleteAccountModalVisible}
+          setDeleteAccountModalVisible={setDeleteAccountModalVisible}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -402,7 +443,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 20,
   },
   textButton: {
     color: "#fff",
@@ -418,14 +459,22 @@ const styles = StyleSheet.create({
     fontSize: 38,
     fontWeight: "600",
   },
-  input: {
-    height: 50,
-    width: "80%",
-    backgroundColor: "rgb(108, 122, 137)",
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 15,
+    paddingHorizontal: 10,
+  },
+  inputIcon: {
+    paddingLeft: 5,
+  },
+  input: {
+    flex: 1,
+    height: 50,
+    color: "white",
     paddingLeft: 10,
-    fontSize: 18,
   },
   error: {
     textAlign: "center",
@@ -433,6 +482,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 20,
   },
+  backButton: {
+    // position: 'relative',
+    // justifyContent: 'flex-end',
+    alignContent: 'flex-start',
+    padding: 10,
+    // position: "absolute",
+    top: '30%',
+    // left: 5,
+    zIndex: 1,
+},
+backButtonText: {
+    fontSize: 16,
+    color: "#007BFF",
+},
 });
 
 export default ProfileSettingsScreen;

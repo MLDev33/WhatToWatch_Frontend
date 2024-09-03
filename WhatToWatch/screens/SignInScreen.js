@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import Icon from "react-native-vector-icons/Ionicons";
 import GradientButton from "../components/GradientButton";
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
@@ -154,9 +154,9 @@ export default function SignIn({ navigation }) {
           <View style={styles.formContent}>
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
-                <Icon name="mail-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <Icon name="person-outline" size={24} color="#fff" style={styles.inputIcon} />
                 <TextInput
-                  placeholder="Email"
+                  placeholder="Username"
                   placeholderTextColor="#8e8e93"
                   autoCapitalize="none"
                   onChangeText={(value) => setSignInUsername(value)}
