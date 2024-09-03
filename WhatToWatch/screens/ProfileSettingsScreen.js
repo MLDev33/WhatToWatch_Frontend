@@ -79,7 +79,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           console.log("true");
           setNewUsername("");
           setError(true);
-          setErrorMessage('Username updated!');
+          setErrorMessage("Username updated!");
         }
         console.log("button change username clicked");
       });
@@ -92,7 +92,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
       setWrongEmailMessage("Please enter a valid email address!");
       console.log("wrongEmail");
     } else {
-      setWrongEmail(false)
+      setWrongEmail(false);
       fetch(`${baseUrl}users/updateEmail/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -114,7 +114,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
             console.log("true");
             setNewEmail("");
             setWrongEmail(true);
-      setWrongEmailMessage("Email address updated!");
+            setWrongEmailMessage("Email address updated!");
           }
           console.log("button change email clicked");
         });
@@ -142,7 +142,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
     } else {
       if (newPassword !== confirmNewPassword) {
         setPasswordError(true);
-      setPasswordErrorMessage("Passwords not matching");
+        setPasswordErrorMessage("Passwords not matching");
         console.log("password not matching");
       } else {
         console.log(userPassword, newPassword, confirmNewPassword);
@@ -174,49 +174,61 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <Image
-              source={require("../assets/imgsmall.png")}
-              style={styles.logo}
-            />
-            <View style={styles.textAndImageContainer}>
-              <Text style={styles.text}>{username}</Text>
-              {avatar === undefined ? (
-                <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                  <Image
-                    source={require("../assets/avatar-1.png")}
-                    style={styles.profileImage}
-                  />
-                  <Avatar.Accessory size={24} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-                  <Image source={{ uri: avatar }} style={styles.profileImage} />
-                  <Avatar.Accessory size={24} />
-                </TouchableOpacity>
-              )}
-            </View>
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <Image
+            source={require("../assets/imgsmall.png")}
+            style={styles.logo}
+          />
+          <View style={styles.textAndImageContainer}>
+            <Text style={styles.text}>{username}</Text>
+            {avatar === undefined ? (
+              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                <Image
+                  source={require("../assets/avatar-1.png")}
+                  style={styles.profileImage}
+                />
+                <Avatar.Accessory size={24} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
+                <Image source={{ uri: avatar }} style={styles.profileImage} />
+                <Avatar.Accessory size={24} />
+              </TouchableOpacity>
+            )}
           </View>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Icon name='chevron-back-outline' size={24} color="blue" style={styles.inputIcon} />
-                    <Text style={styles.backButtonText}>Back</Text>
-                </TouchableOpacity>
-          <Text style={styles.username}>Profile Settings</Text>
-          {/* tBChanged !!!!! to back !!!! */}
-          {/* <TouchableOpacity
-            style={styles.closeButtonContainer}
-            onPress={() => navigation.navigate("ProfileScreen")}
-          >
-            <FontAwesome name="times" size={20} color="white" />
-          </TouchableOpacity> */}
         </View>
-
+        <View >
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon
+              name="chevron-back-outline"
+              size={20}
+              color="#007BFF"
+              // style={styles.backButtonText}
+            />
+            <Text style={styles.backButtonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.titleView}>
+        <Text style={styles.title}>Profile Settings</Text>
+        <Icon name='settings-outline'  size={24}
+                  color="#fff"
+                  style={styles.settingsIcon}/>
+                  </View>
+      </View>
+      <ScrollView>
         <View style={styles.section}>
-          <Text style={styles.text}>NAME</Text>
+          <Text style={styles.title}>NAME</Text>
           <View style={styles.inputWrapper}>
-          <Icon name="person-outline" size={24} color="#fff" style={styles.inputIcon} />
+            <Icon
+              name="person-outline"
+              size={24}
+              color="#fff"
+              style={styles.inputIcon}
+            />
             <TextInput
               placeholder="Username"
               placeholderTextColor="#8e8e93"
@@ -226,20 +238,22 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
               style={styles.input}
             />
           </View>
-    
+
           {error && <Text style={styles.error}>{errorMessage}</Text>}
-
-          <TouchableOpacity
-            style={styles.button2}
-            onPress={() => handleNewUsername()}
-          >
-            <Text style={styles.buttonText}>Change Username</Text>
-          </TouchableOpacity>
-
-          {/* if GoogleUser, user cannot change email or password */}
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.button2}
+              onPress={() => handleNewUsername()}
+            >
+              <Text style={styles.buttonText}>Change Username</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* if GoogleUser, user cannot change email or password */}
+        <View style={styles.section}>
           {!isGoogleUser ? (
             <>
-              <Text style={styles.text}>EMAIL</Text>
+              <Text style={styles.title}>EMAIL</Text>
 
               <View style={styles.inputWrapper}>
                 <Icon
@@ -264,18 +278,38 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
               {wrongEmail && (
                 <Text style={styles.error}>{wrongEmailMessage}</Text>
               )}
+              <View style={styles.buttonWrapper}>
               <TouchableOpacity
                 style={styles.button2}
                 onPress={() => handleNewEmail()}
               >
                 <Text style={styles.buttonText}>Change Email</Text>
               </TouchableOpacity>
-              <Text style={styles.text}>LANGUAGE</Text>
+              </View>
+              <View style={styles.section}>
+              <Text style={styles.title}>LANGUAGE</Text>
+              <View style={styles.buttonWrapper}>
+              <TouchableOpacity
+                style={styles.button2}
+                onPress={console.log("Button language")}
+              >
+                <Text style={styles.buttonText}>Confirm</Text>
+              </TouchableOpacity>
+              </View>
+              </View>
 
-              <Text style={styles.text}>PASSWORD</Text>
+
+              <View style={styles.section}></View>
+
+              <Text style={styles.title}>PASSWORD</Text>
 
               <View style={styles.inputWrapper}>
-                <Icon name="lock-closed-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
                 <TextInput
                   secureTextEntry={hidePassword}
                   placeholder="Current Password"
@@ -285,12 +319,24 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                   value={userPassword}
                   style={styles.input}
                 />
-                <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
-                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
                 </TouchableOpacity>
               </View>
               <View style={styles.inputWrapper}>
-                <Icon name="lock-closed-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
                 <TextInput
                   secureTextEntry={hidePassword}
                   placeholder="New Password"
@@ -300,12 +346,24 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                   value={newPassword}
                   style={styles.input}
                 />
-                <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
-                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
                 </TouchableOpacity>
               </View>
               <View style={styles.inputWrapper}>
-                <Icon name="lock-closed-outline" size={24} color="#fff" style={styles.inputIcon} />
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
                 <TextInput
                   secureTextEntry={hidePassword}
                   placeholder="Confirm New Password"
@@ -315,11 +373,19 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                   value={confirmNewPassword}
                   style={styles.input}
                 />
-                <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
-                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
                 </TouchableOpacity>
               </View>
-
+              {/* </View> */}
+              <View></View>
               {PasswordError && (
                 <Text style={styles.error}>{PasswordErrorMessage}</Text>
               )}
@@ -333,16 +399,21 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           ) : (
             <></>
           )}
-          <Text style={styles.text}>ACCOUNT</Text>
-        </View>
 
-        <TouchableOpacity
-          style={styles.button2}
-          activeOpacity={0.8}
-          onPress={() => setDeleteAccountModalVisible(true)}
-        >
-          <Text style={styles.textButton}>DELETE ACCOUNT</Text>
-        </TouchableOpacity>
+         
+              <View style={styles.section}>
+            <Text style={styles.title}>ACCOUNT</Text>
+          
+
+          <TouchableOpacity
+            style={styles.button2}
+            activeOpacity={0.8}
+            onPress={() => setDeleteAccountModalVisible(true)}
+          >
+            <Text style={styles.textButton}>DELETE ACCOUNT</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
 
         <AvatarModal
           avatarModalVisible={avatarModalVisible}
@@ -394,70 +465,58 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
   },
-  username: {
+  title: {
+    textAlign: 'flex-start',
     fontSize: 20,
     color: "#fff",
     fontWeight: "bold",
     marginTop: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff",
   },
   section: {
-    marginBottom: 20,
+    // marginBottom: 20,
+    borderColor: 'red',
+    borderBottomWidth: '1',
+    // alignItems: 'center'
   },
-  buttonContainer: {
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "transparent",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    height: 60,
-  },
+  // buttonContainer: {
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  // },
+  // button: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   backgroundColor: "transparent",
+  //   paddingVertical: 15,
+  //   paddingHorizontal: 10,
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  //   height: 60,
+  // },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     marginLeft: 10,
     flex: 1,
   },
-  switchContainer: {
-    justifyContent: "space-between",
-  },
-  logoutButton: {
-    borderRadius: 10,
-    alignItems: "center",
-    alignSelf: "center",
-    width: "60%",
-    paddingVertical: 15,
-  },
-  logoutText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   button2: {
-    backgroundColor: "#F94A56",
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 10,
+    borderColor: '#fff',
+    borderWidth: 1,
+    opacity: 0.7,
+    justifyContent: "center",
     alignItems: "center",
     marginVertical: 20,
+    width: "60%",
   },
   textButton: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  inputContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    width: "80%",
-    fontSize: 38,
-    fontWeight: "600",
+    flex: 1,
   },
   inputWrapper: {
     flexDirection: "row",
@@ -483,19 +542,27 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   backButton: {
-    // position: 'relative',
-    // justifyContent: 'flex-end',
-    alignContent: 'flex-start',
-    padding: 10,
-    // position: "absolute",
-    top: '30%',
-    // left: 5,
-    zIndex: 1,
-},
-backButtonText: {
+    flexDirection: "row",
+    paddingTop: 20,
+    right: 180,
+  },
+  backButtonText: {
     fontSize: 16,
     color: "#007BFF",
-},
+  },
+  buttonWrapper: {
+    alignItems: "center",
+  },
+  titleView: {
+    flexDirection: "row",
+    // justifyContent: 'space-around'
+    // paddingTop: 20,
+  },
+  settingsIcon: {
+    // flexDirection: "row",
+    paddingTop: 5,
+    left: 100,
+  }
 });
 
 export default ProfileSettingsScreen;

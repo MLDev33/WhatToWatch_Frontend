@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Share, Imag
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import ShareButton from '../components/ShareButton';
+import Icon from "react-native-vector-icons/Ionicons";
+import GradientButton from '../components/GradientButton';
 
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
@@ -38,58 +40,33 @@ const InviteFriendsScreen = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
+           <View style={styles.backButtonView}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon
+              name="chevron-back-outline"
+              size={20}
+              color="#007BFF"
+              // style={styles.backButtonText}
+            />
+            <Text style={styles.backButtonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
            <Image
             source={require("../assets/imgsmall.png")}
             style={styles.logo}
           />
-                    <Text style={styles.sectionTitle}>Invite your friends to join {'\n'} What to Watch</Text>
-                    {/* //react native share// */}
-                    {/* <Text style={styles.textH2}>Please enter your friend's email address</Text> */}
-                    {/* <TextInput
-          autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-          keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-          textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-          autoComplete="email"
-          placeholder="Email address"
-          placeholderTextColor={'white'}
-          onChangeText={(value) => setFriendEmail(value)}
-          value={friendEmail}
-          style={styles.input}
-        /> */}
-          {/* <TouchableOpacity
-                onPress={() => setEmailConfirmationModal(true)}
-                style={styles.button}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.sectionTitle}>Send Email</Text>
-              </TouchableOpacity>         
+                    <Text style={styles.sectionTitle}>Invite your friends to join {'\n'}           What to Watch</Text>
        
-              <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      > */}
-        {/* <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Email Sent</Text> */}
-            {/* <TouchableOpacity
-              style={styles.closeButtonContainer}
-              onPress={() => setModalVisible(false)}
-            >
-              <FontAwesome name="times" size={20} color="white" />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-            //   onPress={handleSubmit()}
-              style={styles.button}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.modalTitle}>Invite another friend</Text>
-            </TouchableOpacity> */}
-            <ShareButton onShare={shareNative} />
-          {/* </View> */}
-        {/* // </View> */}
-      {/* // </Modal> */}
+            <View style={styles.buttonWrapper}>
+                        <GradientButton
+                          iconName="share"
+                          buttonText="Send invitation"
+                          onPress={() => shareNative()}
+                        />
+                      </View>
         </SafeAreaView>
     );
 };
@@ -118,18 +95,24 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 16,
       },
-      // input: {
-      //   height: 50,
-      //   width: "80%",
-      //   backgroundColor: "rgb(108, 122, 137)",
-      //   borderRadius: 10,
-      //   marginTop: 20,
-      //   paddingLeft: 10,
-      //   fontSize: 18,
-      // },
       logo: {
        marginBottom: 100,
-      }
+      },
+      backButton: {
+        flexDirection: "row",
+        right: 180,
+        top: -160
+      },
+      backButtonText: {
+        fontSize: 16,
+        color: "#007BFF",
+      },
+      buttonWrapper: {
+        marginTop: 40,
+        marginBottom: 20,
+        width: '60%',
+        textAlign: 'center'
+      },
 
 });
 

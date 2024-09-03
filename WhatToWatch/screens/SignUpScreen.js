@@ -140,6 +140,8 @@ export default function SignUp({ navigation }) {
     }
   };
 
+  const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
   //penser a ajouter logo
   //list updated with platforms that provide results
   const providers = [
@@ -300,6 +302,7 @@ export default function SignUp({ navigation }) {
     }
   };
 
+  
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -328,7 +331,7 @@ export default function SignUp({ navigation }) {
             <View style={styles.content}>
               <Text style={styles.title}>Welcome to {"\n"}What To Watch</Text>
               <Text style={styles.subtitle}>
-                If you're ready to chill and watch a movie, then signup !
+                If you're ready to chill and watch a movie, then sign up !
               </Text>
             </View>
           </ImageBackground>
@@ -384,20 +387,14 @@ export default function SignUp({ navigation }) {
                   keyboardType="password"
                   autoCapitalize="none"
                   onChangeText={(value) => {
-                    setSignUpPassword(value), validatePassword(value);
+                    setSignUpPassword(value),
+                    validatePassword(value)
                   }}
                   value={signUpPassword}
                   style={styles.input}
                 />
-                <TouchableOpacity
-                  onPress={handlePasswordVisibility}
-                  style={styles.eyeIcon}
-                >
-                  <Icon
-                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
-                    size={24}
-                    color="#fff"
-                  />
+               <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
+                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -411,9 +408,9 @@ export default function SignUp({ navigation }) {
               ))}
             </Text>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={handlePasswordVisibility}
-            ></TouchableOpacity>
+            ></TouchableOpacity> */}
 
             {/* {missingFieldError && (
         <Text style={styles.error}>
@@ -461,7 +458,7 @@ export default function SignUp({ navigation }) {
                   <Text style={styles.modalTitle}>
                     Choose your streaming services
                   </Text>
-                  <Text style={styles.modalTitle}>
+                  <Text style={styles.text}>
                     Select at least one platform
                   </Text>
                   <View style={styles.scrollView}>
@@ -488,6 +485,7 @@ export default function SignUp({ navigation }) {
                               );
                             }}
                           >
+                    
                             <Text
                               style={
                                 isSelected ? styles.selectedProviderText : null
@@ -504,7 +502,6 @@ export default function SignUp({ navigation }) {
                   <View style={styles.buttons}>
                     <View style={styles.buttonWrapper}>
                       <GradientButton
-                        // iconName="log-in"
                         buttonText="Cancel"
                         onPress={() => setPlatformsModalVisible(false)}
                       />
@@ -707,9 +704,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  // title: {
-  //   fontSize: 32,
-  // },
+  text: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "white",
+  },
   providers: {
     marginTop: 10,
     backgroundColor: "grey",
