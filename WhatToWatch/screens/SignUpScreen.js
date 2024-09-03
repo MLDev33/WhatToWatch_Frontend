@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 40, // Augmenter la taille de la police pour plus de visibilité
     fontWeight: "bold",
-    marginBottom: 30,
+    marginVertical: 30,
     textAlign: 'left',
     textShadowColor: 'rgba(0, 0, 0, 0.75)', // Ajouter une ombre pour plus de visibilité
     textShadowOffset: { width: -1, height: 1 },
@@ -654,32 +654,6 @@ const styles = StyleSheet.create({
     fontWeight: "350",
     color: "white",
   },
-
-  // // input: {
-  // //   height: 50,
-  // //   width: "80%",
-  // //   backgroundColor: "rgb(108, 122, 137)",
-  // //   borderRadius: 10,
-  // //   marginTop: 20,
-  // //   paddingLeft: 10,
-  // //   fontSize: 18,
-  // // },
-  // haveAccount: {
-  //   flexDirection: "row",
-  //   justifyContent: "center",
-  //   alignItems: "space-around",
-  //   // marginTop: 30,
-  //   paddingHorizontal: 10,
-  // },
-  // button: {
-  //   alignItems: "center",
-  //   paddingTop: 8,
-  //   width: "80%",
-  //   margin: 30,
-  //   // borderRadius: 10,
-  //   // marginBottom: 80,
-  //   backgroundColorolor: "white",
-  // },
   button2: {
     fontWeight: "350",
     color: "white",
@@ -733,9 +707,9 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  title: {
-    fontSize: 32,
-  },
+  // title: {
+  //   fontSize: 32,
+  // },
   providers: {
     marginTop: 10,
     backgroundColor: "grey",
@@ -764,15 +738,4 @@ const styles = StyleSheet.create({
   selectedProviderText: {
     color: "white",
   },
-  // background: {
-  //   overflow: "hidden",
-  //   position: "absolute",
-  //   width: "100%",
-  //   height: "32%",
-  //   margin: 10,
-  //   marginTop: 52,
-  //   opacity: 0.4,
-  //   backgroundSize: "cover",
-  //   borderRadius: 10,
-  // },
 });

@@ -8,6 +8,7 @@ import {
   Image,
   SafeAreaView,
   TextInput,
+  ScrollView
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -165,6 +166,7 @@ const ProfileSettingsScreen = ({
 
   return (
     <SafeAreaView style={styles.container}>
+    <ScrollView>
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Image
@@ -310,6 +312,7 @@ const ProfileSettingsScreen = ({
         deleteAccountModalVisible={deleteAccountModalVisible}
         setDeleteAccountModalVisible={setDeleteAccountModalVisible}
       />
+      </ScrollView>
     </SafeAreaView>
   );
 };
