@@ -18,7 +18,7 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { jwtDecode } from "jwt-decode";
 import Icon from "react-native-vector-icons/Ionicons";
-import GradientButton from "../components/GradientButton";
+import CenteredGradientButton from "../components/CenteredGradientButton";
 import ForgottenPassword from "../components/SignInUp/ForgottenPassword";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -182,8 +182,8 @@ export default function SignIn({ navigation }) {
             </View>
 
             <View style={styles.buttonWrapper}>
-              <GradientButton
-                iconName="log-in"
+              <CenteredGradientButton
+                // iconName="log-in"
                 buttonText="Login"
                 onPress={handleSubmit}
               />

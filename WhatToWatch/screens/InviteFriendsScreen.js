@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import ShareButton from '../components/ShareButton';
 import Icon from "react-native-vector-icons/Ionicons";
-import GradientButton from '../components/GradientButton';
+import CenteredGradientButton from '../components/CenteredGradientButton';
 
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
@@ -61,7 +61,7 @@ const InviteFriendsScreen = ({navigation}) => {
                     <Text style={styles.sectionTitle}>Invite your friends to join {'\n'}           What to Watch</Text>
        
             <View style={styles.buttonWrapper}>
-                        <GradientButton
+                        <CenteredGradientButton
                           iconName="share"
                           buttonText="Send invitation"
                           onPress={() => shareNative()}

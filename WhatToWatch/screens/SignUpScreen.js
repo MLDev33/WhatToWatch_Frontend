@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { login } from "../reducers/user";
-import GradientButton from "../components/GradientButton";
+import CenteredGradientButton from "../components/CenteredGradientButton";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
 import { jwtDecode } from "jwt-decode";
@@ -407,6 +407,7 @@ export default function SignUp({ navigation }) {
                 </Text>
               ))}
             </Text>
+            
 
             {/* <TouchableOpacity
               onPress={handlePasswordVisibility}
@@ -420,8 +421,9 @@ export default function SignUp({ navigation }) {
             {error && <Text style={styles.error}>{errorMessage}</Text>}
 
             <View style={styles.buttonWrapper}>
-              <GradientButton
-                iconName="log-in"
+              <CenteredGradientButton
+                // iconName="log-in"
+                style={styles.buttons}
                 buttonText="Sign Up"
                 onPress={handleRegister}
               />
@@ -499,25 +501,25 @@ export default function SignUp({ navigation }) {
                       keyExtractor={(item) => item.id.toString()}
                     />
                   </View>
-                  <View style={styles.buttons}>
-                    <View style={styles.buttonWrapper}>
-                      <GradientButton
+                  <View style={styles.modalButtons}>
+                    <View style={styles.modalButtonWrapper}>
+                      <CenteredGradientButton
                         buttonText="Cancel"
                         onPress={() => setPlatformsModalVisible(false)}
                       />
                     </View>
                     {isGoogleUser ? (
-                      <View style={styles.buttonWrapper}>
-                        <GradientButton
-                          iconName="log-in"
+                      <View style={styles.modalButtonWrapper}>
+                        <CenteredGradientButton
+                          // iconName="log-in"
                           buttonText="Sign Up"
                           onPress={() => handleSubmitWithGoogle()}
                         />
                       </View>
                     ) : (
-                      <View style={styles.buttonWrapper}>
-                        <GradientButton
-                          iconName="log-in"
+                      <View style={styles.modalButtonWrapper}>
+                        <CenteredGradientButton
+                          // iconName="log-in"
                           buttonText="Sign Up"
                           onPress={() => handleSubmit()}
                         />
@@ -628,8 +630,10 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   buttonWrapper: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginVertical: 20,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    textAlign: 'center'
   },
   googleButton: {
     alignItems: "center",
@@ -646,10 +650,6 @@ const styles = StyleSheet.create({
   link: {
     color: "#8e8e93",
     marginBottom: 10,
-  },
-  button2: {
-    fontWeight: "350",
-    color: "white",
   },
   button2: {
     fontWeight: "350",
@@ -717,13 +717,11 @@ const styles = StyleSheet.create({
   scrollView: {
     maxHeight: 200,
   },
-
-  // strengthMeter: {
-  //   borderColor: "red",
-  //   color: "red",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  // },
+  strengthText: {
+    color: "purple",
+    textAlign: 'center',
+    marginBottom: 10,
+  },
   providers: {
     marginTop: 10,
     backgroundColor: "grey",
@@ -737,4 +735,15 @@ const styles = StyleSheet.create({
   selectedProviderText: {
     color: "white",
   },
+  modalButtons: {
+    flexDirection: 'row',
+    // marginHorizontal: 20,
+    // width: 120,
+
+  },
+  modalButtonWrapper: {
+    width: 100,
+    margin: 20,
+
+  }
 });
