@@ -14,6 +14,7 @@ import { FontAwesome } from "@expo/vector-icons"; // Importation de FontAwesome 
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
 import ButtonComponent from "../components/Lists/ButtonComponent.js";
+import { addLists, addMediaListSelected } from "../reducers/list.js";
 const ListScreen = ({ navigation }) => {
     const [yourLikes, setYourLikes] = useState([]);
     const [userLists, setUserLists] = useState([]);
@@ -105,12 +106,20 @@ const ListScreen = ({ navigation }) => {
             fetchUserLists(); // Désactivé car la route n'est pas encore implémentée
         }, [fetchUserLikes, fetchUserLists])
     );
-    //Handlepress non utilisé pour le moment , pour les listes peut etre
-    /*
+
+    /**
+     * Fonction qui permet d'être redirigé dans la liste de media cliked
+     * via l'item récupéré dans la map des movies de la liste
+     * 
+     * @param {*} item 
+     */
     const handlePress = (item) => {
-      navigation.navigate("MediaDetail", { media: item });
+        console.log("List clicked:", item)
+        setSelectList(item);
+        dispatch(addMediaListSelected(item));
+        navigation.navigate("ListMediaScreen", { listSelected: selectList });
     };
-    */
+
     const handleLikesPress = () => {
         if (yourLikes.length > 0) {
             navigation.navigate("LikedMedia", { likedMedia: yourLikes });
@@ -127,93 +136,102 @@ const ListScreen = ({ navigation }) => {
                 isProfileScreen={false}
                 setAvatarModalVisible={() => { }}
             />
-            <View style={styles.section}>
-                <Text style={styles.header}>Your Likes</Text>
-                {loadingLikes ? (
-                    <ActivityIndicator size="large" color="#ffffff" />
-                ) : (
-                    <TouchableOpacity
-                        style={styles.likesContainer}
-                        onPress={handleLikesPress}
-                    >
-                        <Image
-                            source={userAvatar ? { uri: userAvatar } : require("../assets/avatar-1.png")}
-                            style={styles.avatar}
-                        />
-                        <View style={styles.likesInfo}>
-                            <Text style={styles.likesName}>Your likes</Text>
-                            <Text style={styles.likesDetails}>{yourLikes.length} titles</Text>
-                        </View>
-                        <FontAwesome
-                            name="heart"
-                            size={24}
-                            color="#ff5b5b"
-                            style={styles.heartIcon}
-                        />
-                    </TouchableOpacity>
-                )}
-            </View>
-            <View style={styles.section}>
-                <Text style={styles.header}>Your Lists</Text>
-                <ScrollView>
-                    {loadingLists ? (
-                        <Text style={styles.loadingText}>Loading...</Text>
-                    ) : userLists.length > 0 ? (
-                        userLists.map((list) => (
-                            // <TouchableOpacity
-                            //   key={list._id}
-                            //   style={styles.itemContainer}
-                            //   onPress={() => handlePress(list)}
-                            // >
-                            //   <Text style={styles.itemText}>{list.name}</Text>
-                            // </TouchableOpacity>
-                            <TouchableOpacity
-                                key={list._id}
-                                style={styles.listCardContainer}
-                                onPress={() => handlePress(list)}
-                            >
-                                <View style={styles.listCardInfosContainer}>
-                                    <Image
-                                        source={require("../assets/avatar-1.png")}
-                                        style={styles.avatar}
-                                    />
-                                    <View style={styles.listCardTextContainer}>
-                                        <Text style={styles.listCardTextTitle}>{list.list_name}</Text>
-                                        <Text style={styles.listCardTextLength}>{list.movies.length} titles</Text>
-                                    </View>
-                                    <View style={styles.shareIconContainer}>
-                                        <FontAwesome
-                                            name="share-alt"
-                                            size={50}
-                                            color="#ffF"
-                                            style={styles.shareIcon}
-                                        />
-                                    </View>
-                                </View>
-                                <View style={styles.listCardMembersContainer} >
-                                    <View style={styles.listCardMembersAvatar}></View>
-                                    <View style={styles.listCardMembersAvatar}></View>
-                                    {/* avatars des friends */}
-                                </View>
-                            </TouchableOpacity>
-                        ))
+            <View style={styles.bodyScreenContainer}>
+                <View style={styles.section}>
+                    <Text style={styles.header}>Your Likes</Text>
+                    {loadingLikes ? (
+                        <ActivityIndicator size="large" color="#ffffff" />
                     ) : (
-                        <View style={styles.textAddListContainer}>
-                            <Text style={styles.textH2}>
-                                Ready to create your next watchlist?
-                            </Text>
-                            <Text style={styles.textBody14}>
-                                Create a custom collection of series,
-                                movies, from your favorite streaming platforms.
-                                Share your picks with friends and discover new
-                                favorites together !
-                            </Text>
-                            <Text style={styles.textBody14}>
-                                {errorLists || "You have not created any lists yet."}
-                            </Text>
-                        </View>
+                        <TouchableOpacity
+                            style={styles.likesContainer}
+                            onPress={handleLikesPress}
+                        >
+                            <Image
+                                source={userAvatar ? { uri: userAvatar } : require("../assets/avatar-1.png")}
+                                style={styles.avatar}
+                            />
+                            <View style={styles.likesInfo}>
+                                <Text style={styles.likesName}>Your likes</Text>
+                                <Text style={styles.likesDetails}>{yourLikes.length} titles</Text>
+                            </View>
+                            <FontAwesome
+                                name="heart"
+                                size={24}
+                                color="#ff5b5b"
+                                style={styles.heartIcon}
+                            />
+                        </TouchableOpacity>
                     )}
-                </ScrollView>
+                </View>
+                <View style={styles.section}>
+                    <Text style={styles.header}>Your Lists</Text>
+                    <ScrollView>
+                        {loadingLists ? (
+                            <Text style={styles.loadingText}>Loading...</Text>
+                        ) : userLists.length > 0 ? (
+                            userLists.map((list) => (
+                                // <TouchableOpacity
+                                //   key={list._id}
+                                //   style={styles.itemContainer}
+                                //   onPress={() => handlePress(list)}
+                                // >
+                                //   <Text style={styles.itemText}>{list.name}</Text>
+                                // </TouchableOpacity>
+                                <TouchableOpacity
+                                    key={list._id}
+                                    style={styles.listCardContainer}
+                                    onPress={() => handlePress(list)}
+                                >
+                                    <View style={styles.listCardInfosContainer}>
+                                        <Image
+                                            source={require("../assets/avatar-1.png")}
+                                            style={styles.avatar}
+                                        />
+                                        <View style={styles.listCardTextContainer}>
+                                            <Text style={styles.listCardTextTitle}>{list.list_name}</Text>
+                                            <Text style={styles.listCardTextLength}>{list.movies.length} titles</Text>
+                                        </View>
+                                        <View style={styles.shareIconContainer}>
+                                            <FontAwesome
+                                                name="share-alt"
+                                                size={50}
+                                                color="#ffF"
+                                                style={styles.shareIcon}
+                                            />
+                                        </View>
+                                    </View>
+                                    <View style={styles.listCardMembersContainer} >
+                                        <View style={styles.listCardMembersAvatar}></View>
+                                        <View style={styles.listCardMembersAvatar}></View>
+                                        {/* avatars des friends */}
+                                    </View>
+                                </TouchableOpacity>
+                            ))
+                        ) : (
+                            <View style={styles.textAddListContainer}>
+                                <Text style={styles.textH2}>
+                                    Ready to create your next watchlist?
+                                </Text>
+                                <Text style={styles.textBody14}>
+                                    Create a custom collection of series,
+                                    movies, from your favorite streaming platforms.
+                                    Share your picks with friends and discover new
+                                    favorites together !
+                                </Text>
+                                <Text style={styles.textBody14}>
+                                    {errorLists || "You have not created any lists yet."}
+                                </Text>
+                            </View>
+                        )}
+                    </ScrollView>
+                    <ButtonComponent
+                        label="Add a list"
+                        buttonContainer={styles.buttonContent}
+                        button={styles.button}
+                        buttonLabel={styles.buttonLabel}
+                    //onItemPress={handleAddListPress}
+                    />
+                </View>
             </View>
         </SafeAreaView >
     );
@@ -234,6 +252,17 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 10,
         color: "#ffffff",
+    },
+    bodyScreenContainer: {
+        flex: 1,
+        justifyContent: "Top",
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
+        borderTopColor: "#7C4DFF",
+        borderBottomColor: "#7C4DFF",
+        borderWidth: 2,
     },
     likesContainer: {
         flexDirection: "row",
@@ -281,7 +310,7 @@ const styles = StyleSheet.create({
         color: "#ffffff",
     },
 
-  ////////// Message si pas de list  /////////
+    ////////// Message si pas de list  /////////
     textAddListContainer: {
         height: "50%",
         justifyContent: "center",
@@ -297,6 +326,33 @@ const styles = StyleSheet.create({
         color: "white",
         textAlign: "center",
         marginVertical: 20,
+    },
+
+
+    ////////// Button styles /////////
+    buttonContent: {
+        width: 220,
+        height: 50,
+        justifyContent: "center",
+        alignItems: "center",
+        marginHorizontal: 15,
+        padding: 5,
+        marginTop: 10,
+        alignSelf: "center",
+    },
+    button: {
+        borderRadius: 10,
+        width: "100%",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+    },
+    buttonLabel: {
+        color: "#fff",
+        fontSize: 16,
+        textAlign: "center",
+
     },
 
 
