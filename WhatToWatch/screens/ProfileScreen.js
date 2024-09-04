@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   section: {
-    marginBottom: 20,
+    marginVertical: 30,
   },
   buttonContainer: {
     borderRadius: 10,

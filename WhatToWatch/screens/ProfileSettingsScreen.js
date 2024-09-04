@@ -4,10 +4,10 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Switch,
   Image,
   SafeAreaView,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -19,11 +19,7 @@ import { Avatar } from "react-native-elements";
 import AvatarModal from "../components/Profile/AvatarModal";
 import { FontAwesome } from "@expo/vector-icons";
 
-const ProfileSettingsScreen = ({
-  navigation,
-  hasAvatar,
-  setHasAvatar,
-}) => {
+const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -48,6 +44,8 @@ const ProfileSettingsScreen = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [wrongEmail, setWrongEmail] = useState(false);
   const [wrongEmailMessage, setWrongEmailMessage] = useState("");
+  const [rightIcon, setRightIcon] = useState("eye");
+  const [hidePassword, setHidePassword] = useState(true);
 
   const user = useSelector((state) => state.user.value);
   let username = user.username;
@@ -80,6 +78,8 @@ const ProfileSettingsScreen = ({
           dispatch(updateUsername(data.username));
           console.log("true");
           setNewUsername("");
+          setError(true);
+          setErrorMessage("Username updated!");
         }
         console.log("button change username clicked");
       });
@@ -92,6 +92,7 @@ const ProfileSettingsScreen = ({
       setWrongEmailMessage("Please enter a valid email address!");
       console.log("wrongEmail");
     } else {
+      setWrongEmail(false);
       fetch(`${baseUrl}users/updateEmail/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -112,10 +113,17 @@ const ProfileSettingsScreen = ({
             dispatch(updateEmail(data.email));
             console.log("true");
             setNewEmail("");
+            setWrongEmail(true);
+            setWrongEmailMessage("Email address updated!");
           }
           console.log("button change email clicked");
         });
     }
+  };
+
+  const handlePasswordVisibility = () => {
+    setRightIcon(rightIcon === "eye" ? "eye-slash" : "eye");
+    setHidePassword(!hidePassword);
   };
 
   const handleChangePassword = () => {
@@ -133,6 +141,8 @@ const ProfileSettingsScreen = ({
       console.log("true");
     } else {
       if (newPassword !== confirmNewPassword) {
+        setPasswordError(true);
+        setPasswordErrorMessage("Passwords not matching");
         console.log("password not matching");
       } else {
         console.log(userPassword, newPassword, confirmNewPassword);
@@ -155,12 +165,11 @@ const ProfileSettingsScreen = ({
             //   console.log("true");
             // }
             console.log("button change password clicked");
+            setPasswordError(true);
+            setPasswordErrorMessage("Password updated !");
           });
-
-
       }
     }
- 
   };
 
   return (
@@ -189,127 +198,233 @@ const ProfileSettingsScreen = ({
             )}
           </View>
         </View>
-        <Text style={styles.username}>Profile Settings</Text>
-        <TouchableOpacity
-          style={styles.closeButtonContainer}
-          onPress={() => navigation.navigate("ProfileScreen")}
-        >
-          <FontAwesome name="times" size={20} color="white" />
-        </TouchableOpacity>
+        <View >
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Icon
+              name="chevron-back-outline"
+              size={20}
+              color="#007BFF"
+              // style={styles.backButtonText}
+            />
+            <Text style={styles.backButtonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.titleView}>
+        <Text style={styles.title}>Profile Settings</Text>
+        <Icon name='settings-outline'  size={24}
+                  color="#fff"
+                  style={styles.settingsIcon}/>
+                  </View>
       </View>
+      <ScrollView>
+        <View style={styles.section}>
+          <Text style={styles.title}>NAME</Text>
+          <View style={styles.inputWrapper}>
+            <Icon
+              name="person-outline"
+              size={24}
+              color="#fff"
+              style={styles.inputIcon}
+            />
+            <TextInput
+              placeholder="Username"
+              placeholderTextColor="#8e8e93"
+              autoCapitalize="none"
+              onChangeText={(value) => setNewUsername(value)}
+              value={newUsername}
+              style={styles.input}
+            />
+          </View>
 
-      <View style={styles.section}>
-        <Text style={styles.text}>NAME</Text>
-        <TextInput
-          placeholder="Username"
-          placeholderTextColor={"white"}
-          autoCapitalize="none"
-          onChangeText={(value) => setNewUsername(value)}
-          value={newUsername}
-          style={styles.input}
+          {error && <Text style={styles.error}>{errorMessage}</Text>}
+          <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.button2}
+              onPress={() => handleNewUsername()}
+            >
+              <Text style={styles.buttonText}>Change Username</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* if GoogleUser, user cannot change email or password */}
+        <View style={styles.section}>
+          {!isGoogleUser ? (
+            <>
+              <Text style={styles.title}>EMAIL</Text>
+
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="mail-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
+                  keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
+                  textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
+                  autoComplete="email"
+                  placeholder="Email address"
+                  placeholderTextColor="#8e8e93"
+                  onChangeText={(value) => setNewEmail(value)}
+                  value={newEmail}
+                  style={styles.input}
+                />
+              </View>
+
+              {wrongEmail && (
+                <Text style={styles.error}>{wrongEmailMessage}</Text>
+              )}
+              <View style={styles.buttonWrapper}>
+              <TouchableOpacity
+                style={styles.button2}
+                onPress={() => handleNewEmail()}
+              >
+                <Text style={styles.buttonText}>Change Email</Text>
+              </TouchableOpacity>
+              </View>
+              <View style={styles.section}>
+              <Text style={styles.title}>LANGUAGE</Text>
+              <View style={styles.buttonWrapper}>
+              <TouchableOpacity
+                style={styles.button2}
+                onPress={console.log("Button language")}
+              >
+                <Text style={styles.buttonText}>Confirm</Text>
+              </TouchableOpacity>
+              </View>
+              </View>
+
+
+              <View style={styles.section}></View>
+
+              <Text style={styles.title}>PASSWORD</Text>
+
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  secureTextEntry={hidePassword}
+                  placeholder="Current Password"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setUserPassword(value)}
+                  value={userPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  secureTextEntry={hidePassword}
+                  placeholder="New Password"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setNewPassword(value)}
+                  value={newPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputWrapper}>
+                <Icon
+                  name="lock-closed-outline"
+                  size={24}
+                  color="#fff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  secureTextEntry={hidePassword}
+                  placeholder="Confirm New Password"
+                  placeholderTextColor="#8e8e93"
+                  autoCapitalize="none"
+                  onChangeText={(value) => setConfirmNewPassword(value)}
+                  value={confirmNewPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
+              </View>
+              {/* </View> */}
+              <View></View>
+              {PasswordError && (
+                <Text style={styles.error}>{PasswordErrorMessage}</Text>
+              )}
+              <TouchableOpacity
+                style={styles.button2}
+                onPress={() => handleChangePassword()}
+              >
+                <Text style={styles.buttonText}>Change Password</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <></>
+          )}
+
+         
+              <View style={styles.section}>
+            <Text style={styles.title}>ACCOUNT</Text>
+          
+
+          <TouchableOpacity
+            style={styles.button2}
+            activeOpacity={0.8}
+            onPress={() => setDeleteAccountModalVisible(true)}
+          >
+            <Text style={styles.textButton}>DELETE ACCOUNT</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+
+        <AvatarModal
+          avatarModalVisible={avatarModalVisible}
+          setAvatarModalVisible={setAvatarModalVisible}
         />
-        {error && <Text style={styles.error}>{errorMessage}</Text>}
 
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => handleNewUsername()}
-        >
-          <Text>Confirm</Text>
-        </TouchableOpacity>
-        {!isGoogleUser ? (
-          <>
-            <Text style={styles.text}>EMAIL</Text>
-            <TextInput
-              autoCapitalize="none" // https://reactnative.dev/docs/textinput#autocapitalize
-              keyboardType="email-address" // https://reactnative.dev/docs/textinput#keyboardtype
-              textContentType="emailAddress" // https://reactnative.dev/docs/textinput#textcontenttype-ios
-              autoComplete="email"
-              placeholder="Email address"
-              placeholderTextColor={"white"}
-              onChangeText={(value) => setNewEmail(value)}
-              value={newEmail}
-              style={styles.input}
-            />
-            {wrongEmail && (
-              <Text style={styles.error}>{wrongEmailMessage}</Text>
-            )}
-            <TouchableOpacity
-              style={styles.button2}
-              onPress={() => handleNewEmail()}
-            >
-              <Text>Confirm</Text>
-            </TouchableOpacity>
-            <Text style={styles.text}>LANGUAGE</Text>
-            <Text style={styles.text}>PASSWORD</Text>
-            <TextInput
-              secureTextEntry={true}
-              placeholder="Current Password"
-              placeholderTextColor={"white"}
-              keyboardType="password"
-              autoCapitalize="none"
-              onChangeText={(value) => {
-                setUserPassword(value);
-              }}
-              value={userPassword}
-              style={styles.input}
-            />
-            <TextInput
-              secureTextEntry={true}
-              placeholder="New Password"
-              placeholderTextColor={"white"}
-              keyboardType="password"
-              autoCapitalize="none"
-              onChangeText={(value) => {
-                setNewPassword(value);
-              }}
-              value={newPassword}
-              style={styles.input}
-            />
-            <TextInput
-              secureTextEntry={true}
-              placeholder="Confirm New Password"
-              placeholderTextColor={"white"}
-              keyboardType="password"
-              autoCapitalize="none"
-              onChangeText={(value) => {
-                setConfirmNewPassword(value);
-              }}
-              value={confirmNewPassword}
-              style={styles.input}
-            />
-            {PasswordError && (
-              <Text style={styles.error}>{PasswordErrorMessage}</Text>
-            )}
-            <TouchableOpacity
-              style={styles.button2}
-              onPress={() => handleChangePassword()}
-            >
-              <Text>Confirm Password</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <></>
-        )}
-        <Text style={styles.text}>ACCOUNT</Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.button2}
-        activeOpacity={0.8}
-        onPress={() => setDeleteAccountModalVisible(true)}
-      >
-        <Text style={styles.textButton}>DELETE ACCOUNT</Text>
-      </TouchableOpacity>
-
-      <AvatarModal
-        avatarModalVisible={avatarModalVisible}
-        setAvatarModalVisible={setAvatarModalVisible}
-      />
-
-      <DeleteAccount
-        deleteAccountModalVisible={deleteAccountModalVisible}
-        setDeleteAccountModalVisible={setDeleteAccountModalVisible}
-      />
+        <DeleteAccount
+          deleteAccountModalVisible={deleteAccountModalVisible}
+          setDeleteAccountModalVisible={setDeleteAccountModalVisible}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -350,79 +465,75 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
   },
-  username: {
+  title: {
+    textAlign: 'flex-start',
     fontSize: 20,
     color: "#fff",
     fontWeight: "bold",
     marginTop: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#fff",
   },
   section: {
-    marginBottom: 20,
+    // marginBottom: 20,
+    borderColor: 'red',
+    borderBottomWidth: '1',
+    // alignItems: 'center'
   },
-  buttonContainer: {
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  button: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "transparent",
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    marginBottom: 10,
-    height: 60,
-  },
+  // buttonContainer: {
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  // },
+  // button: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   backgroundColor: "transparent",
+  //   paddingVertical: 15,
+  //   paddingHorizontal: 10,
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  //   height: 60,
+  // },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     marginLeft: 10,
     flex: 1,
   },
-  switchContainer: {
-    justifyContent: "space-between",
-  },
-  logoutButton: {
-    borderRadius: 10,
-    alignItems: "center",
-    alignSelf: "center",
-    width: "60%",
-    paddingVertical: 15,
-  },
-  logoutText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   button2: {
-    backgroundColor: "#F94A56",
+    backgroundColor: "transparent",
     padding: 10,
     borderRadius: 10,
+    borderColor: '#fff',
+    borderWidth: 1,
+    opacity: 0.7,
+    justifyContent: "center",
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 20,
+    width: "60%",
   },
   textButton: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    flex: 1,
   },
-  inputContainer: {
+  inputWrapper: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 10,
+    marginTop: 15,
+    paddingHorizontal: 10,
   },
-  title: {
-    width: "80%",
-    fontSize: 38,
-    fontWeight: "600",
+  inputIcon: {
+    paddingLeft: 5,
   },
   input: {
+    flex: 1,
     height: 50,
-    width: "80%",
-    backgroundColor: "rgb(108, 122, 137)",
-    borderRadius: 10,
-    marginTop: 20,
+    color: "white",
     paddingLeft: 10,
-    fontSize: 18,
   },
   error: {
     textAlign: "center",
@@ -430,6 +541,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
     margin: 20,
   },
+  backButton: {
+    flexDirection: "row",
+    paddingTop: 20,
+    right: 180,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: "#007BFF",
+  },
+  buttonWrapper: {
+    alignItems: "center",
+  },
+  titleView: {
+    flexDirection: "row",
+    // justifyContent: 'space-around'
+    // paddingTop: 20,
+  },
+  settingsIcon: {
+    // flexDirection: "row",
+    paddingTop: 5,
+    left: 100,
+  }
 });
 
 export default ProfileSettingsScreen;

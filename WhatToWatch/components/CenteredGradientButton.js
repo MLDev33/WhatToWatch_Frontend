@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const GradientButton = ({ iconName, buttonText, onPress }) => {
+const CenteredGradientButton = ({ iconName, buttonText, onPress }) => {
   return (
     <LinearGradient
       colors={['#7C4DFF', '#F94A56', '#FF1744']}
@@ -12,8 +12,8 @@ const GradientButton = ({ iconName, buttonText, onPress }) => {
       style={styles.buttonContainer}
     >
       <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Icon name={iconName} size={20} color="#fff" />
-        <Text style={styles.buttonText}>{buttonText}</Text>
+        <Icon name={iconName} size={20} color="#fff" style={styles.icon} />
+        <Text style={styles.buttonText2}>{buttonText}</Text>
       </TouchableOpacity>
     </LinearGradient>
   );
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
     paddingVertical: 15,
@@ -33,13 +34,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 60,
   },
-  buttonText: {
+  buttonText2: {
     color: '#fff',
     fontSize: 16,
     marginLeft: 10,
     flex: 1,
-    // textAlign: 'center',
+    textAlign: 'center',
   },
+  icon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
+  }
 });
 
-export default GradientButton;
+export default CenteredGradientButton;

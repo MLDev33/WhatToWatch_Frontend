@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DeleteAccountConfirmation from "./DeleteAccountConfirmation";
+import GradientButton from "../GradientButton";
+import Icon from "react-native-vector-icons/Ionicons";
 
 //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -44,21 +46,41 @@ const DeleteAccount = ({ deleteAccountModalVisible, setDeleteAccountModalVisible
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Delete Account</Text>
-
-              <FontAwesome
+              <Icon name="warning-outline" size={120} color="red" style={styles.inputIcon}/>
+              {/* <FontAwesome
                 name="exclamation"
                 size={80}
                 color="red"
                 style={styles.exclamationIcon}
-              />
-              <Text style={styles.textH2}>Are you sure you want to delete your account ?</Text>
+              /> */}
+              <Text style={styles.modalText}>Are you sure you want to delete your account ?</Text>
               <View style={styles.buttons}>
-                <TouchableOpacity onPress={handleCloseButton}>
+              <View style={styles.mainButtonContainer}>
+              <GradientButton
+                // iconName="login"
+                style={{ height: 40, width: 40 }}
+                buttonText="Cancel"
+                onPress={() => handleCloseButton()}
+              />
+            </View>
+            <View style={styles.mainButtonContainer}>
+              <GradientButton
+                style={{ height: 40, width: 40 }}
+                buttonText="Delete Account"
+                onPress={() => handleDeleteButton()}
+              />
+            </View>
+
+
+
+
+
+                {/* <TouchableOpacity onPress={handleCloseButton}>
                   <Text style={styles.modalTitle}>Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleDeleteButton}>
                   <Text style={styles.modalTitle}>Delete Account</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
           </View>
@@ -96,7 +118,15 @@ const styles = StyleSheet.create({
 modalTitle: {
     fontSize: 20,
     marginBottom: 20,
+    fontWeight: "bold",
     color: "white",
+},
+modalText: {
+  fontSize: 15,
+  marginBottom: 20,
+  ontWeight: "bold",
+  textAlign: "center",
+  color: "white",
 },
 textH2: {
   marginTop: 10,
@@ -114,6 +144,13 @@ textH2: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  mainButtonContainer: {
+    marginTop: 40,
+    height: 40,
+    width: "30%",
+    justifyContent: "space-between",
+    textAlign: "center",
   },
 });
 
