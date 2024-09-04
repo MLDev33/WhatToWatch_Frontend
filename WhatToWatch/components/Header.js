@@ -7,13 +7,17 @@ import { Avatar } from "react-native-elements";
 const defaultAvatar = "https://res.cloudinary.com/ddr0yckcq/image/upload/v1724492055/avatar-1_wrlvvd.png";
 
 
-const Header = ({ welcomeText, username, avatar, setAvatarModalVisible, isProfileScreen }) => {
-  
-    // Fonction pour obtenir l'avatar ou l'avatar par défaut
-    const getAvatar = () => {
-      return avatar || defaultAvatar;
-    };
-
+const Header = ({
+  welcomeText,
+  username,
+  avatar,
+  setAvatarModalVisible,
+  isProfileScreen,
+}) => {
+  // Fonction pour obtenir l'avatar ou l'avatar par défaut
+  const getAvatar = () => {
+    return avatar || defaultAvatar;
+  };
 
   return (
     <View style={styles.header}>
@@ -24,7 +28,11 @@ const Header = ({ welcomeText, username, avatar, setAvatarModalVisible, isProfil
           <Text style={styles.text}>{username}</Text>
           {avatar === undefined ? (
             <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
-<Image source={{ uri: getAvatar() }} style={styles.profileImage} />
+              <Image
+                source={{ uri: getAvatar() }}
+                style={styles.profileImage}
+              />
+              {isProfileScreen && <Avatar.Accessory size={20} />}
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>

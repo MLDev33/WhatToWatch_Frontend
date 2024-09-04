@@ -28,7 +28,7 @@ const ListScreen = ({ navigation }) => {
   
 
   const fetchUserLikes = useCallback(() => {
-    console.log("User token:", userToken);
+
     fetch(`${baseUrl}movies/user-likes?userToken=${userToken}`)
       .then((response) => {
         if (!response.ok) {
@@ -41,6 +41,7 @@ const ListScreen = ({ navigation }) => {
           console.log("Liked media:", data.likedMedia);
           if (Array.isArray(data.likedMedia)) {
             setYourLikes(data.likedMedia);
+            console.log("Your likes:", data.likedMedia);
           } else {
             console.error("likedMedia is not an array");
           }

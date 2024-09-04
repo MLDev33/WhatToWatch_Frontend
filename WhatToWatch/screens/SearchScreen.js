@@ -117,7 +117,7 @@ function SearchScreen() {
       console.error(error);
       alert("Une erreur est survenue lors de l'ajout aux favoris.");
     }
-  }, []);
+  }, [baseUrl, usertoken, transformMovie]);
 
   const renderItem = ({ item }) => (
     <SearchResults results={[item]} onItemPress={handleItemPress} />

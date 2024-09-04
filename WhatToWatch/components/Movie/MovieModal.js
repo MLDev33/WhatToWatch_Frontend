@@ -19,10 +19,6 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
   const userToken = useSelector((state) => state.user.value.token);
 
   const memoizedMovie = useMemo(() => movie, [movie]);
-  const memoizedUserToken = useMemo(() => userToken, [userToken]);
-
-  console.log(memoizedMovie.type, memoizedMovie.genre, memoizedMovie.titre, memoizedMovie.annee);
-  console.log("userToken", memoizedUserToken);
 
   const shareNative = async () => {
     const typeMap = {
@@ -143,7 +139,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
               onRequestClose={() => setPlatformModalVisible(false)}
             >
               <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
+                <View style={styles.platformModalContent}>
                   <Text style={styles.modalTitle}>{selectedPlatform?.nom}</Text>
                   <TouchableOpacity
                     style={styles.closeButtonContainer}
@@ -264,6 +260,14 @@ const styles = StyleSheet.create({
     top: 5,
     right: 5,
     zIndex: 1,
+  },
+  platformModalContent: {
+    width: "80%", // Réduire la largeur de la modal
+    backgroundColor: "#0d0f2b",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    position: "relative",
   },
 });
 

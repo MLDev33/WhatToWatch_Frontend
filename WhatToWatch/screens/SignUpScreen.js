@@ -142,7 +142,7 @@ export default function SignUp({ navigation }) {
 
   const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-  //penser a ajouter logo
+
   //list updated with platforms that provide results
   const providers = [
     {
