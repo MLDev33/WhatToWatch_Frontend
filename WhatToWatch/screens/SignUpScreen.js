@@ -381,22 +381,22 @@ export default function SignUp({ navigation }) {
                   color="#fff"
                   style={styles.inputIcon}
                 />
-                <TextInput
-                  secureTextEntry={true}
-                  placeholder="Password"
-                  placeholderTextColor="#8e8e93"
-                  keyboardType="password"
-                  autoCapitalize="none"
-                  onChangeText={(value) => {
-                    setSignUpPassword(value),
-                    validatePassword(value)
-                  }}
-                  value={signUpPassword}
-                  style={styles.input}
-                />
-               <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
-                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
-                </TouchableOpacity>
+<TextInput
+  secureTextEntry={hidePassword} // Utilisez l'état hidePassword ici
+  placeholder="Password"
+  placeholderTextColor="#8e8e93"
+  keyboardType="password"
+  autoCapitalize="none"
+  onChangeText={(value) => {
+    setSignUpPassword(value),
+    validatePassword(value)
+  }}
+  value={signUpPassword}
+  style={styles.input}
+/>
+<TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
+  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+</TouchableOpacity>
               </View>
             </View>
 
