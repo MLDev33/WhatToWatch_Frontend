@@ -26,6 +26,7 @@ import ButtonComponent from "../components/Buttons/ButtonComponent.js";
 import arrowLeftIcon from "../assets/Icons/arrowLeftIcon.png";
 //import arrowRightIcon from "../assets/icons/arrowRightIcon.png";
 import MediaCardForList from '../components/Lists/MediaCardForList.js';
+import MediaDetails_SwipeModal from '../components/MediaDetailsModal/MediaDetails_SwipeModal.js';
 import { useNavigation } from "@react-navigation/native";
 //import Mediadetails_SwipeModal from '../components/MoviesSwipeModal/Mediadetails_SwipeModal.js';
 
@@ -220,7 +221,7 @@ export default function ListMediaScreen() {
                     )}
 
                 </ScrollView>
-                {/* <Mediadetails_SwipeModal
+                {/* <MediaDetails_SwipeModal
                     visible={isModalVisible}
                     unVisible={() => onClose()}
                     media={selectedMedia}
