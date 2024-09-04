@@ -11,7 +11,7 @@ import {
   Modal,
   Dimensions
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -30,6 +30,7 @@ const LikedMediaScreen = ({ navigation }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -40,13 +41,15 @@ const LikedMediaScreen = ({ navigation }) => {
   const username = user.username;
   const usertoken = user.token;
 
-  useEffect(() => {
-    setFilteredMedia(
-      likedMedia.filter((item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  }, [searchQuery, likedMedia]);
+  useFocusEffect(
+    React.useCallback(() => {
+      setFilteredMedia(
+        likedMedia.filter((item) =>
+          item.title ? item.title.toLowerCase().includes(searchQuery.toLowerCase()) : false
+        )
+      );
+    }, [likedMedia, searchQuery])
+  );
 
   const handleSelectMedia = (item) => {
     setSelectedMedia(item);
@@ -91,6 +94,11 @@ const LikedMediaScreen = ({ navigation }) => {
       const data = await response.json();
       if (data.result) {
         console.log("Film/série ajouté(e) à la watchlist:", data.watchlist);
+        setConfirmationMessage(`"${selectedMedia.title}" ajouté(e) à la watchlist !`);
+        setSelectedMedia(null);
+        setTimeout(() => {
+          setConfirmationMessage("");
+        }, 5000);
       } else {
         console.error("Erreur lors de l'ajout à la watchlist:", data.error);
       }
@@ -103,43 +111,44 @@ const LikedMediaScreen = ({ navigation }) => {
     return moment(date).format("DD/MM/YYYY");
   };
 
-  //affichage des elements likes sur la page LikedMediaScreen (non pressé)
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={() => handleSelectMedia(item)}>
-      <View style={styles.posterContainer}>
-        <Image 
-          source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.poster}` }} 
-          style={styles.poster} 
-          resizeMode="cover"
-        />
-      </View>
-      <View style={styles.infoContainer}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description} numberOfLines={3}>{item.description}</Text>
-        <Text style={styles.details}>Genre: {item.genre.join(", ")}</Text>
-        <Text style={styles.details}>Année: {new Date(item.release_date).getFullYear()}</Text>
-        <Text style={styles.details}>Popularité: {item.popularity}</Text>
-        <Text style={styles.details}>Votes: {item.vote_count}</Text>
-        <View style={styles.platformsContainer}>
-          <Text style={styles.details}>Plateformes: </Text>
-          {Array.isArray(item.providers) && item.providers.length > 0 ? (
-            <View style={styles.platformsList}>
-              {item.providers.map((p, index) => (
-                <View key={index} style={styles.platformContainer}>
-                  <Image
-                    source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logoPath}` }}
-                    style={styles.platformLogo}
-                  />
-                </View>
-              ))}
-            </View>
-          ) : (
-            <Text style={styles.details}>Aucune plateforme disponible</Text>
-          )}
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity style={styles.card} onPress={() => handleSelectMedia(item)}>
+        <View style={styles.posterContainer}>
+          <Image 
+            source={{ uri: `${TMDB_IMAGE_BASE_URL}/${item.poster}` }} 
+            style={styles.poster} 
+            resizeMode="cover"
+          />
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+        <View style={styles.infoContainer}>
+          <Text style={styles.title}>{item.title || "Titre non disponible"}</Text>
+          <Text style={styles.description} numberOfLines={3}>{item.description || "Description non disponible"}</Text>
+          <Text style={styles.details}>Genre: {item.genre?.join(", ") || "N/A"}</Text>
+          <Text style={styles.details}>Année: {item.release_date ? new Date(item.release_date).getFullYear() : "N/A"}</Text>
+          <Text style={styles.details}>Popularité: {item.popularity || "N/A"}</Text>
+          <Text style={styles.details}>Votes: {item.vote_count || "N/A"}</Text>
+          <View style={styles.platformsContainer}>
+            <Text style={styles.details}>Plateformes: </Text>
+            {Array.isArray(item.providers) && item.providers.length > 0 ? (
+              <View style={styles.platformsList}>
+                {item.providers.map((p, index) => (
+                  <View key={index} style={styles.platformContainer}>
+                    <Image
+                      source={{ uri: `${TMDB_IMAGE_BASE_URL}${p.logoPath}` }}
+                      style={styles.platformLogo}
+                    />
+                  </View>
+                ))}
+              </View>
+            ) : (
+              <Text style={styles.details}>Aucune plateforme disponible</Text>
+            )}
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const currentDate = new Date();
 
@@ -164,7 +173,7 @@ const LikedMediaScreen = ({ navigation }) => {
       <FlatList
         data={filteredMedia}
         renderItem={renderItem}
-        keyExtractor={(item) => item.tmdbId.toString()}
+        keyExtractor={(item) => item?.tmdbId?.toString() || Math.random().toString()}
       />
       {selectedMedia && (
         <Modal
@@ -289,6 +298,11 @@ const LikedMediaScreen = ({ navigation }) => {
           </View>
         </Modal>
       )}
+      {confirmationMessage ? (
+        <View style={styles.confirmationContainer}>
+          <Text style={styles.confirmationText}>{confirmationMessage}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -481,6 +495,21 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "#fff", // Texte en blanc
     marginLeft: 5,
+  },
+  confirmationContainer: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  confirmationText: {
+    color: "#fff",
+    fontSize: 16,
   },
 });
 
