@@ -145,19 +145,71 @@ export default function SignUp({ navigation }) {
   //penser a ajouter logo
   //list updated with platforms that provide results
   const providers = [
-    { id: 2, name: "Apple TV", logo: "https://image.tmdb.org/t/p/original/9ghgSC0MA082EL6HLCW3GalykFD.jpg" },
-    { id: 8, name: "Netflix", logo: "https://image.tmdb.org/t/p/original/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg" },
-    { id: 11, name: "MUBI", logo: "https://image.tmdb.org/t/p/original/fj9Y8iIMFUC6952HwxbGixTQPb7.jpg" },
-    { id: 35, name: "Rakuten TV", logo: "https://image.tmdb.org/t/p/original/bZvc9dXrXNly7cA0V4D9pR8yJwm.jpg" },
-    { id: 56, name: "OCS", logo: "https://image.tmdb.org/t/p/original/z64xZ5CIT6k4VyI5ThKtxJARDOZ.jpg" },
-    { id: 119, name: "Amazon Prime Video", logo: "https://image.tmdb.org/t/p/original/dQeAar5H991VYporEjUspolDarG.jpg" },
-    { id: 184, name: "Universal Pictures", logo: "https://image.tmdb.org/t/p/original/8pvjGOr83RSlPwKfYi6e99mOS4.jpg" },
-    { id: 192, name: "YouTube", logo: "https://image.tmdb.org/t/p/original/pTnn5JwWr4p3pG8H6VrpiQo7Vs0.jpg" },
-    { id: 234, name: "Arte", logo: "https://image.tmdb.org/t/p/original/vPZrjHe7wvALuwJEXT2kwYLi0gV.jpg" },
-    { id: 236, name: "France TV", logo: "https://image.tmdb.org/t/p/original/maeiT4ORBxykOVlaW9gCsLuFPnS.jpg" },
-    { id: 283, name: "Crunchyroll", logo: "https://image.tmdb.org/t/p/original/mXeC4TrcgdU6ltE9bCBCEORwSQR.jpg" },
-    { id: 337, name: "Disney Plus", logo: "https://image.tmdb.org/t/p/original/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg" },
-    { id: 381, name: "Canal+", logo: "https://image.tmdb.org/t/p/original/eBXzkFEupZjKaIKY7zBUaSdCY8I.jpg" },
+    {
+      id: 2,
+      name: "Apple TV",
+      logo: "https://image.tmdb.org/t/p/original/9ghgSC0MA082EL6HLCW3GalykFD.jpg",
+    },
+    {
+      id: 8,
+      name: "Netflix",
+      logo: "https://image.tmdb.org/t/p/original/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg",
+    },
+    {
+      id: 11,
+      name: "MUBI",
+      logo: "https://image.tmdb.org/t/p/original/fj9Y8iIMFUC6952HwxbGixTQPb7.jpg",
+    },
+    {
+      id: 35,
+      name: "Rakuten TV",
+      logo: "https://image.tmdb.org/t/p/original/bZvc9dXrXNly7cA0V4D9pR8yJwm.jpg",
+    },
+    {
+      id: 56,
+      name: "OCS",
+      logo: "https://image.tmdb.org/t/p/original/z64xZ5CIT6k4VyI5ThKtxJARDOZ.jpg",
+    },
+    {
+      id: 119,
+      name: "Amazon Prime Video",
+      logo: "https://image.tmdb.org/t/p/original/dQeAar5H991VYporEjUspolDarG.jpg",
+    },
+    {
+      id: 184,
+      name: "Universal Pictures",
+      logo: "https://image.tmdb.org/t/p/original/8pvjGOr83RSlPwKfYi6e99mOS4.jpg",
+    },
+    {
+      id: 192,
+      name: "YouTube",
+      logo: "https://image.tmdb.org/t/p/original/pTnn5JwWr4p3pG8H6VrpiQo7Vs0.jpg",
+    },
+    {
+      id: 234,
+      name: "Arte",
+      logo: "https://image.tmdb.org/t/p/original/vPZrjHe7wvALuwJEXT2kwYLi0gV.jpg",
+    },
+    {
+      id: 236,
+      name: "France TV",
+      logo: "https://image.tmdb.org/t/p/original/maeiT4ORBxykOVlaW9gCsLuFPnS.jpg",
+    },
+    {
+      id: 283,
+      name: "Crunchyroll",
+      logo: "https://image.tmdb.org/t/p/original/mXeC4TrcgdU6ltE9bCBCEORwSQR.jpg",
+    },
+    {
+      id: 337,
+      name: "Disney Plus",
+      logo: "https://image.tmdb.org/t/p/original/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+    },
+    {
+      id: 381,
+      name: "Canal+",
+      logo: "https://image.tmdb.org/t/p/original/eBXzkFEupZjKaIKY7zBUaSdCY8I.jpg",
+    },
   ];
 
   const handlePasswordVisibility = () => {
@@ -303,7 +355,7 @@ export default function SignUp({ navigation }) {
   const filteredProviders = providers.filter((provider) =>
     provider.name.toLowerCase().includes(searchText.toLowerCase())
   );
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -381,22 +433,28 @@ export default function SignUp({ navigation }) {
                   color="#fff"
                   style={styles.inputIcon}
                 />
-<TextInput
-  secureTextEntry={hidePassword} // Utilisez l'état hidePassword ici
-  placeholder="Password"
-  placeholderTextColor="#8e8e93"
-  keyboardType="password"
-  autoCapitalize="none"
-  onChangeText={(value) => {
-    setSignUpPassword(value),
-    validatePassword(value)
-  }}
-  value={signUpPassword}
-  style={styles.input}
-/>
-<TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
-  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
-</TouchableOpacity>
+                <TextInput
+                  secureTextEntry={hidePassword} // Utilisez l'état hidePassword ici
+                  placeholder="Password"
+                  placeholderTextColor="#8e8e93"
+                  keyboardType="password"
+                  autoCapitalize="none"
+                  onChangeText={(value) => {
+                    setSignUpPassword(value), validatePassword(value);
+                  }}
+                  value={signUpPassword}
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -408,7 +466,6 @@ export default function SignUp({ navigation }) {
                 </Text>
               ))}
             </Text>
-            
 
             {/* <TouchableOpacity
               onPress={handlePasswordVisibility}
@@ -452,90 +509,87 @@ export default function SignUp({ navigation }) {
 
             {/* debut modal */}
             <Modal
-  animationType="slide"
-  transparent={true}
-  visible={platformsModalVisible}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContent}>
-      <Text style={styles.modalTitle}>
-        Choose your streaming services
-      </Text>
-      <Text style={styles.text}>
-        Select at least one platform
-      </Text>
-      <ScrollView style={styles.platformsContainer}>
-        {filteredProviders.map((item) => {
-          const isSelected = selectedProviders.includes(item.name);
-          return (
-            <TouchableOpacity
-              key={item.id}
-              style={[
-                styles.providers,
-                isSelected && styles.selectedProvider,
-              ]}
-              onPress={() => {
-                setSelectedProviders((prevProviders) =>
-                  prevProviders.includes(item.name)
-                    ? prevProviders.filter(
-                        (provider) => provider !== item.name
-                      )
-                    : [...prevProviders, item.name]
-                );
-              }}
+              animationType="slide"
+              transparent={true}
+              visible={platformsModalVisible}
             >
-              <View style={styles.providerItem}>
-                <Image
-                  source={{ uri: item.logo }}
-                  style={styles.providerLogo}
-                />
-                <Text
-                  style={
-                    isSelected ? styles.selectedProviderText : null
-                  }
-                >
-                  {item.name}
-                </Text>
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>
+                    Choose your streaming services
+                  </Text>
+                  <Text style={styles.text}>Select at least one platform</Text>
+                  <ScrollView style={styles.platformsContainer}>
+                    {filteredProviders.map((item) => {
+                      const isSelected = selectedProviders.includes(item.name);
+                      return (
+                        <TouchableOpacity
+                          key={item.id}
+                          style={[
+                            styles.providers,
+                            isSelected && styles.selectedProvider,
+                          ]}
+                          onPress={() => {
+                            setSelectedProviders((prevProviders) =>
+                              prevProviders.includes(item.name)
+                                ? prevProviders.filter(
+                                    (provider) => provider !== item.name
+                                  )
+                                : [...prevProviders, item.name]
+                            );
+                          }}
+                        >
+                          <View style={styles.providerItem}>
+                            <Image
+                              source={{ uri: item.logo }}
+                              style={styles.providerLogo}
+                            />
+                            <Text
+                              style={
+                                isSelected ? styles.selectedProviderText : null
+                              }
+                            >
+                              {item.name}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </ScrollView>
+                  <TextInput
+                    placeholder="Search platforms"
+                    placeholderTextColor="#8e8e93"
+                    onChangeText={(text) => setSearchText(text)}
+                    value={searchText}
+                    style={styles.searchInput} // Appliquer le style ici
+                  />
+                  <View style={styles.modalButtons}>
+                    <View style={styles.modalButtonWrapper}>
+                      <CenteredGradientButton
+                        buttonText="Cancel"
+                        onPress={() => setPlatformsModalVisible(false)}
+                      />
+                    </View>
+                    {isGoogleUser ? (
+                      <View style={styles.modalButtonWrapper}>
+                        <CenteredGradientButton
+                          buttonText="Sign Up"
+                          onPress={() => handleSubmitWithGoogle()}
+                        />
+                      </View>
+                    ) : (
+                      <View style={styles.modalButtonWrapper}>
+                        <CenteredGradientButton
+                          buttonText="Sign Up"
+                          onPress={() => handleSubmit()}
+                        />
+                      </View>
+                    )}
+                  </View>
+                </View>
               </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-      <TextInput
-        placeholder="Search platforms"
-        placeholderTextColor="#8e8e93"
-        onChangeText={(text) => setSearchText(text)}
-        value={searchText}
-        style={styles.searchInput} // Appliquer le style ici
-      />
-      <View style={styles.modalButtons}>
-        <View style={styles.modalButtonWrapper}>
-          <CenteredGradientButton
-            buttonText="Cancel"
-            onPress={() => setPlatformsModalVisible(false)}
-          />
-        </View>
-        {isGoogleUser ? (
-          <View style={styles.modalButtonWrapper}>
-            <CenteredGradientButton
-              buttonText="Sign Up"
-              onPress={() => handleSubmitWithGoogle()}
-            />
-          </View>
-        ) : (
-          <View style={styles.modalButtonWrapper}>
-            <CenteredGradientButton
-              buttonText="Sign Up"
-              onPress={() => handleSubmit()}
-            />
-          </View>
-        )}
-      </View>
-    </View>
-  </View>
-</Modal>
+            </Modal>
             {/* //end of modal// */}
-
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -590,8 +644,8 @@ const styles = StyleSheet.create({
     fontSize: 40, // Augmenter la taille de la police pour plus de visibilité
     fontWeight: "bold",
     marginVertical: 30,
-    textAlign: 'left',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)', // Ajouter une ombre pour plus de visibilité
+    textAlign: "left",
+    textShadowColor: "rgba(0, 0, 0, 0.75)", // Ajouter une ombre pour plus de visibilité
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
@@ -636,8 +690,8 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginVertical: 20,
     marginHorizontal: 5,
-    justifyContent: 'center',
-    textAlign: 'center'
+    justifyContent: "center",
+    textAlign: "center",
   },
   googleButton: {
     alignItems: "center",
@@ -678,7 +732,7 @@ const styles = StyleSheet.create({
   platformsContainer: {
     maxHeight: 300, // Limiter la hauteur de la liste des plateformes
     marginBottom: 10,
-    width: '100%',
+    width: "100%",
     marginBottom: -30,
   },
   modalOverlay: {
@@ -688,8 +742,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: '80%',
-    height: '80%',
+    width: "80%",
+    height: "80%",
     padding: 15,
     backgroundColor: "#0d0f2b",
     borderRadius: 10,
@@ -731,7 +785,7 @@ const styles = StyleSheet.create({
   },
   strengthText: {
     color: "purple",
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 10,
   },
   providers: {
@@ -742,8 +796,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   providerItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   providerLogo: {
     width: 24,
@@ -759,7 +813,7 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 10,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
-    width: '100%', // Ajuster la largeur pour qu'elle soit de même taille que la modal
+    width: "100%", // Ajuster la largeur pour qu'elle soit de même taille que la modal
   },
   selectedProvider: {
     backgroundColor: "green",
@@ -769,12 +823,12 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    width: '100%',
+    width: "100%",
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   modalButtonWrapper: {
     flex: 1,
