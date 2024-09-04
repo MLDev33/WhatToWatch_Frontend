@@ -104,7 +104,7 @@ export default function ParameterListAvatar_ModalAvatar({
      */
     dispatch(addAvatarList(avatarOfList))
 
-    const mysource = '"https://res.cloudinary.com/ddr0yckcq/image/upload/v1725477045/history_s5mzcd.png"'
+  
     /**
      * Fonction qui pour chaque item (avatar) de la source de donnée (flatList),
      * renvoie l'item comme formaté dans cette fonction
@@ -126,7 +126,7 @@ export default function ParameterListAvatar_ModalAvatar({
                     : styles.buttonAvatar
                 }
                 stylesAvatar={styles.avatar}
-                source={mysource}
+                source={item.source}
                 stylesButtonLabel={styles.buttonAvatarLabel}
                 stylesLinearGradient={
                     isClickAvatar.source === item.source 

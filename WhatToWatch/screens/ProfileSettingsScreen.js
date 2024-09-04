@@ -220,14 +220,18 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.titleView}>
+          <View style={styles.bottomBar}>
           <Text style={styles.title}>Profile Settings</Text>
-          <Icon
+          
+          {/* <Icon
             name="settings-outline"
             size={24}
             color="#fff"
             style={styles.settingsIcon}
-          />
+          /> */}
+          
         </View>
+      </View>
       </View>
       <ScrollView>
         <View style={styles.section}>
@@ -564,6 +568,13 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     left: 100,
   },
+  bottomBar: {
+    flex: 1,
+    borderBottomColor: '#7C4DFF',
+    borderBottomWidth: 2,
+    marginHorizontal: 15
+
+  }
 });
 
 export default ProfileSettingsScreen;

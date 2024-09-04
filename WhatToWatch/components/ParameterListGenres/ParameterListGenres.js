@@ -135,7 +135,7 @@ export default function ParameterListGenres({typesOfList}){
     };
 
     const onPressIcon = async() => {
-        if(isEmptyArray(list.types)) return alert("Categorie requiere !!!")
+        if(isEmptyArray(list.types)) return alert("Category required !!!")
         const afficherGenres = getGenres(typesOfList)
         setIsModalGenresVisible(true)
     }
