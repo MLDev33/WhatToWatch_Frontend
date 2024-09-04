@@ -311,19 +311,19 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                   <Text style={styles.buttonText}>Change Email</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.section}>
-              <View style={styles.bottomBar}>
-                <Text style={styles.sectionTitle}>LANGUAGE</Text>
-                </View>
-                <View style={styles.buttonWrapper}>
-                  <TouchableOpacity
+              {/* <View style={styles.section}> */}
+              {/* <View style={styles.bottomBar}> */}
+                {/* <Text style={styles.sectionTitle}>LANGUAGE</Text> */}
+                {/* </View> */}
+                {/* <View style={styles.buttonWrapper}> */}
+                  {/* <TouchableOpacity
                     style={styles.button2}
                     onPress={console.log("Button language")}
                   >
                     <Text style={styles.buttonText}>Confirm</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+                  </TouchableOpacity> */}
+                {/* </View> */}
+              {/* </View> */}
 
               <View style={styles.section}>
               <View style={styles.bottomBar}>

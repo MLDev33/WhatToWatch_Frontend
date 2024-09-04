@@ -254,6 +254,7 @@ export default function SignUp({ navigation }) {
           } else {
             setPlatformsModalVisible(true);
             setGoogleUser(false);
+            setStrength('');
           }
         });
     }
