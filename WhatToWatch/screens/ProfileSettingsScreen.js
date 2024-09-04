@@ -18,6 +18,7 @@ import DeleteAccount from "../components/Profile/DeleteAccount";
 import { Avatar } from "react-native-elements";
 import AvatarModal from "../components/Profile/AvatarModal";
 import { FontAwesome } from "@expo/vector-icons";
+import Header from "../components/Header";
 
 const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
@@ -174,15 +175,21 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+     <Header
+        username={username}
+        avatar={avatar}
+        setAvatarModalVisible={setAvatarModalVisible}
+        isProfileScreen={true}
+      />
       <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <Image
+        {/* <View style={styles.headerContent}> */}
+          {/* <Image
             source={require("../assets/imgsmall.png")}
             style={styles.logo}
-          />
-          <View style={styles.textAndImageContainer}>
-            <Text style={styles.text}>{username}</Text>
-            {avatar === undefined ? (
+          /> */}
+          {/* <View style={styles.textAndImageContainer}>
+            {/* <Text style={styles.text}>{username}</Text> */}
+            {/* {avatar === undefined ? (
               <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
                 <Image
                   source={require("../assets/avatar-1.png")}
@@ -195,9 +202,9 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                 <Image source={{ uri: avatar }} style={styles.profileImage} />
                 <Avatar.Accessory size={24} />
               </TouchableOpacity>
-            )}
-          </View>
-        </View>
+            )} */} 
+          {/* </View> */}
+        {/* </View> */}
         <View>
           <TouchableOpacity
             style={styles.backButton}
@@ -444,7 +451,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0d0f2b",
-    paddingHorizontal: 30,
+    paddingHorizontal: 10,
     paddingTop: 20,
   },
   header: {
@@ -482,12 +489,9 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     marginTop: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#fff",
   },
   section: {
     borderColor: "red",
-    borderBottomWidth: "1",
     paddingHorizontal: 20,
   },
 
