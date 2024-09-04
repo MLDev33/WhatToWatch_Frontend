@@ -104,7 +104,7 @@ export default function ParameterListAvatar_ModalAvatar({
      */
     dispatch(addAvatarList(avatarOfList))
 
-    const mysource = '"https://res.cloudinary.com/ddr0yckcq/image/upload/v1725477045/history_s5mzcd.png"'
+    //const mysource = '"https://res.cloudinary.com/ddr0yckcq/image/upload/v1725477045/history_s5mzcd.png"'
     /**
      * Fonction qui pour chaque item (avatar) de la source de donnée (flatList),
      * renvoie l'item comme formaté dans cette fonction
@@ -125,8 +125,9 @@ export default function ParameterListAvatar_ModalAvatar({
                     ? styles.buttonAvatarActif
                     : styles.buttonAvatar
                 }
+                stylesAvatarContainer={styles.avatarContainer}
                 stylesAvatar={styles.avatar}
-                source={mysource}
+                source={{uri: item.source}}
                 stylesButtonLabel={styles.buttonAvatarLabel}
                 stylesLinearGradient={
                     isClickAvatar.source === item.source 
@@ -151,7 +152,7 @@ export default function ParameterListAvatar_ModalAvatar({
                 <View  style={styles.modalContainer}>
                     <View style={styles.parameterAvatarHeader}>
                         <Image 
-                            source={isSelectedAvatar}
+                            source={{uri: isClickAvatar.source}}
                             style={styles.avatarSelected}
                         />
                         <View style={styles.avatarHeaderTextContainer}>
@@ -164,7 +165,7 @@ export default function ParameterListAvatar_ModalAvatar({
                             </Text>
                             <Text 
                                 style={
-                                    isClickAvatar && isClickAvatar != ""
+                                    isClickAvatar && isSelectedAvatar != ""
                                     ? ""
                                     : styles.parameterAvatarLegende
                                 } 
@@ -352,10 +353,17 @@ const styles = StyleSheet.create({
         backgroundColor:"#000027",
         gap:10,
     },
+    avatarContainer:{
+        height:45,
+        width: 45,
+        backgroundColor: "gray",
+        borderRadius:50,
+
+    },
     avatar:{
         height:45,
         width: 45,
-        // backgroundColor: "gray",
+        backgroundColor: "gray",
         borderRadius:50,
 
     },
