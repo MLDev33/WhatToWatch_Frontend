@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, Modal, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DeleteAccountConfirmation from "./DeleteAccountConfirmation";
-import GradientButton from "../GradientButton";
+import CenteredGradientButton from "../CenteredGradientButton";
 import Icon from "react-native-vector-icons/Ionicons";
 
 //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
@@ -18,8 +12,10 @@ const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
 //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
 const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
-const DeleteAccount = ({ deleteAccountModalVisible, setDeleteAccountModalVisible }) => {
-
+const DeleteAccount = ({
+  deleteAccountModalVisible,
+  setDeleteAccountModalVisible,
+}) => {
   const [
     deleteAccountConfirmationModalVisible,
     setDeleteAccountConfirmationModalVisible,
@@ -46,41 +42,34 @@ const DeleteAccount = ({ deleteAccountModalVisible, setDeleteAccountModalVisible
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Delete Account</Text>
-              <Icon name="warning-outline" size={120} color="red" style={styles.inputIcon}/>
+              <Icon
+                name="warning-outline"
+                size={120}
+                color="red"
+                style={styles.inputIcon}
+              />
               {/* <FontAwesome
                 name="exclamation"
                 size={80}
                 color="red"
                 style={styles.exclamationIcon}
               /> */}
-              <Text style={styles.modalText}>Are you sure you want to delete your account ?</Text>
-              <View style={styles.buttons}>
-              <View style={styles.mainButtonContainer}>
-              <GradientButton
-                // iconName="login"
-                style={{ height: 40, width: 40 }}
-                buttonText="Cancel"
-                onPress={() => handleCloseButton()}
-              />
-            </View>
-            <View style={styles.mainButtonContainer}>
-              <GradientButton
-                style={{ height: 40, width: 40 }}
-                buttonText="Delete Account"
-                onPress={() => handleDeleteButton()}
-              />
-            </View>
-
-
-
-
-
-                {/* <TouchableOpacity onPress={handleCloseButton}>
-                  <Text style={styles.modalTitle}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleDeleteButton}>
-                  <Text style={styles.modalTitle}>Delete Account</Text>
-                </TouchableOpacity> */}
+              <Text style={styles.modalText}>
+                Are you sure you want to delete your account ?
+              </Text>
+              <View style={styles.modalButtons}>
+                <View style={styles.modalButtonWrapper}>
+                  <CenteredGradientButton
+                    buttonText="Cancel"
+                    onPress={() => handleCloseButton()}
+                  />
+                </View>
+                <View style={styles.modalButtonWrapper}>
+                  <CenteredGradientButton
+                    buttonText="Delete Account"
+                    onPress={() => handleDeleteButton()}
+                  />
+                </View>
               </View>
             </View>
           </View>
@@ -111,46 +100,45 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-},
-modalTitle: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalTitle: {
     fontSize: 20,
     marginBottom: 20,
     fontWeight: "bold",
     color: "white",
-},
-modalText: {
-  fontSize: 15,
-  marginBottom: 20,
-  ontWeight: "bold",
-  textAlign: "center",
-  color: "white",
-},
-textH2: {
-  marginTop: 10,
-  marginHorizontal: 7,
-  textAlign: "center",
-  color: "white",
-  fontSize: 16,
-},
+  },
+  modalText: {
+    fontSize: 15,
+    marginBottom: 20,
+    ontWeight: "bold",
+    textAlign: "center",
+    color: "white",
+  },
+  textH2: {
+    marginTop: 10,
+    marginHorizontal: 7,
+    textAlign: "center",
+    color: "white",
+    fontSize: 16,
+  },
   exclamationIcon: {
     justifyContent: "center",
     alignItems: "center",
   },
-  buttons: {
-    flexWrap: "wrap",
+  modalButtons: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    // marginHorizontal: 10,
+    // flexWrap: 'wrap',
   },
-  mainButtonContainer: {
-    marginTop: 40,
-    height: 40,
-    width: "30%",
-    justifyContent: "space-between",
-    textAlign: "center",
+  modalButtonWrapper: {
+    flex: 1,
+    // flexWrap: 'wrap',
+    marginRight: 10,
+    textAlign: 'center',
+
   },
 });
 

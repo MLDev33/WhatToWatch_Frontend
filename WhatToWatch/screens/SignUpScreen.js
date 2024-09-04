@@ -422,7 +422,7 @@ export default function SignUp({ navigation }) {
 
             <View style={styles.buttonWrapper}>
               <CenteredGradientButton
-                // iconName="log-in"
+                iconName="log-in"
                 style={styles.buttons}
                 buttonText="Sign Up"
                 onPress={handleRegister}
@@ -511,7 +511,7 @@ export default function SignUp({ navigation }) {
                     {isGoogleUser ? (
                       <View style={styles.modalButtonWrapper}>
                         <CenteredGradientButton
-                          // iconName="log-in"
+                          iconName="log-in"
                           buttonText="Sign Up"
                           onPress={() => handleSubmitWithGoogle()}
                         />
@@ -519,7 +519,7 @@ export default function SignUp({ navigation }) {
                     ) : (
                       <View style={styles.modalButtonWrapper}>
                         <CenteredGradientButton
-                          // iconName="log-in"
+                          iconName="log-in"
                           buttonText="Sign Up"
                           onPress={() => handleSubmit()}
                         />
@@ -542,7 +542,7 @@ export default function SignUp({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0d0f2b",
+    backgroundColor: "#0d0f2b", 
   },
   keyboardAvoidingView: {
     flex: 1,
@@ -742,8 +742,8 @@ const styles = StyleSheet.create({
 
   },
   modalButtonWrapper: {
-    width: 100,
-    margin: 20,
+    width: 110,
+    margin: 10,
 
   }
 });

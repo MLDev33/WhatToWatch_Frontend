@@ -198,7 +198,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
             )}
           </View>
         </View>
-        <View >
+        <View>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => navigation.goBack()}
@@ -213,11 +213,14 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.titleView}>
-        <Text style={styles.title}>Profile Settings</Text>
-        <Icon name='settings-outline'  size={24}
-                  color="#fff"
-                  style={styles.settingsIcon}/>
-                  </View>
+          <Text style={styles.title}>Profile Settings</Text>
+          <Icon
+            name="settings-outline"
+            size={24}
+            color="#fff"
+            style={styles.settingsIcon}
+          />
+        </View>
       </View>
       <ScrollView>
         <View style={styles.section}>
@@ -279,139 +282,147 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                 <Text style={styles.error}>{wrongEmailMessage}</Text>
               )}
               <View style={styles.buttonWrapper}>
-              <TouchableOpacity
-                style={styles.button2}
-                onPress={() => handleNewEmail()}
-              >
-                <Text style={styles.buttonText}>Change Email</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button2}
+                  onPress={() => handleNewEmail()}
+                >
+                  <Text style={styles.buttonText}>Change Email</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.section}>
-              <Text style={styles.title}>LANGUAGE</Text>
-              <View style={styles.buttonWrapper}>
-              <TouchableOpacity
-                style={styles.button2}
-                onPress={console.log("Button language")}
-              >
-                <Text style={styles.buttonText}>Confirm</Text>
-              </TouchableOpacity>
+                <Text style={styles.title}>LANGUAGE</Text>
+                <View style={styles.buttonWrapper}>
+                  <TouchableOpacity
+                    style={styles.button2}
+                    onPress={console.log("Button language")}
+                  >
+                    <Text style={styles.buttonText}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              </View>
 
+              <View style={styles.section}>
+                <Text style={styles.title}>PASSWORD</Text>
 
-              <View style={styles.section}></View>
-
-              <Text style={styles.title}>PASSWORD</Text>
-
-              <View style={styles.inputWrapper}>
-                <Icon
-                  name="lock-closed-outline"
-                  size={24}
-                  color="#fff"
-                  style={styles.inputIcon}
-                />
-                <TextInput
-                  secureTextEntry={hidePassword}
-                  placeholder="Current Password"
-                  placeholderTextColor="#8e8e93"
-                  autoCapitalize="none"
-                  onChangeText={(value) => setUserPassword(value)}
-                  value={userPassword}
-                  style={styles.input}
-                />
-                <TouchableOpacity
-                  onPress={handlePasswordVisibility}
-                  style={styles.eyeIcon}
-                >
+                <View style={styles.inputWrapper}>
                   <Icon
-                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    name="lock-closed-outline"
                     size={24}
                     color="#fff"
+                    style={styles.inputIcon}
                   />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputWrapper}>
-                <Icon
-                  name="lock-closed-outline"
-                  size={24}
-                  color="#fff"
-                  style={styles.inputIcon}
-                />
-                <TextInput
-                  secureTextEntry={hidePassword}
-                  placeholder="New Password"
-                  placeholderTextColor="#8e8e93"
-                  autoCapitalize="none"
-                  onChangeText={(value) => setNewPassword(value)}
-                  value={newPassword}
-                  style={styles.input}
-                />
-                <TouchableOpacity
-                  onPress={handlePasswordVisibility}
-                  style={styles.eyeIcon}
-                >
+                  <TextInput
+                    secureTextEntry={hidePassword}
+                    placeholder="Current Password"
+                    placeholderTextColor="#8e8e93"
+                    autoCapitalize="none"
+                    onChangeText={(value) => setUserPassword(value)}
+                    value={userPassword}
+                    style={styles.input}
+                  />
+                  <TouchableOpacity
+                    onPress={handlePasswordVisibility}
+                    style={styles.eyeIcon}
+                  >
+                    <Icon
+                      name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                      size={24}
+                      color="#fff"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.inputWrapper}>
                   <Icon
-                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    name="lock-closed-outline"
                     size={24}
                     color="#fff"
+                    style={styles.inputIcon}
                   />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputWrapper}>
-                <Icon
-                  name="lock-closed-outline"
-                  size={24}
-                  color="#fff"
-                  style={styles.inputIcon}
-                />
-                <TextInput
-                  secureTextEntry={hidePassword}
-                  placeholder="Confirm New Password"
-                  placeholderTextColor="#8e8e93"
-                  autoCapitalize="none"
-                  onChangeText={(value) => setConfirmNewPassword(value)}
-                  value={confirmNewPassword}
-                  style={styles.input}
-                />
-                <TouchableOpacity
-                  onPress={handlePasswordVisibility}
-                  style={styles.eyeIcon}
-                >
+                  <TextInput
+                    secureTextEntry={hidePassword}
+                    placeholder="New Password"
+                    placeholderTextColor="#8e8e93"
+                    autoCapitalize="none"
+                    onChangeText={(value) => setNewPassword(value)}
+                    value={newPassword}
+                    style={styles.input}
+                  />
+                  <TouchableOpacity
+                    onPress={handlePasswordVisibility}
+                    style={styles.eyeIcon}
+                  >
+                    <Icon
+                      name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                      size={24}
+                      color="#fff"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.inputWrapper}>
                   <Icon
-                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    name="lock-closed-outline"
                     size={24}
                     color="#fff"
+                    style={styles.inputIcon}
                   />
+                  <TextInput
+                    secureTextEntry={hidePassword}
+                    placeholder="Confirm New Password"
+                    placeholderTextColor="#8e8e93"
+                    autoCapitalize="none"
+                    onChangeText={(value) => setConfirmNewPassword(value)}
+                    value={confirmNewPassword}
+                    style={styles.input}
+                  />
+                  <TouchableOpacity
+                    onPress={handlePasswordVisibility}
+                    style={styles.eyeIcon}
+                  >
+                    <Icon
+                      name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                      size={24}
+                      color="#fff"
+                    />
+                  </TouchableOpacity>
+                </View>
+                {/* </View> */}
+                <View></View>
+                {PasswordError && (
+                  <Text style={styles.error}>{PasswordErrorMessage}</Text>
+                )}
+                {/* <TouchableOpacity
+                  style={styles.button2}
+                  onPress={() => handleChangePassword()}
+                >
+                  <Text style={styles.buttonText}>Change Password</Text>
+                </TouchableOpacity> */}
+
+                <View style={styles.buttonWrapper}>
+                <TouchableOpacity
+                  style={styles.button2}
+                  onPress={() => handleChangePassword()}
+                >
+                  <Text style={styles.buttonText}>Change Password</Text>
                 </TouchableOpacity>
               </View>
-              {/* </View> */}
-              <View></View>
-              {PasswordError && (
-                <Text style={styles.error}>{PasswordErrorMessage}</Text>
-              )}
-              <TouchableOpacity
-                style={styles.button2}
-                onPress={() => handleChangePassword()}
-              >
-                <Text style={styles.buttonText}>Change Password</Text>
-              </TouchableOpacity>
+
+              </View>
             </>
           ) : (
             <></>
           )}
 
-         
-              <View style={styles.section}>
+          <View style={styles.section}>
             <Text style={styles.title}>ACCOUNT</Text>
-          
-
-          <TouchableOpacity
-            style={styles.button2}
-            activeOpacity={0.8}
-            onPress={() => setDeleteAccountModalVisible(true)}
-          >
-            <Text style={styles.textButton}>DELETE ACCOUNT</Text>
-          </TouchableOpacity>
+            <View style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.button2}
+              activeOpacity={0.8}
+              onPress={() => setDeleteAccountModalVisible(true)}
+            >
+              <Text style={styles.textButton}>DELETE ACCOUNT</Text>
+            </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -433,7 +444,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0d0f2b",
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
     paddingTop: 20,
   },
   header: {
@@ -466,7 +477,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   title: {
-    textAlign: 'flex-start',
+    textAlign: "flex-start",
     fontSize: 20,
     color: "#fff",
     fontWeight: "bold",
@@ -475,25 +486,11 @@ const styles = StyleSheet.create({
     borderBottomColor: "#fff",
   },
   section: {
-    // marginBottom: 20,
-    borderColor: 'red',
-    borderBottomWidth: '1',
-    // alignItems: 'center'
+    borderColor: "red",
+    borderBottomWidth: "1",
+    paddingHorizontal: 20,
   },
-  // buttonContainer: {
-  //   borderRadius: 10,
-  //   marginBottom: 10,
-  // },
-  // button: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   backgroundColor: "transparent",
-  //   paddingVertical: 15,
-  //   paddingHorizontal: 10,
-  //   borderRadius: 10,
-  //   marginBottom: 10,
-  //   height: 60,
-  // },
+
   buttonText: {
     color: "#fff",
     fontSize: 16,
@@ -504,7 +501,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     padding: 10,
     borderRadius: 10,
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderWidth: 1,
     opacity: 0.7,
     justifyContent: "center",
@@ -562,7 +559,7 @@ const styles = StyleSheet.create({
     // flexDirection: "row",
     paddingTop: 5,
     left: 100,
-  }
+  },
 });
 
 export default ProfileSettingsScreen;

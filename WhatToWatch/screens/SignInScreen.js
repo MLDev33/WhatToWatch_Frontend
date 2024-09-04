@@ -183,7 +183,7 @@ export default function SignIn({ navigation }) {
 
             <View style={styles.buttonWrapper}>
               <CenteredGradientButton
-                // iconName="log-in"
+                iconName="log-in"
                 buttonText="Login"
                 onPress={handleSubmit}
               />

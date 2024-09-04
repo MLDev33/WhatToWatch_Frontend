@@ -18,6 +18,7 @@ import { Avatar } from "react-native-elements";
 import GradientButton from "../components/GradientButton";
 import AvatarModal from "../components/Profile/AvatarModal";
 import Header from "../components/Header"; // Importer le nouveau composant Header
+import CenteredGradientButton from "../components/CenteredGradientButton";
 
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
 const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
@@ -113,7 +114,7 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         </LinearGradient>
       </View>
 
-      <GradientButton
+      <CenteredGradientButton
         buttonText="Logout"
         onPress={handleLogOut}
         style={styles.logoutButton}
