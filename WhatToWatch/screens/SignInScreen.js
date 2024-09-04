@@ -131,9 +131,9 @@ export default function SignIn({ navigation }) {
           keyboardShouldPersistTaps="handled"
         >
           <ImageBackground
-            source={require("../assets/SignupBackground.png")} // Votre image d'arrière-plan
+            source={require("../assets/SignupBackground.png")}
             style={styles.backgroundImage}
-            imageStyle={styles.backgroundImageStyle} // Pour ajuster l'image d'arrière-plan
+            imageStyle={styles.backgroundImageStyle}
           >
             <View style={styles.overlay} />
             <View style={styles.header}>

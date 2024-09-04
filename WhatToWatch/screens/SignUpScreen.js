@@ -100,7 +100,7 @@ export default function SignUp({ navigation }) {
   const [isGoogleUser, setIsGoogleUser] = useState(false);
   const [googleUser, setGoogleUser] = useState("");
   const [googleUserEmail, setGoogleUserEmail] = useState("");
-
+  const [searchText, setSearchText] = useState("");
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
   const baseUrl = localUrl;
@@ -145,20 +145,71 @@ export default function SignUp({ navigation }) {
   //penser a ajouter logo
   //list updated with platforms that provide results
   const providers = [
-    { id: 119, name: "Amazon Prime Video" },
-    { id: 337, name: "Disney Plus" },
-    { id: 8, name: "Netflix" },
-    { id: 381, name: "Canal+" },
-    { id: 2, name: "Apple TV" },
-    { id: 283, name: "Crunchyroll" },
-    { id: 11, name: "MUBI" },
-    { id: 192, name: "YouTube" },
-    { id: 35, name: "Rakuten TV" },
-    { id: 56, name: "OCS" },
-    //universal only one movie on trendings
-    { id: 184, name: "Universal Pictures" },
-    { id: 234, name: "Arte" },
-    { id: 236, name: "France TV" },
+    {
+      id: 2,
+      name: "Apple TV",
+      logo: "https://image.tmdb.org/t/p/original/9ghgSC0MA082EL6HLCW3GalykFD.jpg",
+    },
+    {
+      id: 8,
+      name: "Netflix",
+      logo: "https://image.tmdb.org/t/p/original/pbpMk2JmcoNnQwx5JGpXngfoWtp.jpg",
+    },
+    {
+      id: 11,
+      name: "MUBI",
+      logo: "https://image.tmdb.org/t/p/original/fj9Y8iIMFUC6952HwxbGixTQPb7.jpg",
+    },
+    {
+      id: 35,
+      name: "Rakuten TV",
+      logo: "https://image.tmdb.org/t/p/original/bZvc9dXrXNly7cA0V4D9pR8yJwm.jpg",
+    },
+    {
+      id: 56,
+      name: "OCS",
+      logo: "https://image.tmdb.org/t/p/original/z64xZ5CIT6k4VyI5ThKtxJARDOZ.jpg",
+    },
+    {
+      id: 119,
+      name: "Amazon Prime Video",
+      logo: "https://image.tmdb.org/t/p/original/dQeAar5H991VYporEjUspolDarG.jpg",
+    },
+    {
+      id: 184,
+      name: "Universal Pictures",
+      logo: "https://image.tmdb.org/t/p/original/8pvjGOr83RSlPwKfYi6e99mOS4.jpg",
+    },
+    {
+      id: 192,
+      name: "YouTube",
+      logo: "https://image.tmdb.org/t/p/original/pTnn5JwWr4p3pG8H6VrpiQo7Vs0.jpg",
+    },
+    {
+      id: 234,
+      name: "Arte",
+      logo: "https://image.tmdb.org/t/p/original/vPZrjHe7wvALuwJEXT2kwYLi0gV.jpg",
+    },
+    {
+      id: 236,
+      name: "France TV",
+      logo: "https://image.tmdb.org/t/p/original/maeiT4ORBxykOVlaW9gCsLuFPnS.jpg",
+    },
+    {
+      id: 283,
+      name: "Crunchyroll",
+      logo: "https://image.tmdb.org/t/p/original/mXeC4TrcgdU6ltE9bCBCEORwSQR.jpg",
+    },
+    {
+      id: 337,
+      name: "Disney Plus",
+      logo: "https://image.tmdb.org/t/p/original/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+    },
+    {
+      id: 381,
+      name: "Canal+",
+      logo: "https://image.tmdb.org/t/p/original/eBXzkFEupZjKaIKY7zBUaSdCY8I.jpg",
+    },
   ];
 
   const handlePasswordVisibility = () => {
@@ -301,8 +352,10 @@ export default function SignUp({ navigation }) {
       console.log(googleUser, googleUserEmail);
     }
   };
+  const filteredProviders = providers.filter((provider) =>
+    provider.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
-  
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -381,20 +434,26 @@ export default function SignUp({ navigation }) {
                   style={styles.inputIcon}
                 />
                 <TextInput
-                  secureTextEntry={true}
+                  secureTextEntry={hidePassword} // Utilisez l'état hidePassword ici
                   placeholder="Password"
                   placeholderTextColor="#8e8e93"
                   keyboardType="password"
                   autoCapitalize="none"
                   onChangeText={(value) => {
-                    setSignUpPassword(value),
-                    validatePassword(value)
+                    setSignUpPassword(value), validatePassword(value);
                   }}
                   value={signUpPassword}
                   style={styles.input}
                 />
-               <TouchableOpacity onPress={handlePasswordVisibility} style={styles.eyeIcon}>
-                  <Icon name={hidePassword ? "eye-outline" : "eye-off-outline"} size={24} color="#fff" />
+                <TouchableOpacity
+                  onPress={handlePasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Icon
+                    name={hidePassword ? "eye-outline" : "eye-off-outline"}
+                    size={24}
+                    color="#fff"
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -407,7 +466,6 @@ export default function SignUp({ navigation }) {
                 </Text>
               ))}
             </Text>
-            
 
             {/* <TouchableOpacity
               onPress={handlePasswordVisibility}
@@ -449,7 +507,7 @@ export default function SignUp({ navigation }) {
               </View>
             </View>
 
-            {/* //platform modal // */}
+            {/* debut modal */}
             <Modal
               animationType="slide"
               transparent={true}
@@ -460,34 +518,32 @@ export default function SignUp({ navigation }) {
                   <Text style={styles.modalTitle}>
                     Choose your streaming services
                   </Text>
-                  <Text style={styles.text}>
-                    Select at least one platform
-                  </Text>
-                  <View style={styles.scrollView}>
-                    <FlatList
-                      data={providers}
-                      numColumns={1}
-                      renderItem={({ item }) => {
-                        const isSelected = selectedProviders.includes(
-                          item.name
-                        );
-                        return (
-                          <TouchableOpacity
-                            style={[
-                              styles.providers,
-                              isSelected && styles.selectedProvider,
-                            ]}
-                            onPress={() => {
-                              setSelectedProviders((prevProviders) =>
-                                prevProviders.includes(item.name)
-                                  ? prevProviders.filter(
-                                      (provider) => provider !== item.name
-                                    )
-                                  : [...prevProviders, item.name]
-                              );
-                            }}
-                          >
-                    
+                  <Text style={styles.text}>Select at least one platform</Text>
+                  <ScrollView style={styles.platformsContainer}>
+                    {filteredProviders.map((item) => {
+                      const isSelected = selectedProviders.includes(item.name);
+                      return (
+                        <TouchableOpacity
+                          key={item.id}
+                          style={[
+                            styles.providers,
+                            isSelected && styles.selectedProvider,
+                          ]}
+                          onPress={() => {
+                            setSelectedProviders((prevProviders) =>
+                              prevProviders.includes(item.name)
+                                ? prevProviders.filter(
+                                    (provider) => provider !== item.name
+                                  )
+                                : [...prevProviders, item.name]
+                            );
+                          }}
+                        >
+                          <View style={styles.providerItem}>
+                            <Image
+                              source={{ uri: item.logo }}
+                              style={styles.providerLogo}
+                            />
                             <Text
                               style={
                                 isSelected ? styles.selectedProviderText : null
@@ -495,12 +551,18 @@ export default function SignUp({ navigation }) {
                             >
                               {item.name}
                             </Text>
-                          </TouchableOpacity>
-                        );
-                      }}
-                      keyExtractor={(item) => item.id.toString()}
-                    />
-                  </View>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </ScrollView>
+                  <TextInput
+                    placeholder="Search platforms"
+                    placeholderTextColor="#8e8e93"
+                    onChangeText={(text) => setSearchText(text)}
+                    value={searchText}
+                    style={styles.searchInput} // Appliquer le style ici
+                  />
                   <View style={styles.modalButtons}>
                     <View style={styles.modalButtonWrapper}>
                       <CenteredGradientButton
@@ -525,13 +587,11 @@ export default function SignUp({ navigation }) {
                         />
                       </View>
                     )}
-
                   </View>
                 </View>
               </View>
             </Modal>
             {/* //end of modal// */}
-
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -586,8 +646,8 @@ const styles = StyleSheet.create({
     fontSize: 40, // Augmenter la taille de la police pour plus de visibilité
     fontWeight: "bold",
     marginVertical: 30,
-    textAlign: 'left',
-    textShadowColor: 'rgba(0, 0, 0, 0.75)', // Ajouter une ombre pour plus de visibilité
+    textAlign: "left",
+    textShadowColor: "rgba(0, 0, 0, 0.75)", // Ajouter une ombre pour plus de visibilité
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
   },
@@ -632,8 +692,8 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginVertical: 20,
     marginHorizontal: 5,
-    justifyContent: 'center',
-    textAlign: 'center'
+    justifyContent: "center",
+    textAlign: "center",
   },
   googleButton: {
     alignItems: "center",
@@ -671,6 +731,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  platformsContainer: {
+    maxHeight: 300, // Limiter la hauteur de la liste des plateformes
+    marginBottom: 10,
+    width: "100%",
+    marginBottom: -30,
+  },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",
@@ -679,15 +745,17 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "80%",
-    padding: 20,
+    height: "80%",
+    padding: 15,
     backgroundColor: "#0d0f2b",
     borderRadius: 10,
     alignItems: "center",
+    justifyContent: "space-between",
   },
   modalTitle: {
     fontSize: 20,
-    marginBottom: 20,
     color: "white",
+    marginBottom: -50,
   },
   button: {
     marginHorizontal: 10,
@@ -706,7 +774,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    marginBottom: 20,
+    marginBottom: -50,
     color: "white",
   },
   providers: {
@@ -719,15 +787,35 @@ const styles = StyleSheet.create({
   },
   strengthText: {
     color: "purple",
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 10,
   },
   providers: {
-    marginTop: 10,
+    marginTop: 5,
     backgroundColor: "grey",
     fontSize: 20,
     padding: 10,
     borderRadius: 5,
+  },
+  providerItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  providerLogo: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+  },
+  searchInput: {
+    height: 50,
+    borderColor: "#8e8e93",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    color: "white",
+    marginBottom: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    width: "100%", // Ajuster la largeur pour qu'elle soit de même taille que la modal
   },
   selectedProvider: {
     backgroundColor: "green",
@@ -735,15 +823,17 @@ const styles = StyleSheet.create({
   selectedProviderText: {
     color: "white",
   },
+  scrollView: {
+    flex: 1,
+    width: "100%",
+  },
   modalButtons: {
-    flexDirection: 'row',
-    // marginHorizontal: 20,
-    // width: 120,
-
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   modalButtonWrapper: {
-    width: 110,
-    margin: 10,
-
-  }
+    flex: 1,
+    marginHorizontal: 5,
+  },
 });

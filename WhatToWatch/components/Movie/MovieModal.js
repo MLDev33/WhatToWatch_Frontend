@@ -51,6 +51,24 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
     setPlatformModalVisible(true);
   };
 
+  const renderGenres = (genres) => {
+    if (!genres || genres.length === 0) return "N/A";
+    let totalLength = 0;
+    const maxLength = 30; // Limite de longueur totale des genres
+    const displayedGenres = [];
+
+    for (const genre of genres) {
+      if (totalLength + genre.length > maxLength) {
+        displayedGenres.push("...");
+        break;
+      }
+      displayedGenres.push(genre);
+      totalLength += genre.length;
+    }
+
+    return displayedGenres.join(", ");
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -77,13 +95,9 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
                     : memoizedMovie.description}
                 </Text>
                 <View style={styles.modalDetailsRow}>
-                  {memoizedMovie.genre && memoizedMovie.genre.length > 0 ? (
-                    <Text style={styles.modalDetailsText}>genre : {memoizedMovie.genre.join(", ")}</Text>
-                  ) : (
-                    <Text style={styles.modalDetailsText}>genre : N/A</Text>
-                  )}
-                  <Text style={styles.modalDetailsText}>type : {memoizedMovie.type}</Text>
-                  <Text style={styles.modalDetailsText}>Année: {memoizedMovie.annee}</Text>
+                  <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>genre : {renderGenres(memoizedMovie.genre)}</Text>
+                  <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>type : {memoizedMovie.type}</Text>
+                  <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>Année: {memoizedMovie.annee}</Text>
                   <Text style={styles.modalDetailsText}>
                     Popularité: {memoizedMovie.popularite}
                   </Text>
@@ -199,8 +213,11 @@ const styles = StyleSheet.create({
   modalDetailsText: {
     fontSize: 14,
     color: "white",
-    // marginBottom: 15,
+    marginBottom: 5,
     height: Platform.OS === "ios" ? 30 : 30,
+  },
+  seriesSpacing: {
+    marginRight: 10, // Ajoute un espace entre les éléments pour les séries
   },
   platformContainer: {
     flexDirection: "row",
