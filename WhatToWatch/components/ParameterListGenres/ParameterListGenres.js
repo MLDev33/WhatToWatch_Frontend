@@ -148,7 +148,7 @@ export default function ParameterListGenres({typesOfList}){
     return(
         <ParameterContainer 
             name={"GENRES"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             onPressIcon={onPressIcon}
             styleParameterContenuContainer={styles.parameterContenuContainer}
             contenu={

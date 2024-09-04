@@ -31,7 +31,7 @@ export default function ParameterListMembers(){
     return(
         <ParameterContainer 
             name={"MEMBERS"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             onPressIcon={onPressIcon}
             styleParameterContenuContainer={styles.parameterContenuContainer}
             contenu={

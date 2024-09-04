@@ -79,9 +79,7 @@ export default function ListsSettingsScreen({ }) {
         console.log("avatar:", list.avatar)
         console.log("list_name:", list.name)
         console.log("types:", list.types)
-        console.log("genres:", list.genres.map(genre => {
-            return genre.id
-        }).slice(",").join("|"))
+        console.log("genres:", list.genres.map(genre => { return genre.id }).slice(",").join("|"))
         console.log("providers:", list.providers)
         console.log("release:", list.releaseDateGte)
         console.log("rating:", list.rating)
@@ -195,6 +193,7 @@ export default function ListsSettingsScreen({ }) {
             case "Movie":
                 console.log("case type : Movie");
                 try {
+                    let responseClone; // 1 - etape pour fix l'erreur format token non reconnu -> Fetch error: [SyntaxError: JSON Parse error: Unexpected character: <]
                     // Si le type est Movie
                     //Entregistrement des parametres de la liste en base de données
                     // et ajoute l'id de la liste dans user en base de données
@@ -220,6 +219,7 @@ export default function ListsSettingsScreen({ }) {
                                     throw new Error(`HTTP error! status: ${response.status}`);
                                 }
                             }
+                            responseClone = response.clone(); // 2 - etape pour fix l'erreur format token non reconnu 
                             return response.json();
                         })
                         .then((data) => {
@@ -233,6 +233,12 @@ export default function ListsSettingsScreen({ }) {
                             const newMedia = data.movies
                             setMediaOfList(newMedia)
                             dispatch(addMediaList(newMedia));
+                        }, function (rejectionReason) { // 3 - etape pour fix l'erreur format token non reconnu 
+                            console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4 - etape pour fix l'erreur format token non reconnu 
+                            responseClone.text() // 5 - etape pour fix l'erreur format token non reconnu 
+                                .then(function (bodyText) {
+                                    console.log('Received the following instead of valid JSON:', bodyText); // 6 - etape pour fix l'erreur format token non reconnu -> voir les infos dans le terminal l'erreur ne s'affiche plus
+                                });
                         })
                 } catch (error) {
                     console.error('Une erreur est survenue:', error);
@@ -242,6 +248,7 @@ export default function ListsSettingsScreen({ }) {
             case "TV":
                 console.log("case type : TV");
                 try {
+                    let responseClone; // 1 - etape pour fix l'erreur format token non reconnu -> Fetch error: [SyntaxError: JSON Parse error: Unexpected character: <]
                     // Si le type est TV
                     //Entregistrement des parametres de la liste en base de données
                     // et ajoute l'id de la liste dans user en base de données
@@ -267,11 +274,12 @@ export default function ListsSettingsScreen({ }) {
                                     throw new Error(`HTTP error! status: ${response.status}`);
                                 }
                             }
+                            responseClone = response.clone(); // 2 - etape pour fix l'erreur format token non reconnu 
                             return response.json();
                         })
                         .then((data) => {
                             console.log('Données création de list:', data)
-                            const newdata = data.map((item) => {item})
+                            const newdata = data.map((item) => { item })
                             console.log("newData:", newdata)
                             console.log("type:", newdata.option.content_type)
                             console.log("récupe:", newdata.movies)
@@ -282,6 +290,12 @@ export default function ListsSettingsScreen({ }) {
                             const newMedia = newdata.movies
                             setMediaOfList(newMedia)
                             dispatch(addMediaList(newMedia));
+                        }, function (rejectionReason) { // 3 - etape pour fix l'erreur format token non reconnu 
+                            console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4 - etape pour fix l'erreur format token non reconnu 
+                            responseClone.text() // 5 - etape pour fix l'erreur format token non reconnu 
+                                .then(function (bodyText) {
+                                    console.log('Received the following instead of valid JSON:', bodyText); // 6 - etape pour fix l'erreur format token non reconnu -> voir les infos dans le terminal l'erreur ne s'affiche plus
+                                });
                         })
                 } catch (error) {
                     console.error('Une erreur est survenue:', error);
@@ -302,8 +316,8 @@ export default function ListsSettingsScreen({ }) {
         if (isEmpty(list.name)) return alert("Name of list is requiere !!!");
         if (isEmpty(list.types)) return alert("Type of list is requiere !!!");
         addParameterListToMovieList();
-        navigation.navigate("ListCreatedSwipeScreen", { moviesToSwipe: mediaOfList });
-        //navigation.navigate("List", { moviesToSwipe: mediaOfList });
+        //navigation.navigate("ListCreatedSwipeScreen", { moviesToSwipe: mediaOfList });
+        navigation.navigate("List", { moviesToSwipe: mediaOfList });
     }
 
     useFocusEffect(

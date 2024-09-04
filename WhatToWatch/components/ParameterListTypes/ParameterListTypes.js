@@ -46,7 +46,7 @@ export default function ParameterListTypes({refresTypeOfList}){
     return(
         <ParameterContainer 
             name={"CATEGORIES"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             onPressIcon={() => alert("Mettre un fonction ici !")}
             styleParameterContenuContainer={styles.parameterContenuContainer}
             contenu={

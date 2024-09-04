@@ -102,6 +102,10 @@ const ListScreen = ({ navigation }) => {
             .finally(() => setLoadingLists(false));
     }, [baseUrl, userToken]);
 
+    const handleAddListPress = () => {
+        navigation.navigate("ListsSettingsScreen")
+    }
+
     useFocusEffect(
         useCallback(() => {
             fetchUserLikes();
@@ -234,7 +238,7 @@ const ListScreen = ({ navigation }) => {
                         buttonContainer={styles.buttonContent}
                         button={styles.button}
                         buttonLabel={styles.buttonLabel}
-                    //onItemPress={handleAddListPress}
+                        onItemPress={handleAddListPress}
                     />
                 </View>
             </View>

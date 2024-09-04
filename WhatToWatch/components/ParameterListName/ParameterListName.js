@@ -20,7 +20,7 @@ export default function ParameterListName({saveName}){
     return(
         <ParameterContainer
             name={"NAME"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             //imageaccessible={true} à paramètrer
             onPressIcon={() => alert("Mettre un fonction ici !")}
             styleParameterContenuContainer={styles.parameterContenuContainer}

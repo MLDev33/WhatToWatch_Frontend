@@ -28,7 +28,7 @@ export default function ParameterListAvatar({}){
 
     /**
      * Fonction qui permet d'afficher la modal qui contient les avatars
-     * au click sur l'icon arrow_navigate_right
+     * au click sur l'icon chevron_navigate_right
      * 
      * @returns {boolean} state of isModalAvatarVisible
      */
@@ -50,7 +50,7 @@ export default function ParameterListAvatar({}){
     return(
         <ParameterContainer 
             name={"AVATAR"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             onPressIcon={onPressIcon}
             styleParameterContenuContainer={styles.parameterContenuContainer}
             contenu={

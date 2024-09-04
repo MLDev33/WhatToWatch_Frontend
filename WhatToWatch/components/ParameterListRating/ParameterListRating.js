@@ -17,7 +17,7 @@ export default function ParameterListRating(){
     return(
         <ParameterContainer 
             name={"MINIMUM RATING"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             nPressIcon={() => alert("Mettre un fonction ici !")}
             styleParameterContenuContainer={styles.parameterContenuContainer}
             contenu={

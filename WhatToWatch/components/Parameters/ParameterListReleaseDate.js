@@ -15,7 +15,7 @@ export default function ParameterListReleaseDate(){
     return(
         <ParameterContainer 
             name={"RELEASE DATE"}
-            image={arrow_navigate_right}
+            image={chevron_navigate_right}
             // onPressIcon={handleArrowNamePress}
             styleParameterContenuContainer={styles.parameterContenuContainer}
             contenu={
