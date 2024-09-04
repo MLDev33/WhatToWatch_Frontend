@@ -59,7 +59,7 @@ export default function ListAvatarComponent({
                   }}
                 >
                     <View style={stylesAvatar}>
-                        {/* <Image style={stylesAvatar} source={source}/> */}
+                        <Image style={stylesAvatar} source={source}/>
                     </View>
                     <Text style={stylesButtonLabel}>
                         {label}
