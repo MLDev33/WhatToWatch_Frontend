@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import RecoveredPasswordModal from "./RecoveredPassword";
-import GradientButton from "../GradientButton";
+import CenteredGradientButton from "../CenteredGradientButton";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
@@ -63,7 +63,7 @@ export default function ForgottenPassword({ modalVisible, setModalVisible }) {
               />
               </View>
             <View style={styles.buttonWrapper}>
-              <GradientButton
+              <CenteredGradientButton
                 buttonText="Recover Password"
                 onPress={() => handleSubmit()}
               />

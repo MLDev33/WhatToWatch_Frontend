@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginBottom: 20,
         width: '60%',
-        textAlign: 'center'
+        // textAlign: 'center'
       },
 
 });
