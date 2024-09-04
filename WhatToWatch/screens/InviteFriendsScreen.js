@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import ShareButton from '../components/ShareButton';
 import Icon from "react-native-vector-icons/Ionicons";
 import CenteredGradientButton from '../components/CenteredGradientButton';
+import arrowLeftIcon from "../assets/Icons/arrowLeftIcon.png";
 
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 
@@ -41,17 +42,8 @@ const InviteFriendsScreen = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
            <View style={styles.backButtonView}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Icon
-              name="chevron-back-outline"
-              size={20}
-              color="#007BFF"
-              // style={styles.backButtonText}
-            />
-            <Text style={styles.backButtonText}>Back</Text>
+             <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image style={styles.backButton} source={arrowLeftIcon} />
           </TouchableOpacity>
         </View>
            <Image
@@ -111,7 +103,11 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginBottom: 20,
         width: '60%',
-        // textAlign: 'center'
+      },
+      backButton: {
+        justifyContent: "flex-start",
+        right: 180,
+        bottom: 120,
       },
 
 });

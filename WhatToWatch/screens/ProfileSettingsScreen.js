@@ -19,6 +19,7 @@ import { Avatar } from "react-native-elements";
 import AvatarModal from "../components/Profile/AvatarModal";
 import { FontAwesome } from "@expo/vector-icons";
 import Header from "../components/Header";
+import arrowLeftIcon from "../assets/Icons/arrowLeftIcon.png";
 
 const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
@@ -175,21 +176,28 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-     <Header
+       <View style={styles.header}>
+      <Header
         username={username}
         avatar={avatar}
         setAvatarModalVisible={setAvatarModalVisible}
         isProfileScreen={true}
       />
-      <View style={styles.header}>
+      </View>
+      {/* <View style={styles.header}> */}
+        {/* <View style={styles.leftIconContainer}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Image style={styles.leftIcon} source={arrowLeftIcon} />
+                    </TouchableOpacity>
+                </View> */}
         {/* <View style={styles.headerContent}> */}
-          {/* <Image
+        {/* <Image
             source={require("../assets/imgsmall.png")}
             style={styles.logo}
           /> */}
-          {/* <View style={styles.textAndImageContainer}>
+        {/* <View style={styles.textAndImageContainer}>
             {/* <Text style={styles.text}>{username}</Text> */}
-            {/* {avatar === undefined ? (
+        {/* {avatar === undefined ? (
               <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
                 <Image
                   source={require("../assets/avatar-1.png")}
@@ -202,40 +210,41 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                 <Image source={{ uri: avatar }} style={styles.profileImage} />
                 <Avatar.Accessory size={24} />
               </TouchableOpacity>
-            )} */} 
-          {/* </View> */}
+            )} */}
         {/* </View> */}
-        <View>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Icon
-              name="chevron-back-outline"
-              size={20}
-              color="#007BFF"
-              // style={styles.backButtonText}
-            />
-            <Text style={styles.backButtonText}>Back</Text>
+        {/* </View> */}
+
+        <View style={styles.headerContent}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image style={styles.leftIcon} source={arrowLeftIcon} />
           </TouchableOpacity>
+
+          <Icon
+            name="settings-outline"
+            size={24}
+            color="#fff"
+            style={styles.settingsIcon}
+          />
         </View>
         <View style={styles.titleView}>
           <View style={styles.bottomBar}>
-          <Text style={styles.title}>Profile Settings</Text>
-          
-          {/* <Icon
+            <Text style={styles.title}>Profile Settings</Text>
+
+            {/* <Icon
             name="settings-outline"
             size={24}
             color="#fff"
             style={styles.settingsIcon}
           /> */}
-          
+          </View>
         </View>
-      </View>
-      </View>
+      {/* </View> */}
       <ScrollView>
         <View style={styles.section}>
-          <Text style={styles.title}>NAME</Text>
+        <View style={styles.bottomBar}>
+          <Text style={styles.sectionTitle}>NAME</Text>
+          </View>
+          <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <Icon
               name="person-outline"
@@ -252,7 +261,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
               style={styles.input}
             />
           </View>
-
+          </View>
           {error && <Text style={styles.error}>{errorMessage}</Text>}
           <View style={styles.buttonWrapper}>
             <TouchableOpacity
@@ -267,8 +276,10 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
         <View style={styles.section}>
           {!isGoogleUser ? (
             <>
-              <Text style={styles.title}>EMAIL</Text>
-
+            <View style={styles.bottomBar}>
+              <Text style={styles.sectionTitle}>EMAIL</Text>
+              </View>
+              <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
                 <Icon
                   name="mail-outline"
@@ -288,7 +299,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                   style={styles.input}
                 />
               </View>
-
+</View>
               {wrongEmail && (
                 <Text style={styles.error}>{wrongEmailMessage}</Text>
               )}
@@ -301,7 +312,9 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.section}>
-                <Text style={styles.title}>LANGUAGE</Text>
+              <View style={styles.bottomBar}>
+                <Text style={styles.sectionTitle}>LANGUAGE</Text>
+                </View>
                 <View style={styles.buttonWrapper}>
                   <TouchableOpacity
                     style={styles.button2}
@@ -313,8 +326,10 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
               </View>
 
               <View style={styles.section}>
-                <Text style={styles.title}>PASSWORD</Text>
-
+              <View style={styles.bottomBar}>
+                <Text style={styles.sectionTitle}>PASSWORD</Text>
+                </View>
+                <View style={styles.inputContainer}>
                 <View style={styles.inputWrapper}>
                   <Icon
                     name="lock-closed-outline"
@@ -385,6 +400,7 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                     value={confirmNewPassword}
                     style={styles.input}
                   />
+                  {/* </View> */}
                   <TouchableOpacity
                     onPress={handlePasswordVisibility}
                     style={styles.eyeIcon}
@@ -396,8 +412,8 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                     />
                   </TouchableOpacity>
                 </View>
+                </View>
                 {/* </View> */}
-                <View></View>
                 {PasswordError && (
                   <Text style={styles.error}>{PasswordErrorMessage}</Text>
                 )}
@@ -409,14 +425,13 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
                 </TouchableOpacity> */}
 
                 <View style={styles.buttonWrapper}>
-                <TouchableOpacity
-                  style={styles.button2}
-                  onPress={() => handleChangePassword()}
-                >
-                  <Text style={styles.buttonText}>Change Password</Text>
-                </TouchableOpacity>
-              </View>
-
+                  <TouchableOpacity
+                    style={styles.button2}
+                    onPress={() => handleChangePassword()}
+                  >
+                    <Text style={styles.buttonText}>Change Password</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </>
           ) : (
@@ -424,15 +439,17 @@ const ProfileSettingsScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
           )}
 
           <View style={styles.section}>
-            <Text style={styles.title}>ACCOUNT</Text>
+          <View style={styles.bottomBar}>
+            <Text style={styles.sectionTitle}>ACCOUNT</Text>
+            </View>
             <View style={styles.buttonWrapper}>
-            <TouchableOpacity
-              style={styles.button2}
-              activeOpacity={0.8}
-              onPress={() => setDeleteAccountModalVisible(true)}
-            >
-              <Text style={styles.textButton}>DELETE ACCOUNT</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button2}
+                activeOpacity={0.8}
+                onPress={() => setDeleteAccountModalVisible(true)}
+              >
+                <Text style={styles.textButton}>DELETE ACCOUNT</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -460,7 +477,8 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    marginBottom: 20,
+    marginVertical: 20,
+    paddingHorizontal: 10,
   },
   headerContent: {
     flexDirection: "row",
@@ -488,15 +506,21 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   title: {
+    textAlign: "center",
+    fontSize: 20,
+    color: "#fff",
+    fontWeight: "bold",
+    marginVertical: 5,
+  },
+  sectionTitle: {
     textAlign: "flex-start",
     fontSize: 20,
     color: "#fff",
     fontWeight: "bold",
-    marginTop: 5,
+    marginVertical: 5,
   },
   section: {
     borderColor: "red",
-    paddingHorizontal: 20,
   },
 
   buttonText: {
@@ -560,21 +584,22 @@ const styles = StyleSheet.create({
   },
   titleView: {
     flexDirection: "row",
-    // justifyContent: 'space-around'
-    // paddingTop: 20,
-  },
-  settingsIcon: {
-    // flexDirection: "row",
-    paddingTop: 5,
-    left: 100,
   },
   bottomBar: {
     flex: 1,
-    borderBottomColor: '#7C4DFF',
+    borderBottomColor: "#7C4DFF",
     borderBottomWidth: 2,
-    marginHorizontal: 15
-
-  }
+    marginHorizontal: 15,
+    marginVertical: 20,
+  },
+  inputContainer: {
+    marginHorizontal: 15,
+  },
+  // iconsContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignContent: "space-around",
+  // }
 });
 
 export default ProfileSettingsScreen;

@@ -14,6 +14,7 @@ export default function ListAvatarComponent({
   stylesButtonLabel,
   clickAvatar,
   stylesLinearGradient,
+  stylesAvatarContainer,
   stylesAvatar,
   label,
   source,
@@ -58,7 +59,7 @@ export default function ListAvatarComponent({
                     //console.log(`Dans parameters list: ${label} is clicked ${toggleAvatarButton}`)
                   }}
                 >
-                    <View style={stylesAvatar}>
+                    <View style={stylesAvatarContainer}>
                         <Image style={stylesAvatar} source={source}/>
                     </View>
                     <Text style={stylesButtonLabel}>

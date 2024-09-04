@@ -142,7 +142,7 @@ export default function SignUp({ navigation }) {
 
   const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-  //penser a ajouter logo
+
   //list updated with platforms that provide results
   const providers = [
     {
@@ -299,7 +299,7 @@ export default function SignUp({ navigation }) {
           } else {
             setCredentialError(data.error);
           }
-          console.log("button clicked");
+          // console.log("button clicked");
         })
         .catch((error) => {
           console.error("Error during sign up:", error);

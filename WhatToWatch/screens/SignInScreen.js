@@ -150,7 +150,6 @@ export default function SignIn({ navigation }) {
               </Text>
             </View>
           </ImageBackground>
-
           <View style={styles.formContent}>
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
@@ -188,16 +187,13 @@ export default function SignIn({ navigation }) {
                 onPress={handleSubmit}
               />
             </View>
-
             <Text style={styles.orText}>or login with</Text>
-
             <TouchableOpacity style={styles.googleButton} onPress={() => promptAsync()}>
               <Image
                 source={require("../assets/google-logo-dark.png")}
                 style={styles.googleLogo}
               />
             </TouchableOpacity>
-
             <View style={styles.bottomLinks}>
             <Text style={styles.link}>Don't have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
@@ -210,8 +206,6 @@ export default function SignIn({ navigation }) {
                 <Text style={styles.button2}> Click here</Text>
               </TouchableOpacity>
             </View>
-
-
             <ForgottenPassword
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}

@@ -34,32 +34,32 @@ const ListScreen = ({ navigation }) => {
     const userToken = useSelector((state) => state.user.value.token);
     const dispatch = useDispatch();
 
+  const fetchUserLikes = useCallback(() => {
 
+    fetch(`${baseUrl}movies/user-likes?userToken=${userToken}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          console.log("Liked media:", data.likedMedia);
+          if (Array.isArray(data.likedMedia)) {
+            setYourLikes(data.likedMedia);
+            console.log("Your likes:", data.likedMedia);
+          } else {
+            console.error("likedMedia is not an array");
+          }
+        } else {
+          console.error(data.message);
+        }
+      })
+      .catch((error) => console.error("Fetch error:", error))
+      .finally(() => setLoadingLikes(false));
+  }, [baseUrl, userToken]);
 
-    const fetchUserLikes = useCallback(() => {
-        console.log("User token:", userToken);
-        fetch(`${baseUrl}movies/user-likes?userToken=${userToken}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                if (data.success) {
-                    console.log("Liked media:", data.likedMedia);
-                    if (Array.isArray(data.likedMedia)) {
-                        setYourLikes(data.likedMedia);
-                    } else {
-                        console.error("likedMedia is not an array");
-                    }
-                } else {
-                    console.error(data.message);
-                }
-            })
-            .catch((error) => console.error("Fetch error:", error))
-            .finally(() => setLoadingLikes(false));
-    }, [baseUrl, userToken]);
 
     const fetchUserLists = useCallback(() => {
         let responseClone; // 1 - etape pour fix l'erreur format token non reconnu -> Fetch error: [SyntaxError: JSON Parse error: Unexpected character: <]

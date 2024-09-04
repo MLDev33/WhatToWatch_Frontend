@@ -47,13 +47,14 @@ const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        username={username}
-        avatar={avatar}
-        setAvatarModalVisible={setAvatarModalVisible}
-        isProfileScreen={true}
-      />
-
+      <View style={styles.header}>
+        <Header
+          username={username}
+          avatar={avatar}
+          setAvatarModalVisible={setAvatarModalVisible}
+          isProfileScreen={true}
+        />
+      </View>
       <View style={styles.section}>
         <GradientButton
           iconName="settings-outline"
@@ -133,6 +134,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#0d0f2b",
     paddingHorizontal: 10,
     paddingTop: 20,
+  },
+  header: {
+    alignItems: "center",
+    marginVertical: 20,
+    paddingHorizontal: 10,
   },
   section: {
     marginVertical: 30,
