@@ -13,8 +13,10 @@ import { useFocusEffect } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons"; // Importation de FontAwesome pour l'icône de cœur
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header";
-import ButtonComponent from "../components/Lists/ButtonComponent.js";
+import HeaderTitle from "../components/Header/HeaderTitle.js";
+import ButtonComponent from "../components/Buttons/ButtonComponent.js";
 import { addLists, addMediaListSelected } from "../reducers/list.js";
+
 const ListScreen = ({ navigation }) => {
     const [yourLikes, setYourLikes] = useState([]);
     const [userLists, setUserLists] = useState([]);
@@ -136,6 +138,9 @@ const ListScreen = ({ navigation }) => {
                 isProfileScreen={false}
                 setAvatarModalVisible={() => { }}
             />
+            <View style={styles.headerTitleContainer}>
+                <HeaderTitle style={styles.HeaderTitle} title={"Lists"} />
+            </View>
             <View style={styles.bodyScreenContainer}>
                 <View style={styles.section}>
                     <Text style={styles.header}>Your Likes</Text>

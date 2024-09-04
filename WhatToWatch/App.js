@@ -12,6 +12,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ListScreen from "./screens/ListScreen";
 import LikedMediaScreen from "./screens/LikedMediaScreen";
 import ListMediaScreen from './screens/ListMediaScreen';
+import ListsSettingsScreen from "./screens/ListsSettingsScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileSettingsScreen from "./screens/ProfileSettingsScreen";
@@ -151,6 +152,7 @@ function UserListNavigationLayout() {
       <Stack.Screen name="ListScreen" component={ListScreen} />
       <Stack.Screen name="LikedMedia" component={LikedMediaScreen} />
       <Stack.Screen name="ListMediaScreen" component={ListMediaScreen} />
+      <Stack.Screen name="ListsSettingsScreen" component={ListsSettingsScreen} />
     </Stack.Navigator>
   );
 }

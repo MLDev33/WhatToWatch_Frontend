@@ -17,12 +17,13 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { addLists } from "../reducers/list.js";
-//import Header from "../components/Header.js";
-//import HeaderTitle from "../components/HeaderTitle.js";
-//import arrow_navigate_right from '../assets/icons/arrow_navigate_right.png';
+import Header from "../components/Header/Header.js";
+import HeaderTitle from "../components/Header/HeaderTitle.js";
+//import chevron_navigate_right from '../assets/icons/chevronnavigate_right.png';
 //import arrow_navigate_down from '../assets/icons/arrow_navigate_down.png';
-import ButtonComponent from "../components/Lists/ButtonComponent.js";
-//import arrowLeftIcon from "../assets/icons/arrowLeftIcon.png";
+
+import ButtonComponent from "../components/Buttons/ButtonComponent.js";
+import arrowLeftIcon from "../assets/Icons/arrowLeftIcon.png";
 //import arrowRightIcon from "../assets/icons/arrowRightIcon.png";
 import MediaCardForList from '../components/Lists/MediaCardForList.js';
 import { useNavigation } from "@react-navigation/native";
@@ -44,6 +45,7 @@ export default function ListMediaScreen() {
     const [selectedMedia, setSelectedMedia] = useState(null);
     const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const user = useSelector((state) => state.user.value);
     const list = useSelector((state) => state.list.value)
     const moviesFromReducer = list.mediaListSelected.movies
     const navigation = useNavigation();
@@ -107,7 +109,7 @@ export default function ListMediaScreen() {
     const handleMoreMediaPress = () => {
         const listId = list.mediaListSelected._id
 
-        //mémo : fetchListMedia() avec ingrementation de la page +1 
+        //mémo : fetchListMedia() avec incrementation de la page +1 
     }
 
     /**
@@ -144,7 +146,7 @@ export default function ListMediaScreen() {
 
     return (
         <View style={styles.pageContainer}>
-            {/* <View style={styles.headerContainer}>
+            <View style={styles.headerContainer}>
                 <Header label={user.username} />
             </View>
             <View style={styles.headerTitleContainer}>
@@ -159,7 +161,7 @@ export default function ListMediaScreen() {
                         <Image />
                     </TouchableOpacity>
                 </View>
-            </View> */}
+            </View>
 
             <View style={styles.bodyScreenContainer}>
                 <View style={styles.parameterAvatarHeader}>
@@ -453,49 +455,6 @@ const styles = StyleSheet.create({
         textAlign: "right",
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //// A supprimer si ok 
-    listCardContainer: {
-        backgroundColor: "white",
-        justifyContent: "center",
-        margin: 10,
-        height: 100,
-        width: 360,
-        backgroundColor: "#4C4C67",
-        borderWidth: 1,
-        borderRadius: 10,
-    },
-    listCardInfosContainer: {
-        flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingTop: 10,
-        paddingEnd: 10,
-        paddingStart: 10,
-
-
-    },
     listCardTextContainer: {
         flex: 1,
         alignItems: "flex-start",
