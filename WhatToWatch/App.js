@@ -33,9 +33,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./reducers/user";
+import list from "./reducers/list";
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { user, list },
 });
 
 const Tab = createBottomTabNavigator();
