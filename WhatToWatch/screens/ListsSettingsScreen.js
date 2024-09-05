@@ -281,6 +281,10 @@ export default function ListsSettingsScreen({ }) {
                             return response.json();
                         })
                         .then((data) => {
+                            // navigation.navigate("ListScreen", 
+                            //     // { moviesToSwipe: mediaOfList }
+                            // );
+
                             console.log('Données création de list:', data)
                             const newdata = data.map((item) => { item })
                             console.log("newData:", newdata)
@@ -323,11 +327,11 @@ export default function ListsSettingsScreen({ }) {
         if (isEmpty(list.types)) return alert("List type is required !!!");
         addParameterListToMovieList();
         //navigation.navigate("ListCreatedSwipeScreen", { moviesToSwipe: mediaOfList });
-        navigation.navigate("ListScreen", 
-            // { moviesToSwipe: mediaOfList }
+        setTimeout(() => {
+            navigation.navigate("ListScreen");
+          }, 1000);
 
-
-        );
+      
     }
 
     useFocusEffect(

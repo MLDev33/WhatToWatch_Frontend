@@ -31,6 +31,7 @@ const ListScreen = ({ navigation }) => {
     const list = useSelector((state) => state.list.value)
     let username = user.username;
     let userAvatar = user.avatar;
+    let listAvatar = list.avatar
     const userToken = useSelector((state) => state.user.value.token);
     const dispatch = useDispatch();
 
@@ -195,9 +196,9 @@ const ListScreen = ({ navigation }) => {
                                     onPress={() => handlePress(list)}
                                 >
                                     <View style={styles.listCardInfosContainer}>
-                                       {list.avatar === null ? (
+                                       {listAvatar === null ? (
                       <Image
-                        source={{ uri: list.avatar }}
+                        source={{ uri: listAvatar }}
                         style={styles.avatar}
                       />
                     ) : (

@@ -427,7 +427,7 @@ export default function ListMediaScreen() {
 
                 <View style={styles.bodyScreenContainer}>
                     <View style={styles.parameterAvatarHeader}>
-                    {list.mediaListSelected.avatar === null ? (
+                    {list.mediaListSelected.avatar !== null ? (
                       <Image
                         source={{ uri: list.avatar }}
                         style={styles.avatar}
