@@ -22,7 +22,7 @@ import CenteredGradientButton from "../components/CenteredGradientButton";
 
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
 const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-const baseUrl = localUrl;
+const baseUrl = vercelUrl;
 
 const ProfileScreen = ({ navigation, hasAvatar, setHasAvatar }) => {
   const [darkMode, setDarkMode] = useState(true);

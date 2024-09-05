@@ -34,7 +34,7 @@ const LikedMediaScreen = ({ navigation }) => {
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  const baseUrl = localUrl;
+  const baseUrl = vercelUrl;
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
