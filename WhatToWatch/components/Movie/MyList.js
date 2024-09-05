@@ -7,7 +7,7 @@ const MyList = ({ items, onPress, onSchedule }) => {
     <View style={styles.container}>
       {items.length > 0 ? (
         items.map((item) => {
-          const formattedDate = moment(item.release_date).format('YYYY-MM-DD');
+          const formattedDate = moment(item.release_date).format('DD/MM/YYYY');
           return (
             <View key={item._id} style={styles.card}>
               <TouchableOpacity onPress={() => onPress(item)}>

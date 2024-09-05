@@ -8,7 +8,7 @@ export default function GenreComponent({
   stylesButtonLabel,
   clickGenres,
   stylesLinearGradient,
-  key,
+  genreId, // Utilisez genreId au lieu de key
   label,
   results,
 } ){

@@ -10,6 +10,7 @@ import { useEffect, useState} from "react";
 import { addProviders } from "../../reducers/list.js";
 import { element } from "prop-types";
 
+
 const data = [
     {"key": 2, "value": "Apple TV"}, 
     {"key": 8, "value": "Netflix"}, 
@@ -42,7 +43,7 @@ const data = [
             onSelect={()=> console.log("Streaming choices", providersOfList)}
             save="key"
             searchPlaceholder="Search"
-            fontFamily="Inter"
+            fontFamily="Roboto"
             notFoundText='No found'
             labelStyles={{color:"white"}} // style nom catégorie
             badgeStyles={{backgroundColor: "green"}}

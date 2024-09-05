@@ -77,6 +77,7 @@ const ListScreen = ({ navigation }) => {
                 return response.json();
             })
             .then((data) => {
+                console.log("-----------Données récupérées-------------:", data);
                 if (data.success) {
                     console.log("User lists:", data.listsMedia);
                     if (Array.isArray(data.listsMedia)) {

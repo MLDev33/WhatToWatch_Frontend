@@ -26,6 +26,7 @@ import * as Google from "expo-auth-session/providers/google";
 
 
 
+
 WebBrowser.maybeCompleteAuthSession();
 
 //try fix modal swipping issue

@@ -232,6 +232,9 @@ export default function ListsSettingsScreen({ }) {
                             const newMedia = data.movies
                             setMediaOfList(newMedia)
                             dispatch(addMediaList(newMedia));
+
+                           
+
                         }, function (rejectionReason) { // 3 - etape pour fix l'erreur format token non reconnu 
                             console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4 - etape pour fix l'erreur format token non reconnu 
                             responseClone.text() // 5 - etape pour fix l'erreur format token non reconnu 
@@ -289,6 +292,9 @@ export default function ListsSettingsScreen({ }) {
                             const newMedia = newdata.movies
                             setMediaOfList(newMedia)
                             dispatch(addMediaList(newMedia));
+
+                       
+
                         }, function (rejectionReason) { // 3 - etape pour fix l'erreur format token non reconnu 
                             console.log('Error parsing JSON from response:', rejectionReason, responseClone); // 4 - etape pour fix l'erreur format token non reconnu 
                             responseClone.text() // 5 - etape pour fix l'erreur format token non reconnu 

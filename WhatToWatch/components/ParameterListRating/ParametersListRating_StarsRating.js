@@ -10,26 +10,32 @@ import { useDispatch } from 'react-redux';
 import { AirbnbRating } from 'react-native-ratings';
 import { addRating } from '../../reducers/list';
 
-export default function ParametersListRating_StarsRating(){
+export default function ParametersListRating_StarsRating({
+    count = 10,
+    defaultRating = 0,
+    showRating = false,
+    selectedColor = 'yellow',
+    size = 20,
+}){
 
     //Le minimum rating est la note moyen minimum des media que l'utilisateur veux dans sa liste
-    const [ratingOfList, setRatingOfList] =useState(0)
+    const [ratingOfList, setRatingOfList] = useState(0);
 
     const dispatch = useDispatch();
 
     const handleRatingComplete = (ratingValue) => {
         setRatingOfList(ratingValue);
-        dispatch(addRating(ratingValue))
-    }
+        dispatch(addRating(ratingValue));
+    };
 
     return(
         <View style={styles.ratingContainer}>
             <AirbnbRating 
-                count={10}
-                defaultRating={0}
-                showRating={false}
-                selectedColor='yellow'
-                size={20} 
+                count={count}
+                defaultRating={defaultRating}
+                showRating={showRating}
+                selectedColor={selectedColor}
+                size={size} 
                 onFinishRating={handleRatingComplete}
             />
             <View>
@@ -53,4 +59,4 @@ const styles = StyleSheet.create({
         fontSize:16,
         textAlign:"bottom",
     }
-})
+});

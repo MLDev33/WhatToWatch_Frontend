@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.3",
     "@expo/webpack-config": "^19.0.1",
     "@fanchenbao/react-native-scroll-indicator": "^0.2.2",
     "@miblanchard/react-native-slider": "^2.6.0",

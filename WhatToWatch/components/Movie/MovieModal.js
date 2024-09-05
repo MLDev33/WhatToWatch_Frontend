@@ -7,7 +7,7 @@ import LikeButton from '../LikeButton';
 import DislikeButton from '../DislikeButton';
 import ShareButton from '../ShareButton';
 import UndoButton from '../UndoButton';
-
+import moment from 'moment';
 const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onUndo, onSwipe, canUndo, showDislikeButton, showUndoButton }) => {
   if (!movie) return null;
 
@@ -62,7 +62,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
       totalLength += genre.length;
     }
 
-    return displayedGenres.join(", ");
+    return displayedGenres.join("");
   };
 
   return (
@@ -93,7 +93,7 @@ const MovieModal = React.memo(({ visible, movie, onClose, onLike, onDislike, onU
                 <View style={styles.modalDetailsRow}>
                   <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>genre : {renderGenres(memoizedMovie.genre)}</Text>
                   <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>type : {memoizedMovie.type}</Text>
-                  <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>Année: {memoizedMovie.annee}</Text>
+                  <Text style={[styles.modalDetailsText, memoizedMovie.type === 'série' && styles.seriesSpacing]}>Année: {moment(memoizedMovie.annee).format('DD/MM/YYYY')}</Text>
                   <Text style={styles.modalDetailsText}>
                     Popularité: {memoizedMovie.popularite}
                   </Text>

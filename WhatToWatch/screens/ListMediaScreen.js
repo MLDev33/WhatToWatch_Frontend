@@ -51,7 +51,7 @@ const Lists = React.memo(({ movies, openModal }) => (
             styleTextVote={styles.vote}
             popularite={item.popularite}
             styleTextPopularite={styles.popularite}
-            genre={item.popularite}
+            genre={item.genre}
             styleTextGenre={styles.genre}
         />
     ))
@@ -160,8 +160,8 @@ export default function ListMediaScreen() {
         useCallback(() => {
             fetchListMedia();
             setMovies(list.mediaListSelected.movies)  // pb avec acces à movies depuis resultat du fetch ??
-            //console.log("List:", "listSelected")
-            // console.log("movies:", list.mediaListSelected.movies)
+            console.log("List:", "listSelected")
+             console.log("movies:", list.mediaListSelected.movies)
         }, [fetchListMedia])
     );
 
@@ -684,7 +684,7 @@ const styles = StyleSheet.create({
     },
     vote: {
         color: "white",
-        textAlign: "right",
+        marginLeft: -20,
     },
     popularite: {
         color: "white",

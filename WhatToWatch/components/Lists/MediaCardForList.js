@@ -20,8 +20,13 @@ export default function MediaCardForList({
     styleTextPopularite,
     styleVoteEtPopuariteContainer,
     genre,
-    styleTextGenre
+    styleTextGenre,
+
 }) {
+    const arrondirUneDecimale = (valeur) => {
+        return Number(valeur.toFixed(1));
+    };
+
     return (
         <View >
             <LinearGradient
@@ -54,7 +59,7 @@ export default function MediaCardForList({
                         <View style={styleVoteEtPopuariteContainer}>
                             <Text style={styleTextPopularite}>
                                 <Text style={{color: "black", fontWeight:"bold"}}>Popularité : </Text>
-                                {popularite}
+                                {arrondirUneDecimale(popularite)}
                             </Text>
                             <Text style={styleTextVote}>
                                 <Text style={{color: "black", fontWeight:"bold"}}>Vote : </Text>

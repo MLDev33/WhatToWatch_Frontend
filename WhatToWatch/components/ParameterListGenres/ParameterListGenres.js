@@ -27,6 +27,15 @@ export default function ParameterListGenres({typesOfList}){
 
     const list = useSelector((state) => state.list.value) 
 
+
+
+    useEffect(() => {
+        if (!isEmptyArray(typesOfList)) {
+            getGenres(typesOfList);
+        }
+    }, [typesOfList]);
+
+
     /**
      * Fonction qui fetch les genres pour les media de type movie
      */
@@ -68,8 +77,8 @@ export default function ParameterListGenres({typesOfList}){
      * @returns 
      */
     async function getGenres(genresMedia){
-        fetchMovieGenres()
-        fetchTvGenres()
+        await fetchMovieGenres()
+        await fetchTvGenres()
 
         let listAllGenres = [];
         let movieGenresValid =  genresMovieFetch;
@@ -84,7 +93,7 @@ export default function ParameterListGenres({typesOfList}){
         if(genresMedia.includes("Movie")){
             movieGenresValid.map((genreM) => {
                 //console.log("genreMovie", genreM);
-                addElement = genreM;
+                let addElement = genreM;
                 addElement.type = ["movie"];
                 listAllGenres.push(addElement);
                 //console.log("AddMovieGenre", addElement);
@@ -134,9 +143,14 @@ export default function ParameterListGenres({typesOfList}){
         return listAllGenres
     };
 
+    //test fix pour premiere ouverture de la modal
+
+
+
+
     const onPressIcon = async() => {
         if(isEmptyArray(list.types)) return alert("Category required !!!")
-        const afficherGenres = getGenres(typesOfList)
+        await getGenres(typesOfList);
         setIsModalGenresVisible(true)
     }
 

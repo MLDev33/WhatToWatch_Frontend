@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "whatToWatch",
-    "owner" : "whattowatch",
+    "owner": "whattowatch",
     "slug": "whatToWatch",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -31,11 +31,13 @@
         "projectId": "547b6edd-7e9c-4aba-b9a7-7ef1c4b7f217"
       }
     },
-    
     "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/547b6edd-7e9c-4aba-b9a7-7ef1c4b7f217"
     },
-    "scheme": "whattowatch"
+    "scheme": "whattowatch",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
