@@ -140,6 +140,7 @@ export default function ParameterListAvatar_ModalAvatar({
         );
     }
 
+    let firstAvatar = 'https://res.cloudinary.com/ddr0yckcq/image/upload/v1725521994/tv_ydg3zn.png'
     return(
         <View >
             <Modal
@@ -152,7 +153,8 @@ export default function ParameterListAvatar_ModalAvatar({
                 <View  style={styles.modalContainer}>
                     <View style={styles.parameterAvatarHeader}>
                         <Image 
-                            source={{uri: isClickAvatar.source}}
+                            // source={{uri: isClickAvatar.source}}
+                            source={{uri: firstAvatar}}
                             style={styles.avatarSelected}
                         />
                         <View style={styles.avatarHeaderTextContainer}>
@@ -173,7 +175,7 @@ export default function ParameterListAvatar_ModalAvatar({
                                 { 
                                     isClickAvatar
                                     ? ""
-                                    : "Select your preferred list avatar" 
+                                    : "Select an avatar for your list" 
                                 } 
                             </Text>
                         </View>
@@ -258,6 +260,8 @@ const styles = StyleSheet.create({
     parameterAvatarTitle:{
         color:"white",
         fontSize: 20,
+        fontWeight: "bold",
+        marginVertical: 5,
     },
     parameterAvatarLegende:{
         color:"white",

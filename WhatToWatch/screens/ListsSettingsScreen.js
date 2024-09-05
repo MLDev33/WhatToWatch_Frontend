@@ -13,7 +13,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
-import Header from "../components/Header/Header.js";
+import Header from '../components/Header';
 import HeaderTitle from "../components/Header/HeaderTitle.js";
 import chevron_navigate_right from '../assets/Icons/chevron_navigate_right.png';
 import chevron_navigate_down from '../assets/Icons/chevron_navigate_down.png';
@@ -31,6 +31,7 @@ import ParameterListRelease from "../components/ParameterListRelease/ParameterLi
 
 
 import list, { addGenres, addNameList, addProviders, addTypes, addMediaList, addIdList } from '../reducers/list.js';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
@@ -49,6 +50,11 @@ export default function ListsSettingsScreen({ }) {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.value)
     const list = useSelector((state) => state.list.value)
+    let username = user.username;
+    let avatar = user.avatar;
+    let usertoken = user.token;
+
+
     const navigation = useNavigation();
 
     // Le bouton cancel renvoi vers la page List et
@@ -306,8 +312,8 @@ export default function ListsSettingsScreen({ }) {
     // Et renvoie vers la page List où la list créée ou modifié est visible 
     const handleSavePress = () => {
         console.log("valeur du reducer list:", list)
-        if (isEmpty(list.name)) return alert("Name of list is requiere !!!");
-        if (isEmpty(list.types)) return alert("Type of list is requiere !!!");
+        if (isEmpty(list.name)) return alert("List name is required !!!");
+        if (isEmpty(list.types)) return alert("List type is required !!!");
         addParameterListToMovieList();
         //navigation.navigate("ListCreatedSwipeScreen", { moviesToSwipe: mediaOfList });
         navigation.navigate("List", { moviesToSwipe: mediaOfList });
@@ -321,9 +327,14 @@ export default function ListsSettingsScreen({ }) {
     );
 
     return (
-        <View style={styles.pageContainer}>
+        <SafeAreaView style={styles.pageContainer}>
             <View style={styles.headerContainer}>
-                <Header label={user.username} />
+            <Header
+        username={username}
+        avatar={avatar}
+        isProfileScreen={false}
+        setAvatarModalVisible = {()=>{}}
+      />
             </View>
             <View style={styles.headerTitleContainer}>
                 <View style={styles.leftIconContainer}>
@@ -374,7 +385,7 @@ export default function ListsSettingsScreen({ }) {
                     </View>
                 </ScrollView>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -401,7 +412,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderTopColor: "#7C4DFF",
-        borderBottomColor: "#7C4DFF",
+        // borderBottomColor: "#7C4DFF",
         borderWidth: 2,
     },
     parameterContainer: {
