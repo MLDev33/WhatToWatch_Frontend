@@ -48,7 +48,7 @@ export default function HomeScreen() {
   
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  const baseUrl = localUrl;
+  const baseUrl = vercelUrl;
 
   const fetchFavouritePlatforms = useCallback(async (usertoken) => {
     try {

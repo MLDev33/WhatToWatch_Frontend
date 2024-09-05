@@ -20,7 +20,7 @@ function SearchScreen() {
   const [likedMovieTitle, setLikedMovieTitle] = useState('');
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  const baseUrl = localUrl;
+  const baseUrl = vercelUrl;
   let user = useSelector((state) => state.user.value);
   let username = user.username;
   let avatar = user.avatar;

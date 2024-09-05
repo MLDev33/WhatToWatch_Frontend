@@ -12,7 +12,7 @@ import { addAvatar } from "../../reducers/user";
 
   // Utiliser une condition pour basculer entre les URLs
   //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-  const baseUrl = localUrl; // POUR UTILISER EN LOCAL
+  const baseUrl = vercelUrl; // POUR UTILISER EN LOCAL
 
 
 export default function AvatarModal({ avatarModalVisible, setAvatarModalVisible }) {
