@@ -26,7 +26,7 @@ const ListScreen = ({ navigation }) => {
     const [selectList, setSelectList] = useState(null);
     const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
     const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-    const baseUrl = vercelUrl; // Changez en vercelUrl pour utiliser avec Vercel
+    const baseUrl = localUrl; // Changez en vercelUrl pour utiliser avec Vercel
     let user = useSelector((state) => state.user.value);
     const list = useSelector((state) => state.list.value)
     let username = user.username;

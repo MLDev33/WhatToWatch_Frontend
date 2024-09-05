@@ -15,7 +15,7 @@ const WatchScheduleScreen = () => {
     const [error, setError] = useState(null);
     const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
     const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-    const baseUrl = vercelUrl;
+    const baseUrl = localUrl;
 
     const fetchLikes = async () => {
         try {
