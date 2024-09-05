@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderTopColor: "#7C4DFF",
-        borderBottomColor: "#7C4DFF",
+        // borderBottomColor: "#7C4DFF",
         borderWidth: 2,
     },
     textAddListContainer: {

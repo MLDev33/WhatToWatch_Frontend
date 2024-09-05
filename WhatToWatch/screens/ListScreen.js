@@ -34,6 +34,8 @@ const ListScreen = ({ navigation }) => {
     const userToken = useSelector((state) => state.user.value.token);
     const dispatch = useDispatch();
 
+    let firstAvatar = 'https://res.cloudinary.com/ddr0yckcq/image/upload/v1725521994/tv_ydg3zn.png'
+
   const fetchUserLikes = useCallback(() => {
 
     fetch(`${baseUrl}movies/user-likes?userToken=${userToken}`)
@@ -175,7 +177,7 @@ const ListScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.header}>Your Lists</Text>
-                    <ScrollView>
+                    <ScrollView style={styles.mainListsContainer}>
                         {loadingLists ? (
                             <Text style={styles.loadingText}>Loading...</Text>
                         ) : userLists.length > 0 ? (
@@ -193,10 +195,17 @@ const ListScreen = ({ navigation }) => {
                                     onPress={() => handlePress(list)}
                                 >
                                     <View style={styles.listCardInfosContainer}>
-                                        <Image
-                                            source={require("../assets/avatar-1.png")}
-                                            style={styles.avatar}
-                                        />
+                                       {list.avatar === null ? (
+                      <Image
+                        source={{ uri: list.avatar }}
+                        style={styles.avatar}
+                      />
+                    ) : (
+                      <Image
+                        source={{ uri: firstAvatar }}
+                        style={styles.avatar}
+                      />
+                    )}
                                         <View style={styles.listCardTextContainer}>
                                             <Text style={styles.listCardTextTitle}>{list.list_name}</Text>
                                             <Text style={styles.listCardTextLength}>{list.movies.length} titles</Text>
@@ -204,15 +213,15 @@ const ListScreen = ({ navigation }) => {
                                         <View style={styles.shareIconContainer}>
                                             <FontAwesome
                                                 name="share-alt"
-                                                size={50}
+                                                size={20}
                                                 color="#ffF"
                                                 style={styles.shareIcon}
                                             />
                                         </View>
                                     </View>
                                     <View style={styles.listCardMembersContainer} >
-                                        <View style={styles.listCardMembersAvatar}></View>
-                                        <View style={styles.listCardMembersAvatar}></View>
+                                        {/* <View style={styles.listCardMembersAvatar}></View> */}
+                                        {/* <View style={styles.listCardMembersAvatar}></View> */}
                                         {/* avatars des friends */}
                                     </View>
                                 </TouchableOpacity>
@@ -271,7 +280,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 15,
         borderTopColor: "#7C4DFF",
-        borderBottomColor: "#7C4DFF",
+        // borderBottomColor: "#7C4DFF",
         borderWidth: 2,
     },
     likesContainer: {
@@ -319,6 +328,10 @@ const styles = StyleSheet.create({
     noDataText: {
         color: "#ffffff",
     },
+
+mainListsContainer: {
+    height: '66%'
+},
 
     ////////// Message si pas de list  /////////
     textAddListContainer: {
@@ -371,11 +384,14 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         justifyContent: "center",
         margin: 10,
-        height: 100,
+        // height: 100,
+        // padding: 10,
         width: 360,
         backgroundColor: "#4C4C67",
         borderWidth: 1,
-        borderRadius: 10,
+        borderRadius: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: 'white'
     },
     listCardInfosContainer: {
         flex: 1,
