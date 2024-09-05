@@ -79,6 +79,7 @@ export default function ListMediaScreen() {
     let usertoken = user.token;
     let avatar = user.avatar;
     let listAvatar = list.avatar;
+
      let firstAvatar = 'https://res.cloudinary.com/ddr0yckcq/image/upload/v1725521994/tv_ydg3zn.png'
 
 
@@ -427,7 +428,7 @@ export default function ListMediaScreen() {
 
                 <View style={styles.bodyScreenContainer}>
                     <View style={styles.parameterAvatarHeader}>
-                    {list.mediaListSelected.avatar !== null ? (
+                    {list.mediaListSelected.avatar === null ? (
                       <Image
                         source={{ uri: list.avatar }}
                         style={styles.avatar}

@@ -97,15 +97,17 @@ export default function ParameterListAvatar_ModalAvatar({
         setIsSelectedAvatar(isClickAvatar)
         setAvatarOfList(isClickAvatar)
         unVisible(false)
-
+        dispatch(addAvatarList(isClickAvatar.source))
+        console.log(isClickAvatar, '1')
+    
 
     };
 
     /**
      * Fonction qui envoie l'avatar au reducer list
      */
-    dispatch(addAvatarList(isClickAvatar.source))
-    console.log(isClickAvatar, '1')
+    // dispatch(addAvatarList(isClickAvatar.source))
+    // console.log(isClickAvatar, '1')
 
   
     /**
