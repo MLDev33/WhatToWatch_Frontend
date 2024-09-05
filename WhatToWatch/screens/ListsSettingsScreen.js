@@ -53,6 +53,7 @@ export default function ListsSettingsScreen({ }) {
     let username = user.username;
     let avatar = user.avatar;
     let usertoken = user.token;
+    console.log(list, 'list')
 
 
     const navigation = useNavigation();
@@ -72,15 +73,15 @@ export default function ListsSettingsScreen({ }) {
     // Fonction qui permet d'envoyer les paramètres de la liste en base de données pour les sauvegarder
     const addParameterListToMovieList = async () => {
 
-        console.log("username:", user.username)
-        console.log("token:", user.token)
-        console.log("avatar:", list.avatar)
-        console.log("list_name:", list.name)
-        console.log("types:", list.types)
-        console.log("genres:", list.genres.map(genre => { return genre.id }).slice(",").join("|"))
-        console.log("providers:", list.providers)
-        console.log("release:", list.releaseDateGte)
-        console.log("rating:", list.rating)
+        // console.log("username:", user.username)
+        // console.log("token:", user.token)
+        // console.log("avatar:", list.avatar)
+        // console.log("list_name:", list.name)
+        // console.log("types:", list.types)
+        // console.log("genres:", list.genres.map(genre => { return genre.id }).slice(",").join("|"))
+        // console.log("providers:", list.providers)
+        // console.log("release:", list.releaseDateGte)
+        // console.log("rating:", list.rating)
 
         // retraiter les parameters 
         // Pour chaque parametre préciser le format du reducer
@@ -322,7 +323,11 @@ export default function ListsSettingsScreen({ }) {
         if (isEmpty(list.types)) return alert("List type is required !!!");
         addParameterListToMovieList();
         //navigation.navigate("ListCreatedSwipeScreen", { moviesToSwipe: mediaOfList });
-        navigation.navigate("List", { moviesToSwipe: mediaOfList });
+        navigation.navigate("ListScreen", 
+            // { moviesToSwipe: mediaOfList }
+
+
+        );
     }
 
     useFocusEffect(

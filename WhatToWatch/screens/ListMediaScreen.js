@@ -15,7 +15,7 @@ import React,{ useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { addLists } from "../reducers/list.js";
-import Header from "../components/Header/Header.js";
+import Header from "../components/Header";
 import HeaderTitle from "../components/Header/HeaderTitle.js";
 import MovieModal from '../components/Movie/MovieModal';
 import { FontAwesome } from '@expo/vector-icons';
@@ -74,9 +74,12 @@ export default function ListMediaScreen() {
     const navigation = useNavigation();
     const user = useSelector((state) => state.user.value);
     const list = useSelector((state) => state.list.value)
+    console.log(list.avatar, 'avatar')
     let username = user.username;
     let usertoken = user.token;
-    let userAvatar = user.avatar;
+    let avatar = user.avatar;
+    let listAvatar = list.avatar;
+     let firstAvatar = 'https://res.cloudinary.com/ddr0yckcq/image/upload/v1725521994/tv_ydg3zn.png'
 
 
     const [errorLists, setErrorLists] = useState(null);
@@ -165,6 +168,7 @@ export default function ListMediaScreen() {
         }, [fetchListMedia])
     );
 
+    
     const transformMovie = useCallback((movie) => ({
         tmdbId: movie.id,
         mediaType: movie.type,
@@ -400,7 +404,12 @@ export default function ListMediaScreen() {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <Header label={user.username} />
+                <Header
+        username={username}
+        avatar={avatar}
+        isProfileScreen={false}
+        setAvatarModalVisible = {()=>{}}
+      />
                 </View>
                 <View style={styles.headerTitleContainer}>
                     <View style={styles.leftIconContainer}>
@@ -418,10 +427,17 @@ export default function ListMediaScreen() {
 
                 <View style={styles.bodyScreenContainer}>
                     <View style={styles.parameterAvatarHeader}>
-                        <Image
-                            source={list.mediaListSelected.avatar}
-                            style={styles.avatarSelected}
-                        />
+                    {list.mediaListSelected.avatar === null ? (
+                      <Image
+                        source={{ uri: list.avatar }}
+                        style={styles.avatar}
+                      />
+                    ) : (
+                      <Image
+                        source={{ uri: firstAvatar }}
+                        style={styles.avatar}
+                      />
+                    )}
                         <View style={styles.avatarHeaderTextContainer}>
                             <Text style={styles.parameterAvatarTitle} >
                                 {
