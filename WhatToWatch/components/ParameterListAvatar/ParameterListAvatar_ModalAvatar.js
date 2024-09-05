@@ -143,7 +143,6 @@ export default function ParameterListAvatar_ModalAvatar({
         );
     }
 
-    let firstAvatar = 'https://res.cloudinary.com/ddr0yckcq/image/upload/v1725521994/tv_ydg3zn.png'
     return(
         <View >
             <Modal
@@ -156,8 +155,7 @@ export default function ParameterListAvatar_ModalAvatar({
                 <View  style={styles.modalContainer}>
                     <View style={styles.parameterAvatarHeader}>
                         <Image 
-                            // source={{uri: isClickAvatar.source}}
-                            source={{uri: firstAvatar}}
+                            source={{uri: isClickAvatar.source}}
                             style={styles.avatarSelected}
                         />
                         <View style={styles.avatarHeaderTextContainer}>
