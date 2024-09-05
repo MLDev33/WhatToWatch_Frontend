@@ -36,7 +36,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 //-----POUR RECUPERER L'URL DE L'API EN FONCTION DE L'ENVIRONNEMENT DE TRAVAIL---//
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
 const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-const baseUrl = vercelUrl; // Changez en vercelUrl pour utiliser avec Vercel
+const baseUrl = localUrl; // Changez en vercelUrl pour utiliser avec Vercel
 
 const categorieData = ["Movie", "TV"];
 

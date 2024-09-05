@@ -13,7 +13,7 @@ const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
 const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
 // Utiliser une condition pour basculer entre les URLs
 //const baseUrl = vercelUrl; // POUR UTILISER AVEC VERCEL
-const baseUrl = vercelUrl; // POUR UTILISER EN LOCAL
+const baseUrl = localUrl; // POUR UTILISER EN LOCAL
 
 /**
  * Types de média possible sur l'API TMDB Movie ou TV
