@@ -84,7 +84,7 @@ export default function SignIn({ navigation }) {
 
   const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
   const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-  const baseUrl = vercelUrl;
+  const baseUrl = localUrl;
 
   const checkEmail = RegExp(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
