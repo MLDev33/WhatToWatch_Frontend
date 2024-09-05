@@ -30,7 +30,7 @@ import arrowLeftIcon from "../assets/Icons/arrowLeftIcon.png";
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const vercelUrl = process.env.EXPO_PUBLIC_VERCEL_URL;
 const localUrl = process.env.EXPO_PUBLIC_LOCAL_URL;
-const baseUrl = vercelUrl;
+const baseUrl = localUrl;
 
 const Lists = React.memo(({ movies, openModal }) => (
     movies.map((item, index) => (
